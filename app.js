@@ -5,10 +5,18 @@ var express = require('express'),
     path = require('path');
 
 var proxy = require('./routes/updates'),
-    config = require('./lib/config'),
-    logger = require('./lib/logger');
+    routes = require('./routes'),
+    config = require('./backend/config'),
+    logger = require('./backend/logger');
 
-var app = express();
+var app = exports.modules = express();
+
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+app.use(express.static(path.join(__dirname, 'frontend')));
+
+app.get('/', routes.index);
+app.get('/partials/:name', routes.partials);
 
 app.use(express.logger({
   stream: {
@@ -26,8 +34,7 @@ app.use('/download', express.static(config.download.dir));
 logger.info('Dumping server configuration :', config);
 app.set('port', config.server.port);
 
-app.put('/admin/updates/:id/update/:indexOfUpdate', admin.activateUpdate);
-app.delete('/admin/updates/:id/update/:indexOfUpdate', admin.deactivateUpdate);
+app.get('/:name', routes.index);
 
 http.createServer(app).listen(app.get('port'), function() {
   logger.info('mozilla-updater server listening on port %d', app.get('port'));

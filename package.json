@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "mocha --reporter spec"
+    "test": "sh ./scripts/test-backend.sh && sh ./scripts/test-frontend.sh"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,13 @@
     "mocha": "*",
     "chai": "*",
     "nock": "*",
+    "phantomjs" : "*",
+    "karma" : "*",
+    "karma-junit-reporter" : "*",
+    "karma-jasmine" : "*",
+    "karma-ng-scenario" : "*",
+    "karma-phantomjs-launcher": "*",
+    "karma-mocha": "*",
     "mockery": "*"
   },
   "keywords": [
