@@ -15,6 +15,10 @@ exports.emptyUpdates = function(request, response) {
   response.send(new SourceVersion({}).updatesAsXML());
 };
 
+exports.emptyUpdates = function(request, response) {
+  response.send(new SourceVersion({}).updatesAsXML());
+};
+
 exports.updateClient = function(request, response) {
   var db = DbProvider.db();
   var storage = new MetadataStorage(db);

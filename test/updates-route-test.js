@@ -141,6 +141,20 @@ describe('The Updates route', function() {
           });
         });
     });
+
+    describe('should send empty updates', function(done) {
+      it('When URL is not handled', function(done) {
+        var replyXMLFromProxy = '<?xml version="1.0" encoding=\"UTF-8\"?>\n<updates></updates>';
+
+        proxy.emptyUpdates({}, {
+          send: function (data) {
+            data.should.equal(replyXMLFromProxy);
+            done();
+          }
+        });
+      });
+    });
+
     after(function(done) {
         mockery.disable();
         db.collection('source-versions').drop(function() {
