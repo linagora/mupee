@@ -3,10 +3,17 @@
 var SourceVersion = require('../lib/source-version'),
   DbProvider = require('../lib/mongo-provider'),
   MetadataStorage = require('../lib/metadata-storage'),
-  UpdateFetcher = require('../lib/update-fetcher');
+  UpdateFetcher = require('../lib/update-fetcher'),
+  Downloader = require('../lib/downloader'),
+  Path = require('path'),
+  fs = require('fs');
 
 var logger = require('../lib/logger'),
   config = require('../lib/config');
+
+exports.emptyUpdates = function(request, response) {
+  response.send(new SourceVersion({}).updatesAsXML());
+};
 
 exports.updateClient = function(request, response) {
   var db = DbProvider.db();
@@ -35,12 +42,53 @@ exports.updateClient = function(request, response) {
         if (error) {
           logger.error('while fetching from remote server :', error);
         }
-        storage.save(result, function(error, stored) {
-          if (error) {
-            Logger.error('while saving fetched updates to storage :');
-          }
-        });
-        response.send(result.updatesAsXML());
+
+        var saveAndSendResponse = function() {
+          storage.save(result, function(error, stored) {
+            if (error) {
+              logger.error('while saving fetched updates to storage :', error);
+            }
+          });
+
+          response.send(result.updatesAsXML());
+        };
+
+        if (result.updates && result.updates.length > 0 && config.download.autoCache) {
+          var tasks = [];
+          var downloader = new Downloader();
+
+          result.updates.forEach(function (update) {
+            update.patches.forEach(function (patch) {
+              var destination = Path.join(
+                  clientVersion.product,
+                  update.version || update.appVersion,
+                  update.buildId,
+                  clientVersion.buildTarget,
+                  clientVersion.locale,
+                  'binary');
+
+              tasks.push({
+                url: patch.url,
+                destination: Path.join(config.download.dir, destination),
+                localPath: destination,
+                patch: patch
+              })
+            });
+          });
+
+          downloader.on('finish', saveAndSendResponse);
+          downloader.on('finish-task', function(err, task) {
+            if (err) {
+              logger.error('while fetching from remote server :', error);
+            }
+
+            task.patch.localPath = task.localPath;
+          });
+
+          downloader.downloadAll(tasks);
+        } else {
+          saveAndSendResponse();
+        }
       });
     }
     else {

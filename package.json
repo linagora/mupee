@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "test": "sh scripts/test-mozilla-updater.sh"
+    "test": "mocha --reporter spec"
   },
   "dependencies": {
     "express": "3.4.0",
@@ -15,11 +15,13 @@
     "jstoxml": "~0.2.2",
     "libxml-to-js": "0.3.11",
     "winston": "*",
-    "nconf": "~0.6.7"
+    "nconf": "~0.6.7",
+    "mkdirp": "*"
   },
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
-    "nock": "*"
+    "nock": "*",
+    "mockery": "~1.4.0"
   }
 }
