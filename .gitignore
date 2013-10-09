@@ -4,3 +4,8 @@ npm-debug.log
 *.iml
 .idea/
 data/
+.classpath
+.buildpath
+.project
+.settings
+
