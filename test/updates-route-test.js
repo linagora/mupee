@@ -157,6 +157,7 @@ describe('The Updates route', function() {
 
     after(function(done) {
         mockery.disable();
+        nock.enableNetConnect();
         db.collection('source-versions').drop(function() {
             db.close(done);
         });

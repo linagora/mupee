@@ -11,8 +11,12 @@ var UpdateFetcher = require('../lib/update-fetcher'),
 
 describe('The UpdateFetcher module', function() {
 
-  it('should update the metadata if there is a new version available', function() {
-    var mockedMozillaServer = nock('https://aus2.mozilla.org')
+  before(function() {
+    nock.disableNetConnect();
+  });
+
+  it('should update the metadata if there is a new version available', function(done) {
+    var mockedMozillaServer = nock('https://aus3.mozilla.org')
       .get('/update/3/Firefox/3.5.2/20090729225027/WINNT_x86-msvc/en-US/release/Windows_NT%206.0/default/default/update.xml')
       .reply(
       200,
@@ -77,12 +81,13 @@ describe('The UpdateFetcher module', function() {
     UpdateFetcher.fetch(sourceVersion, function(error, fetchedVersion) {
       expect(error).to.equal.null;
       expect(fetchedVersion).to.deep.equal(expectedFetchedVersion);
+      done();
     });
   });
 
-  it('should do nothing if there is no new version available', function() {
+  it('should do nothing if there is no new version available', function(done) {
 
-    var mockedMozillaServer = nock('https://aus2.mozilla.org')
+    var mockedMozillaServer = nock('https://aus3.mozilla.org')
       .get('/update/3/Firefox/1.1.1/20090729225027/WINNT_x86-msvc/en-US/release/Windows_NT%206.0/default/default/update.xml')
       .reply(200, '<?xml version="1.0"?><updates></updates>');
 
@@ -102,10 +107,11 @@ describe('The UpdateFetcher module', function() {
     UpdateFetcher.fetch(sourceVersion, function(error, result) {
       expect(error).to.equal(null);
       expect(result).to.deep.equal(sourceVersion);
+      done();
     });
   });
 
-  it('should support forced updates', function() {
+  it('should support forced updates', function(done) {
 
     var sourceVersion = new SourceVersion(
       {
@@ -152,7 +158,7 @@ describe('The UpdateFetcher module', function() {
       }
     );
 
-    var mockedMozillaServer = nock('https://aus2.mozilla.org')
+    var mockedMozillaServer = nock('https://aus3.mozilla.org')
         .get('/update/3/Thunderbird/12.0.1/20120428123112/WINNT_x86-msvc/fr/release/Windows_NT%205.1.3.0%20(x86)/default/default/update.xml?force=1')
         .once()
         .reply(
@@ -168,6 +174,11 @@ describe('The UpdateFetcher module', function() {
     UpdateFetcher.fetch(sourceVersion, function(error, fetchedVersion) {
       expect(error).to.equal.null;
       expect(fetchedVersion).to.deep.equal(expectedFetchedVersion);
+      done();
     });
+  });
+
+  after(function() {
+    nock.enableNetConnect();
   });
 });
