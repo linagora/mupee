@@ -1,7 +1,7 @@
 var UpdateFetcher = require('./update-fetcher'),
     Path = require('path'),
     db = require('./mongo-provider').db(),
-    MetadataStorage = require('./metadata-storage'),
+    MetadataStorage = require('./update-storage'),
     storage = new MetadataStorage(db),
     Downloader = require('./downloader'),
     logger = require('./logger'),
@@ -12,7 +12,7 @@ var UpdateFetcher = require('./update-fetcher'),
 
 function getDownloadTasks (localVersion, musVersion, updates) {
   var tasks = [];
-  
+
   musVersion.updates.forEach(function (update) {
     var localUpdate = new Update(update);
     localUpdate.clearPatches();

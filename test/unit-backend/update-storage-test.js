@@ -6,15 +6,15 @@ var should = chai.should(),
     expect = chai.expect;
 
 var DbProvider = require('../../backend/mongo-provider'),
-    MetadataStorage = require('../../backend/metadata-storage'),
+    UpdateStorage = require('../../backend/update-storage'),
     SourceVersion = require('../../backend/source-version'),
     Update = require('../../backend/update').Update,
     fixtures = require('./fixtures');
 
 var db = DbProvider.db();
 
-describe('The MetadataStorage module', function() {
-  var manager = new MetadataStorage(db);
+describe('The UpdateStorage module', function() {
+  var manager = new UpdateStorage(db);
   var version = fixtures.withAllFields();
   var versionQuery = new SourceVersion(
     {

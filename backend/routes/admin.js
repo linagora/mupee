@@ -1,10 +1,9 @@
 'use strict';
 
 var DbProvider = require('../mongo-provider'),
-    MetadataStorage = require('../metadata-storage');
+    UpdateStorage = require('../update-storage');
 
-
-var storage = new MetadataStorage(DbProvider.db());
+var storage = new UpdateStorage(DbProvider.db());
 
 exports.findAll = function(request, response) {
   var query = request.query;

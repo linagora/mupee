@@ -5,7 +5,7 @@ var express = require('express'),
     path = require('path');
 
 var proxy = require('./backend/routes/updates'),
-    admin = require('./routes/admin'),
+    admin = require('./backend/routes/admin'),
     routes = require('./backend/routes'),
     config = require('./backend/config'),
     logger = require('./backend/logger');

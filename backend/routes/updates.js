@@ -2,7 +2,7 @@
 
 var SourceVersion = require('../source-version'),
   DbProvider = require('../mongo-provider'),
-  MetadataStorage = require('../metadata-storage'),
+  MetadataStorage = require('../update-storage'),
   UpdateFetcher = require('../update-fetcher'),
   Downloader = require('../downloader'),
   Path = require('path'),

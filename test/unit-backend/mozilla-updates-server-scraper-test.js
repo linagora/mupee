@@ -119,7 +119,7 @@ describe("The mozilla Updates Server Sraper module", function() {
     
   before(function() {
     mockery.enable({warnOnUnregistered: false});
-    mockery.registerMock('./metadata-storage', MetadataStorage);
+    mockery.registerMock('./update-storage', MetadataStorage);
     mockery.registerMock('./downloader', Downloader);
     mockery.registerMock('./update-fetcher', UpdateFetcher);
     musScraper = require("../../backend/mozilla-updates-server-scraper");

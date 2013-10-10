@@ -4,9 +4,9 @@ var should = require('chai').should(),
     DbProvider = require('../../backend/mongo-provider'),
     request = require('request'),
     fixtures = require('./fixtures'),
-    MetadataStorage = require('../../backend/metadata-storage'),
+    UpdateStorage = require('../../backend/update-storage'),
     SourceVersion = require('../../backend/source-version.js'),
-    admin = require('../../routes/admin');
+    admin = require('../../backend/routes/admin');
 
 var db = DbProvider.db();
 
@@ -18,7 +18,7 @@ describe('The update-server module', function() {
 
   before(function() {
     baseUri = 'http://localhost:1234/admin/versions';
-    storage = new MetadataStorage(db);
+    storage = new UpdateStorage(db);
   });
 
   beforeEach(function(done) {
