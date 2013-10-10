@@ -7,7 +7,7 @@ var expect = chai.expect;
 
 var UpdateFetcher = require('../../backend/update-fetcher'),
     SourceVersion = require('../../backend/source-version'),
-    fixtures = require('./fixtures');
+    fixtures = require('./source-version-fixtures');
 
 describe('The UpdateFetcher module', function() {
 

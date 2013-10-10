@@ -4,8 +4,8 @@ var chai = require('chai');
 
 var expect = chai.expect;
 
-var DbProvider = require('../../backend/mongo-provider'),
-  RulesStorage = require('../../backend/rules-storage');
+var DbProvider = require('../../../backend/mongo-provider'),
+  RulesStorage = require('../../../backend/rules/rules-storage');
 
 var db = DbProvider.db();
 

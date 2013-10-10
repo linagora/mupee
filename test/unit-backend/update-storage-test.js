@@ -9,7 +9,7 @@ var DbProvider = require('../../backend/mongo-provider'),
     UpdateStorage = require('../../backend/update-storage'),
     SourceVersion = require('../../backend/source-version'),
     Update = require('../../backend/update').Update,
-    fixtures = require('./fixtures');
+    fixtures = require('./source-version-fixtures');
 
 var db = DbProvider.db();
 

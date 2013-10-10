@@ -1,7 +1,7 @@
 'use strict';
 
 var util = require('util'),
-  Storage = require('./storage');
+  Storage = require('../storage');
 
 var RulesStorage = function(db) {
   this.db = db;

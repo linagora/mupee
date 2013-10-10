@@ -3,7 +3,7 @@
 var expect = require('chai').expect;
 
 var SourceVersion = require('../../backend/source-version'),
-    fixtures = require('./fixtures');
+    fixtures = require('./source-version-fixtures');
 
 describe('The SourceVersion module', function() {
 

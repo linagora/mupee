@@ -3,9 +3,9 @@
 var should = require('chai').should(),
     DbProvider = require('../../backend/mongo-provider'),
     request = require('request'),
-    fixtures = require('./fixtures'),
+    fixtures = require('./source-version-fixtures'),
     UpdateStorage = require('../../backend/update-storage'),
-    SourceVersion = require('../../backend/source-version.js'),
+    SourceVersion = require('../../backend/source-version'),
     admin = require('../../backend/routes/admin');
 
 var db = DbProvider.db();

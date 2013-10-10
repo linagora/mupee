@@ -1,8 +1,8 @@
 'use strict';
 
-var SourceVersion = require('../../backend/source-version.js');
-var Update = require("../../backend/update.js").Update;
-var Patch = require("../../backend/update.js").Patch;
+var SourceVersion = require('../../backend/source-version');
+var Update = require("../../backend/update").Update;
+var Patch = require("../../backend/update").Patch;
 
 exports.withAllFields = function() {
   var sourceVersion = new SourceVersion(
