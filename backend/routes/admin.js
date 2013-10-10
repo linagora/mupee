@@ -1,7 +1,7 @@
 'use strict';
 
-var DbProvider = require('../backend/mongo-provider'),
-    MetadataStorage = require('../backend/metadata-storage');
+var DbProvider = require('../mongo-provider'),
+    MetadataStorage = require('../metadata-storage');
 
 
 var storage = new MetadataStorage(DbProvider.db());
