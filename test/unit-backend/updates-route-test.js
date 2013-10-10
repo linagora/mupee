@@ -16,7 +16,7 @@ describe('The Updates route', function() {
         mockery.enable({warnOnUnregistered: false});
         mockery.registerMock('../lib/config', testconfig);
         nock.disableNetConnect();
-        proxy = require('../../routes/updates'),
+        proxy = require('../../backend/routes/updates'),
         db = mongo.db('localhost:27017/mozilla-updater?auto_reconnect', {safe: true});
     });
 

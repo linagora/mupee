@@ -1,15 +1,15 @@
 'use strict';
 
-var SourceVersion = require('../backend/source-version'),
-  DbProvider = require('../backend/mongo-provider'),
-  MetadataStorage = require('../backend/metadata-storage'),
-  UpdateFetcher = require('../backend/update-fetcher'),
-  Downloader = require('../backend/downloader'),
+var SourceVersion = require('../source-version'),
+  DbProvider = require('../mongo-provider'),
+  MetadataStorage = require('../metadata-storage'),
+  UpdateFetcher = require('../update-fetcher'),
+  Downloader = require('../downloader'),
   Path = require('path'),
   fs = require('fs');
 
-var logger = require('../backend/logger'),
-    config = require('../backend/config');
+var logger = require('../logger'),
+    config = require('../config');
 
 exports.emptyUpdates = function(request, response) {
   response.send(new SourceVersion({}).updatesAsXML());

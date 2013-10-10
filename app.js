@@ -4,8 +4,8 @@ var express = require('express'),
     http = require('http'),
     path = require('path');
 
-var proxy = require('./routes/updates'),
-    routes = require('./routes'),
+var proxy = require('./backend/routes/updates'),
+    routes = require('./backend/routes'),
     config = require('./backend/config'),
     logger = require('./backend/logger');
 
