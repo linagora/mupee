@@ -1,31 +1,7 @@
 extends layout
 
 block body
-  div(ng-controller='AppCtrl')
-    h2 {{versions}}
-    ul.menu
-      li
-        a(href='view1') view1
-      li
-        a(href='view2') view2
-
-    div(ng-view)
-
-    div
-      | Angular seed app: v
-      span(app-version)
-
-  script(src='lib/foundation/custom.modernizr.js')
-  script
-    document.write('<script src=' +
-    ('__proto__' in {} ? 'lib/zepto/zepto' : 'lib/jquery/jquery') +
-     '.js><\/script>')
-
-  script(src='lib/angular/angular.js')
-  script(src='lib/angular/angular-route.js')
-  script(src='lib/foundation/foundation.min.js')
-  script(src='js/app.js')
-  script(src='js/services.js')
-  script(src='js/controllers.js')
-  script(src='js/filters.js')
-  script(src='js/directives.js')
+  div(ng-view)
+  footer(class='center') 
+    p <a href="https://github.com/linagora/mupee">Mupee</a>, the Mozilla Updates Proxy.
+    p Offered to you by the <a href="http://obm.org">OBM Core Team</a>, and <a href="http://linagora.com">Linagora</a>

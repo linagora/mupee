@@ -3,8 +3,17 @@ html(ng-app="myApp")
   head
     meta(charset='utf8')
     base(href='/')
-    title Angular Express Seed App
+    title Mupee, the Mozilla Updates Proxy
     link(rel='stylesheet', href='/css/foundation/foundation.css')
     link(rel='stylesheet', href='/css/app.css')
-  body
+    script(src='lib/foundation/custom.modernizr.js')
+    script document.write('<script src=' + ('__proto__' in {} ? 'lib/zepto/zepto' : 'lib/jquery/jquery') + '.js><\/script>')
+
+    script(src='lib/angular/angular.js')
+    script(src='lib/angular/angular-route.js')
+    script(src='lib/angular/angular-resource.js')
+    script(src='lib/foundation/foundation.min.js')
+    script(src='js/app.js')
+
+  body(ng-cloak)
     block body
