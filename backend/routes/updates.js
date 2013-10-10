@@ -46,7 +46,8 @@ exports.updateClient = function(request, response) {
       logger.info('client with IP [%s] gets cache-miss for url: [%s]:', request.ip, request.url);
       response.send(clientVersion.updatesAsXML());
       var dbVersion = new SourceVersion(clientVersion);
-      dbVersion.clearUpdates();
+      dbVersion.timestamp = Date.now();
+
       storage.save(dbVersion, function(err) {
         if (err) {
           logger.error("Unable to store new SourceVersion");
@@ -54,11 +55,17 @@ exports.updateClient = function(request, response) {
         }
         updatesScraper(clientVersion, function() { logger.debug("scraping finished"); });
       });
-      
     }
     else {
       logger.info('client with IP [%s] gets cache-hit for url: [%s]', request.ip, request.url);
       response.send(new SourceVersion(storedVersion).updatesAsXML());
+
+      storedVersion.timestamp = Date.now();
+      storage.save(storedVersion, function(error, stored) {
+        if (error) {
+          logger.error('while updating timestamp in storage: ', error);
+        }
+      });
     }
   });
 };

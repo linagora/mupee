@@ -5,6 +5,7 @@ var jstoxml = require('./jstoxml');
 var Update = require('./update').Update;
 
 var SourceVersion = function(object) {
+  this.timestamp = object.timestamp || Date.now();
   this.product = object.product;
   this.version = object.version;
   this.buildId = object.buildId;

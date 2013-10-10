@@ -7,6 +7,7 @@ var Patch = require("../../backend/update.js").Patch;
 exports.withAllFields = function() {
   var sourceVersion = new SourceVersion(
     {
+      'timestamp': 123456789,
       'product' : 'Firefox',
       'version' : '3.5.2',
       'buildId' : '20090729225027',
@@ -65,6 +66,7 @@ exports.withAllFields = function() {
 exports.withEmptyUpdates = function() {
   var sourceVersion = new SourceVersion(
     {
+      timestamp: 123456789,
       product: 'Thunderbird',
       version: '17.0.0',
       buildId: '20090729225028',

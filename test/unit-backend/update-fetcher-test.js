@@ -42,6 +42,7 @@ describe('The UpdateFetcher module', function() {
 
     var expectedFetchedVersion = new SourceVersion(
       {
+        'timestamp': sourceVersion.timestamp,
         'product' : 'Firefox',
         'version' : '3.5.2',
         'buildId' : '20090729225027',
@@ -127,6 +128,7 @@ describe('The UpdateFetcher module', function() {
 
     var expectedFetchedVersion = new SourceVersion(
       {
+        'timestamp': sourceVersion.timestamp,
         'product' : 'Thunderbird',
         'version' : '12.0.1',
         'buildId' : '20120428123112',

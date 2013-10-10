@@ -6,6 +6,7 @@ var DbProvider = require('../../backend/mongo-provider');
 var SourceVersion = require('../../backend/source-version');
 var events = require('events');
 var util = require('util');
+var testLogger = require('./test-logger');
 var musScraper;
 function MetadataStorage() {};
 
@@ -41,9 +42,7 @@ describe("The mozilla Updates Server Sraper module", function() {
     }
   );
 
-  
-  
-  var withUpdate = 
+  var withUpdate =
     {
       product: "Thunderbird",
       version: "10.0.12",
@@ -76,11 +75,11 @@ describe("The mozilla Updates Server Sraper module", function() {
               "size" : "21580592"
             }
           ]
-         }
+        }
       ]
     };
-  
-    var withUpdate2 = 
+
+    var withUpdate2 =
     {
       product: "Thunderbird",
       version: "10.0.12",
@@ -116,22 +115,23 @@ describe("The mozilla Updates Server Sraper module", function() {
          }
       ]
     };
-    
+
   before(function() {
     mockery.enable({warnOnUnregistered: false});
     mockery.registerMock('./update-storage', MetadataStorage);
     mockery.registerMock('./downloader', Downloader);
     mockery.registerMock('./update-fetcher', UpdateFetcher);
+    mockery.registerMock('./logger', testLogger);
     musScraper = require("../../backend/mozilla-updates-server-scraper");
   });
-  
+
   beforeEach(function(done) {
     db.collection('source-versions').save(version, {safe: true}, function(err, result) {
       id = result._id;
       done();
     });
   });
-  
+
   describe("when receiving a clientVersion", function() {
     it("should find that version in the database and query the mozilla servers", function(done) {
       var count = 0;
@@ -142,23 +142,21 @@ describe("The mozilla Updates Server Sraper module", function() {
           callback(null, versionWithUpdate);
         });
       };
-      
+
       MetadataStorage.prototype.findByVersion = function(version, callback) {
         process.nextTick(function() {
           count++;
           callback(null, versionWithUpdate);
         });
       };
-      
-      
+
       musScraper(version, function() {
         expect(count).to.equal(2);
         done();
       });
     });
   });
-  
-  
+
   describe("when receiving a clientVersion having an update in base", function() {
     describe("when the mozilla servers sends the same upgrade", function() {
       it("shouldn't start a download", function(done) {
@@ -172,18 +170,18 @@ describe("The mozilla Updates Server Sraper module", function() {
             callback(null, musVersion);
           });
         };
-        
+
         MetadataStorage.prototype.findByVersion = function(version, callback) {
           process.nextTick(function() {
             count++;
             callback(null, dbVersion);
           });
         };
-        
+
         Downloader.prototype.downloadAll = function(tasks) {
           downloadStarted++;
         };
-        
+
         musScraper(version, function() {
           expect(count).to.equal(2);
           expect(downloadStarted).to.equal(0);
@@ -191,7 +189,7 @@ describe("The mozilla Updates Server Sraper module", function() {
         });
       });
     });
-    
+
     describe("when the mozilla servers sends a new upgrade", function() {
       it("should start a download, and record the sourceVersion with two upgrades", function(done) {
         var count = 0;
@@ -205,19 +203,19 @@ describe("The mozilla Updates Server Sraper module", function() {
             callback(null, musVersion);
           });
         };
-        
+
         MetadataStorage.prototype.findByVersion = function(version, callback) {
           process.nextTick(function() {
             count++;
             callback(null, dbVersion);
           });
         };
-        
+
         MetadataStorage.prototype.save = function(version, callback) {
           saved = version;
           callback(null, version);
         };
-        
+
         Downloader.prototype.downloadAll = function(tasks) {
           downloadStarted++;
           var self = this;
@@ -234,7 +232,7 @@ describe("The mozilla Updates Server Sraper module", function() {
           };
           consumeTasks();
         };
-        
+
         musScraper(version, function() {
           expect(count).to.equal(2);
           expect(downloadStarted).to.equal(1);
@@ -247,9 +245,8 @@ describe("The mozilla Updates Server Sraper module", function() {
         });
       });
     });
-    
   });
-  
+
   after(function() {
     mockery.deregisterAll();
     mockery.resetCache();
