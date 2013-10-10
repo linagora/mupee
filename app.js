@@ -11,7 +11,7 @@ var proxy = require('./backend/routes/updates'),
 
 var app = exports.modules = express();
 
-app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/frontend/views');
 app.set('view engine', 'jade');
 app.use(express.static(path.join(__dirname, 'frontend')));
 
