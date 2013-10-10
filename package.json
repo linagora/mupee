@@ -26,7 +26,9 @@
     "winston": "0.7.x",
     "nconf": "0.6.x",
     "mkdirp": "0.3.x",
-    "async": "*"
+    "async": "*",
+    "passport": "*",
+    "passport-http": "*"
   },
   "devDependencies": {
     "mocha": "*",

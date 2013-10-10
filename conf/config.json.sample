@@ -39,5 +39,8 @@
       "prettyPrint" : true,
       "colorize" : true
     }
+  },
+  "interface": {
+    "authModule": "users"
   }
 }

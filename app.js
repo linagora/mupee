@@ -8,16 +8,22 @@ var proxy = require('./backend/routes/updates'),
     admin = require('./backend/routes/admin'),
     routes = require('./backend/routes'),
     config = require('./backend/config'),
-    logger = require('./backend/logger');
+    logger = require('./backend/logger'),
+    passport = require('passport'),
+    BasicStrategy = require('passport-http').BasicStrategy;
 
 var app = exports.modules = express();
+
+passport.use(new BasicStrategy(require('./backend/auth/' + config.interface.authModule)));
+app.use(passport.initialize());
 
 app.set('views', __dirname + '/frontend/views');
 app.set('view engine', 'jade');
 app.use(express.static(path.join(__dirname, 'frontend')));
 
-app.get('/', routes.index);
-app.get('/partials/:name', routes.partials);
+app.get('/', passport.authenticate('basic'), routes.index);
+app.get('/:name', passport.authenticate('basic'), routes.index);
+app.get('/partials/:name', passport.authenticate('basic'), routes.partials);
 
 app.use(express.logger({
   stream: {
@@ -35,10 +41,8 @@ app.use('/download', express.static(config.download.dir));
 logger.info('Dumping server configuration :', config);
 app.set('port', config.server.port);
 
-app.get('/admin/versions', admin.findAll);
-app.get('/admin/versions/:id', admin.findOne);
-
-app.get('/:name', routes.index);
+app.get('/admin/versions', passport.authenticate('basic'), admin.findAll);
+app.get('/admin/versions/:id', passport.authenticate('basic'), admin.findOne);
 
 http.createServer(app).listen(app.get('port'), function() {
   logger.info('mozilla-updater server listening on port %d', app.get('port'));
