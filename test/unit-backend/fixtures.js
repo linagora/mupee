@@ -65,7 +65,7 @@ exports.withAllFields = function() {
 exports.withEmptyUpdates = function() {
   var sourceVersion = new SourceVersion(
     {
-      product: 'Firefox',
+      product: 'Thunderbird',
       version: '17.0.0',
       buildId: '20090729225028',
       buildTarget: 'WINNT_x86-msvc',

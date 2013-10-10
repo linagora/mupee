@@ -7,7 +7,7 @@ angular.module('myApp.controllers', []).
 
     $http({
       method: 'GET',
-      url: '/admin/updates'
+      url: '/admin/versions'
     }).
     success(function(data, status, headers, config) {
       $scope.versions = data;

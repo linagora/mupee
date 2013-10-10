@@ -27,7 +27,6 @@ var Update = function(object) {
       this.patches.push(new Patch(patch));
     }.bind(this));
   }
-  this.activated = object.activated;
 };
 
 Update.prototype.addPatch = function(patch) {

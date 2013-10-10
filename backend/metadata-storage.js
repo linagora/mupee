@@ -1,6 +1,6 @@
 'use strict';
 
-var assert = require('assert');
+var BSON = require('mongodb').BSONPure;
 
 var MetadataStorage = function(db) {
   this.db = db;
@@ -8,6 +8,7 @@ var MetadataStorage = function(db) {
 
 MetadataStorage.prototype.save = function(version, callback) {
   this.db.collection('source-versions').save(version, {safe: true}, callback);
+  return this;
 };
 
 MetadataStorage.prototype.findByVersion = function(version, callback) {
@@ -24,6 +25,19 @@ MetadataStorage.prototype.findByVersion = function(version, callback) {
     function(err, cursor) {
       cursor.nextObject(callback);
     });
+};
+
+MetadataStorage.prototype.findAll = function(query, callback) {
+  this.db.collection('source-versions').find(query, {}).toArray(callback);
+};
+
+MetadataStorage.prototype.findById = function(id, callback) {
+  this.db.collection('source-versions').findOne({'_id': new BSON.ObjectID(id)}, callback);
+};
+
+MetadataStorage.prototype.update = function(id, sourceVersion, callback) {
+  this.db.collection('source-versions').update(
+     {'_id': new BSON.ObjectID(id)}, sourceVersion, {safe: true}, callback);
 };
 
 module.exports = MetadataStorage;

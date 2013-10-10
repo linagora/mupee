@@ -5,6 +5,7 @@ var express = require('express'),
     path = require('path');
 
 var proxy = require('./backend/routes/updates'),
+    admin = require('./routes/admin'),
     routes = require('./backend/routes'),
     config = require('./backend/config'),
     logger = require('./backend/logger');
@@ -33,6 +34,9 @@ app.use('/download', express.static(config.download.dir));
 
 logger.info('Dumping server configuration :', config);
 app.set('port', config.server.port);
+
+app.get('/admin/versions', admin.findAll);
+app.get('/admin/versions/:id', admin.findOne);
 
 app.get('/:name', routes.index);
 
