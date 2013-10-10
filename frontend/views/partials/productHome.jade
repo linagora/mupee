@@ -1,0 +1,13 @@
+h1 {{product}} updates
+
+p Here is a list per version of your {{product}} policies:
+
+div(data-ng-show="loadProgress" class="center") Loading...
+div(data-ng-show="networkError" class="center") Oh my god ! We encountered an error :-(
+div(data-ng-show="!loadProgress && !networkError")
+  div(class="row" data-ng-repeat="majorVersion in majorVersions")
+    div(class="large-2 columns") version {{majorVersion}}
+    div(class="large-10 columns") Policy: allow upgrades to latest known version
+
+  div(class="center" data-ng-show="!majorVersions.length")
+    No {{product}} clients has connected to your Mupee yet
