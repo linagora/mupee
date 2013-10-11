@@ -9,9 +9,9 @@ var SourceVersion = require('../../../backend/source-version'),
 
 describe('The Rule module', function() {
   describe('matches() method should evaluate a predicate and return', function() {
-    var rule = fixtures.versionsUpToTenToLatestMinor;
+    var rule = fixtures.versionTenToLatestMinor;
     it('false if it does not match', function(done) {
-      var result = rule.isSatisfiedBy({ branch : 9 });
+      var result = rule.isSatisfiedBy({ branch : 10 });
       expect(result).to.be.a('boolean');
       expect(result).to.be.true;
       done();
@@ -27,7 +27,7 @@ describe('The Rule module', function() {
   });
 
   it('getAction() method should return a function that performs an action', function(done) {
-    var rule = fixtures.versionsUpToTenToLatestMinor;
+    var rule = fixtures.versionTenToLatestMinor;
     var action = rule.getAction();
     action.should.be.a.function;
     var result = action({ updates : [

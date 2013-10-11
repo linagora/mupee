@@ -3,6 +3,7 @@
 var RuleParameterDefinition = require('./rule-parameter-definition');
 
 var RuleCondition = function(object) {
+  this.id = object.id;
   this.summary = object.summary;
   this.description = object.description;
   this.predicate = object.predicate;
@@ -20,23 +21,4 @@ RuleCondition.prototype.for = function(parameters) {
   }.bind(this);
 };
 
-var branchLesserOrEqual = new RuleCondition({
-  summary : 'lesser or equal than branch',
-  description : '',
-  predicate : function(candidate, parameters) {
-    if (candidate.branch < parameters.branch) {
-      return true;
-    } else {
-      return false;
-    }
-  },
-  parametersDefinitions : [ new RuleParameterDefinition({
-    id : 'branch',
-    summary : 'version branch',
-    description : 'a Mozilla product version branch',
-    type : 'number',
-    mandatory : true
-  })]
-});
-
-module.exports = { branchLesserOrEqual : branchLesserOrEqual, RuleCondition : RuleCondition };
+module.exports = RuleCondition;
