@@ -1,7 +1,7 @@
 'use strict';
 
-var DbProvider = require('../mongo-provider'),
-    UpdateStorage = require('../update-storage');
+var DbProvider = require('../../mongo-provider'),
+    UpdateStorage = require('../../update-storage');
 
 var storage = new UpdateStorage(DbProvider.db());
 

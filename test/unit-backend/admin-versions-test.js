@@ -6,7 +6,7 @@ var should = require('chai').should(),
     fixtures = require('./source-version-fixtures'),
     UpdateStorage = require('../../backend/update-storage'),
     SourceVersion = require('../../backend/source-version'),
-    admin = require('../../backend/routes/admin');
+    versions = require('../../backend/routes/admin/versions');
 
 var db = DbProvider.db();
 
@@ -46,7 +46,7 @@ describe('The update-server module', function() {
       }
     };
 
-    admin.findOne(request, response);
+    versions.findOne(request, response);
   });
 
   it('should return status 404 if updates is not found by id', function(done) {
@@ -59,7 +59,7 @@ describe('The update-server module', function() {
       }
     };
 
-    admin.findOne(request, response);
+    versions.findOne(request, response);
   });
 
   it('should get all updates', function(done) {
@@ -74,7 +74,7 @@ describe('The update-server module', function() {
       }
     };
 
-    admin.findAll({}, response);
+    versions.findAll({}, response);
   });
 
   it('should get all updates by product', function(done) {
@@ -89,7 +89,7 @@ describe('The update-server module', function() {
       }
     };
 
-    admin.findAll(request, response);
+    versions.findAll(request, response);
   });
 
   afterEach(function(done) {

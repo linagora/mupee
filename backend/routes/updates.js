@@ -45,10 +45,8 @@ exports.updateClient = function(request, response) {
     if (!storedVersion) {
       logger.info('client with IP [%s] gets cache-miss for url: [%s]:', request.ip, request.url);
       response.send(clientVersion.updatesAsXML());
-      var dbVersion = new SourceVersion(clientVersion);
-      dbVersion.timestamp = Date.now();
-
-      storage.save(dbVersion, function(err) {
+      clientVersion.timestamp = Date.now();
+      storage.save(clientVersion, function(err) {
         if (err) {
           logger.error("Unable to store new SourceVersion");
           return ;
