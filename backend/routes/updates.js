@@ -39,6 +39,7 @@ exports.updateClient = function(request, response) {
     if (error) {
       logger.error('while retrieving client version from cache :',error);
       response.send(clientVersion.updatesAsXML());
+      return ;
     }
     if (!storedVersion || !storedVersion.length) {
       logger.info('client with IP [%s] gets cache-miss for url: [%s]:', request.ip, request.url);

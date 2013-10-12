@@ -57,13 +57,11 @@ describe('The MetadataStorage module', function() {
   });
 
   it('should allow finding updates for a version from persistent storage', function(done) {
-    manager.findByVersion(versionQuery, function(err, records) {
+    manager.findByVersion(versionQuery, function(err, record) {
       if (err) throw err;
-      expect(records).to.be.an.array;
-      expect(records).to.have.length(1);
-      expect(records[0]).exist;
-      expect(records[0]).to.have.property('_id');
-      expect(records[0]).to.have.property('channel');
+      expect(record).exist;
+      expect(record).to.have.property('_id');
+      expect(record).to.have.property('channel');
       done();
     });
   });
@@ -75,9 +73,9 @@ describe('The MetadataStorage module', function() {
       expect(updated).to.equal(1);
       manager.findByVersion(versionQuery, function(err, updatedRecord) {
         if (err) throw err;
-        expect(updatedRecord[0]).to.exist;
-        expect(updatedRecord[0]).to.have.property('updates');
-        expect(updatedRecord[0].updates).to.have.length(3);
+        expect(updatedRecord).to.exist;
+        expect(updatedRecord).to.have.property('updates');
+        expect(updatedRecord.updates).to.have.length(3);
         done();
       });
     });

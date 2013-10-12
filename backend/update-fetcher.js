@@ -4,6 +4,7 @@ var request = require('request');
 var parser = require('libxml-to-js');
 var Update = require('./update.js').Update;
 var Patch = require('./update.js').Patch;
+var SourceVersion = require("./source-version");
 
 var mozUpdateUrl = require('./config.js').fetch.remoteHost;
 
@@ -15,11 +16,11 @@ exports.fetch = function(version, callback) {
     if (error) {
       return callback(error, version);
     }
-
+    var musVersion = new SourceVersion(version);
     parser(body, function(error, result) {
 
       if (!result.update) {
-        return callback(null, version);
+        return callback(null, musVersion);
       }
 
       var update = new Update(result.update['@']);
@@ -39,9 +40,9 @@ exports.fetch = function(version, callback) {
       };
 
       patchToAdd.map(addPatchToUpdate);
-      version.addUpdate(update);
+      musVersion.addUpdate(update);
 
-      callback(null, version);
+      callback(null, musVersion);
     });
 
   };

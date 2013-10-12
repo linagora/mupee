@@ -34,6 +34,10 @@ Update.prototype.addPatch = function(patch) {
   this.patches.push(patch);
 };
 
+Update.prototype.clearPatches = function() {
+  this.patches = [];
+};
+
 Update.prototype.asXML = function() {
   var patches = [];
   this.patches.forEach(function(patch) {

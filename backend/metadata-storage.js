@@ -22,7 +22,7 @@ MetadataStorage.prototype.findByVersion = function(version, callback) {
     },
     {},
     function(err, cursor) {
-      cursor.toArray(callback);
+      cursor.nextObject(callback);
     });
 };
 

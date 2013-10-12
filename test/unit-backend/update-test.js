@@ -78,4 +78,35 @@ describe('The Update module', function() {
 
     update.asXML().should.equal(expectedXml);
   });
+  
+  describe("The clearPatches() method",function() {
+    it('should empty the patches list ', function() {
+
+      var update = new Update({
+        type : 'minor',
+        version : '3.5.3',
+        extensionVersion : '3.5.3',
+        buildId : '20090824101458',
+        detailsUrl : 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/',
+        patches : [{
+            type : 'complete',
+            url : 'http://download.mozilla.org/?product=firefox-3.5.3-complete&os=win&lang=en-US',
+            hashFunction : 'SHA512',
+            hashValue : 'f8abbaea98bd453b651c24025dbb8cea5908e532ca64ad7150e88778ccb77c0325341c0fecbec3' +
+            '7f31f31cdf7e13955c28140725282d2ce7c4a37c89a25319a1',
+            size : '10728423'
+          },{
+            type : 'partial',
+            url : 'http://download.mozilla.org/?product=firefox-3.5.3-partial-3.5.2&os=win&lang=en-US',
+            hashFunction : 'SHA512',
+            hashValue : '20b133f1bd2025360bda8ef0c53132a5806dbd0606e0' +
+            'fe7c6d1291d1392532cc960262f87b0c7d4fbe8f9bc9fba64ed28ecd89b664c17f51f98acdd76b26ea6a',
+            size : '2531877'
+          }
+        ]
+      });
+      update.clearPatches();
+      update.patches.should.have.length(0);
+    });
+  });
 });
