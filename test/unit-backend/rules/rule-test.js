@@ -8,17 +8,21 @@ var SourceVersion = require('../../../backend/source-version'),
     fixtures = require('./rule-fixtures');
 
 describe('The Rule module', function() {
-  describe('matches() method should evaluate a predicate and return', function() {
+  describe('condition.matches should be a function that evaluate a predicate and return', function() {
     var rule = fixtures.versionTenToLatestMinor;
     it('false if it does not match', function(done) {
-      var result = rule.isSatisfiedBy({ branch : 10 });
+      var matches = rule.condition.matches;
+      matches.should.be.a.function;
+      var result = matches({ branch : 10 });
       expect(result).to.be.a('boolean');
       expect(result).to.be.true;
       done();
     });
 
     it('true if it matches', function(done) {
-      var result = rule.isSatisfiedBy({ branch : 11 });
+      var matches = rule.condition.matches;
+      matches.should.be.a.function;
+      var result = matches({ branch : 11 });
       expect(result).to.be.a('boolean');
       expect(result).to.be.false;
       result.should.be.a.boolean;
@@ -26,11 +30,11 @@ describe('The Rule module', function() {
     });
   });
 
-  it('getAction() method should return a function that performs an action', function(done) {
+  it('action.apply should be function that performs the rule action', function(done) {
     var rule = fixtures.versionTenToLatestMinor;
-    var action = rule.getAction();
-    action.should.be.a.function;
-    var result = action({ updates : [
+    var apply = rule.action.apply;
+    apply.should.be.a.function;
+    var result = apply({ updates : [
       { type : 'major', version : '17.0.1' },
       { type : 'minor', version : '10.0.4' },
       { type : 'major', version : '24.0.1' },
