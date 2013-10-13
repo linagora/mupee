@@ -10,27 +10,25 @@ var SourceVersion = require('../../../backend/source-version'),
 describe('The Rule module', function() {
   describe('condition.matches should be a function that evaluate a predicate and return', function() {
     var rule = fixtures.versionTenToLatestMinor;
-    it('false if it does not match', function(done) {
+    it('false if it does not match', function() {
       var matches = rule.condition.matches;
-      matches.should.be.a.function;
+      expect(matches).to.be.a.function;
       var result = matches({ branch : 10 });
       expect(result).to.be.a('boolean');
       expect(result).to.be.true;
-      done();
     });
 
-    it('true if it matches', function(done) {
+    it('true if it matches', function() {
       var matches = rule.condition.matches;
-      matches.should.be.a.function;
+      expect(matches).to.be.a.function;
       var result = matches({ branch : 11 });
       expect(result).to.be.a('boolean');
       expect(result).to.be.false;
       result.should.be.a.boolean;
-      done();
     });
   });
 
-  it('action.apply should be function that performs the rule action', function(done) {
+  it('action.apply should be function that performs the rule action', function() {
     var rule = fixtures.versionTenToLatestMinor;
     var apply = rule.action.apply;
     apply.should.be.a.function;
@@ -42,10 +40,9 @@ describe('The Rule module', function() {
       { type : 'minor', version : '10.0.2' },
       { type : 'minor', version : '10.0.6' }
     ]});
-    result.should.not.be.null;
-    result.should.be.an.object;
+    expect(result).not.to.be.null;
+    expect(result).to.be.an.object;
     expect(result.version).to.equal('10.0.6');
-    done();
   });
 });
 

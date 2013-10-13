@@ -9,12 +9,10 @@ module.exports.versionTenToLatestMinor = new Rule({
   description : 'evaluates if the candidate version is on branch 10, and send back the latest availableupdate',
   condition : {
     id : branchEquals.id,
-    matches : branchEquals.for({ branch : 10 }),
     parameters : { branch : 10 }
   },
   action : {
     id : latestForBranch.id,
-    apply : latestForBranch.for({ type : 'minor' }),
     parameters : { type : 'minor' }
   }
 });
