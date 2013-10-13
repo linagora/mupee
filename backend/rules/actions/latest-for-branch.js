@@ -2,6 +2,8 @@
 
 var RuleAction = require('../rule-action.js');
 
+var versionsCompare = require('./version-compare');
+
 var latestForBranch = new RuleAction({
   id : 'latestForBranch',
   summary : 'upgrade to latest major/minor version',
@@ -16,7 +18,7 @@ var latestForBranch = new RuleAction({
       });
       return filtered.length ?
         filtered.sort(function(left, right) {
-          return right.version - left.version
+          return - versionsCompare(left.version, right.version);
         })[0] : null;
     };
   },

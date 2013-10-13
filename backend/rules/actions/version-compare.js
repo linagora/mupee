@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports.compareVersions = function(a, b) {
+module.exports = function(a, b) {
   var i, cmp, len, re = /(\.0)+[^\.]*$/;
 
   a = (a + '').replace(re, '').split('.');

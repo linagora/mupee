@@ -31,16 +31,16 @@ describe('The Rule module', function() {
     var action = rule.getAction();
     action.should.be.a.function;
     var result = action({ updates : [
-      { type : 'major', version : 17 },
-      { type : 'minor', version : 2 },
-      { type : 'major', version : 24 },
-      { type : 'minor', version : 3 },
-      { type : 'minor', version : 1 },
-      { type : 'minor', version : 6 }
+      { type : 'major', version : '17.0.1' },
+      { type : 'minor', version : '10.0.4' },
+      { type : 'major', version : '24.0.1' },
+      { type : 'minor', version : '10.0.3' },
+      { type : 'minor', version : '10.0.2' },
+      { type : 'minor', version : '10.0.6' }
     ]});
     result.should.not.be.null;
     result.should.be.an.object;
-    expect(result.version).to.equal(6);
+    expect(result.version).to.equal('10.0.6');
     done();
   });
 });
