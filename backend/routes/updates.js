@@ -6,7 +6,8 @@ var SourceVersion = require('../source-version'),
   UpdateFetcher = require('../update-fetcher'),
   Downloader = require('../downloader'),
   Path = require('path'),
-  fs = require('fs');
+  fs = require('fs'),
+  updatesScraper = require("../mozilla-updates-server-scraper");
 
 var logger = require('../logger'),
     config = require('../config');
@@ -41,64 +42,23 @@ exports.updateClient = function(request, response) {
       response.send(clientVersion.updatesAsXML());
       return ;
     }
-    if (!storedVersion || !storedVersion.length) {
+    if (!storedVersion) {
       logger.info('client with IP [%s] gets cache-miss for url: [%s]:', request.ip, request.url);
-      UpdateFetcher.fetch(clientVersion, function(error, result) {
-        if (error) {
-          logger.error('while fetching from remote server :', error);
+      response.send(clientVersion.updatesAsXML());
+      var dbVersion = new SourceVersion(clientVersion);
+      dbVersion.clearUpdates();
+      storage.save(dbVersion, function(err) {
+        if (err) {
+          logger.error("Unable to store new SourceVersion");
+          return ;
         }
-
-        var saveAndSendResponse = function() {
-          storage.save(result, function(error, stored) {
-            if (error) {
-              logger.error('while saving fetched updates to storage :', error);
-            }
-          });
-
-          response.send(result.updatesAsXML());
-        };
-
-        if (result.updates && result.updates.length > 0 && config.download.autoCache) {
-          var tasks = [];
-          var downloader = new Downloader();
-
-          result.updates.forEach(function (update) {
-            update.patches.forEach(function (patch) {
-              var destination = Path.join(
-                  clientVersion.product,
-                  update.version || update.appVersion,
-                  update.buildId,
-                  clientVersion.buildTarget,
-                  clientVersion.locale,
-                  'binary');
-
-              tasks.push({
-                url: patch.url,
-                destination: Path.join(config.download.dir, destination),
-                localPath: destination,
-                patch: patch
-              })
-            });
-          });
-
-          downloader.on('finish', saveAndSendResponse);
-          downloader.on('finish-task', function(err, task) {
-            if (err) {
-              logger.error('while fetching from remote server :', error);
-            }
-
-            task.patch.localPath = task.localPath;
-          });
-
-          downloader.downloadAll(tasks);
-        } else {
-          saveAndSendResponse();
-        }
+        updatesScraper(clientVersion, function() { logger.debug("scraping finished"); });
       });
+      
     }
     else {
       logger.info('client with IP [%s] gets cache-hit for url: [%s]', request.ip, request.url);
-      response.send(new SourceVersion(storedVersion[0]).updatesAsXML());
+      response.send(new SourceVersion(storedVersion).updatesAsXML());
     }
   });
 };
