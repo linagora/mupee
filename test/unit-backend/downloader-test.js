@@ -7,7 +7,8 @@ var expect = chai.expect,
 
 var Downloader = require('../../backend/downloader'),
     fs = require('fs'),
-    nock = require('nock');
+    nock = require('nock'),
+    mockery = require("mockery");
 
 describe('The downloader module', function() {
   var url;
@@ -79,12 +80,13 @@ describe('The downloader module', function() {
   it('should send an event "error" on error with the url', function(done) {
     nock('http://www.obm.org').get('/gpl.txt')
         .reply(404);
-
-    downloader.on('error', function(err) {
-      err.should.equal('Not Found');
-      done();
+    fs.unlink(destination, function(err) {
+      downloader.on('error', function(err) {
+        err.should.equal('Not Found');
+        done();
+      });
+      downloader.download(url, destination);
     });
-    downloader.download(url, destination);
   });
 
   it('should send a "finish" event only when all files are downloaded', function(done) {
@@ -177,12 +179,25 @@ describe('The downloader module', function() {
     }]);
   });
 
-  after(function(done) {
-    fs.unlink(destination, function(err) {
-      if (err) throw err;
+  it('should not download the file if it already exists', function(done) {
+    var destWithFolders = '/tmp/data/in/folder';
+
+    var realstat = fs.stat;
+    fs.stat = function(file, cb) {
+      return cb(null, {great: true});
+    };
+
+    downloader.on('finish', function() {
+      fs.stat = realstat;
       done();
     });
-
+    downloader.downloadAll([{
+      url: 'http://www.obm.org/dummy/1',
+      destination: '/tmp/mup/1'
+    }]);
+  });
+  
+  after(function() {
     nock.enableNetConnect();
   });
 

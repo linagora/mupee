@@ -6,6 +6,7 @@ var http = require('http'),
     util = require('util'),
     request = require('request'),
     mkdirp = require('mkdirp'),
+    logger = require('./logger'),
     Path = require('path');
 
 var Downloader = function() {
@@ -14,17 +15,30 @@ var Downloader = function() {
 
 util.inherits(Downloader, events.EventEmitter);
 
+Downloader.prototype.checkThatFileDoesNotExists = function (destination, callback) {
+  fs.stat(destination, callback);
+};
+
 Downloader.prototype.download = function(url, destination, parameter) {
   var self = this;
-
-  mkdirp(Path.dirname(destination), function (err) {
+  this.checkThatFileDoesNotExists(destination, function(err,resp) {
     if (err) {
-      return self.emit('error', err, parameter);
+      logger.log("Starting download of "+url);
+      download();
+    } else {
+      logger.debug("File "+destination+" ("+url+") is already available.");
+      self.emit('finish', null, parameter);
     }
+  });
+  function download() {
+    mkdirp(Path.dirname(destination), function (err) {
+      if (err) {
+        return self.emit('error', err, parameter);
+      }
 
-    var req = request.get(url);
+      var req = request.get(url);
 
-    req.on('response', function (response) {
+      req.on('response', function (response) {
         if (response.statusCode != 200) {
           self.emit('error', http.STATUS_CODES[response.statusCode], parameter);
         } else {
@@ -38,7 +52,8 @@ Downloader.prototype.download = function(url, destination, parameter) {
             });
         }
       });
-  });
+    });
+  };
 };
 
 Downloader.prototype.downloadAll = function(tasks) {
@@ -58,10 +73,10 @@ Downloader.prototype.downloadAll = function(tasks) {
       self.emit('finish', errors.length ? errors : null);
     }
   };
-
   downloader.on('finish', cb).on('error', cb);
+  
   tasks.forEach(function (task) {
-    downloader.download(task.url, task.destination, task);
+      downloader.download(task.url, task.destination, task);
   });
 };
 
