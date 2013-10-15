@@ -1,6 +1,8 @@
 'use strict';
 
 var SourceVersion = require('../../backend/source-version.js');
+var Update = require("../../backend/update.js").Update;
+var Patch = require("../../backend/update.js").Patch;
 
 exports.withAllFields = function() {
   var sourceVersion = new SourceVersion(
@@ -75,4 +77,57 @@ exports.withEmptyUpdates = function() {
   );
 
   return sourceVersion;
+};
+
+exports.updates = {
+  thatMatches: function() {
+    return new Update({
+      'type' : 'minor',
+      'version' : '3.6.18',
+      'extensionVersion' : '3.6.18',
+      'displayVersion' : null,
+      'appVersion' : null,
+      'platformVersion' : null,
+      'buildId' : '20110614230723',
+      'detailsUrl' : 'https://www.mozilla.com/en-US/firefox/3.6/details/',
+      'patches' : [],
+      'activated' : true
+    });
+  },
+  thatDontMatch: function() {
+    return new Update({
+      'type' : 'minor',
+      'version' : '3.6.2',
+      'extensionVersion' : '3.6.2',
+      'displayVersion' : null,
+      'appVersion' : null,
+      'platformVersion' : null,
+      'buildId' : '20110614230723',
+      'detailsUrl' : 'https://www.mozilla.com/en-US/firefox/3.6/details/',
+      'patches' : [
+      ],
+      'activated' : true
+    });
+  }
+};
+
+exports.patches = {
+  thatMatches: function() {
+    return new Patch({
+      'type' : 'complete',
+      'url' : 'http://download.mozilla.org/?product=firefox-3.6.18-complete&os=win&lang=en-US',
+      'hashFunction' : 'SHA512',
+      'hashValue' : '345835da0d15607d115cef2a42185f0cdc0d800bde0a0039aac786c370732e2b3855cd0b70a6de390ad49d52f7adfd8df56cd9c69f2b44211ba0bb792d47e59b',
+      'size' : '11587247'
+    });
+  },
+  thatDontMatch: function() {
+    return new Patch({
+      'type' : 'complete',
+      'url' : 'http://download.mozilla.org/?product=firefox-17.5-complete&os=win&lang=en-US',
+      'hashFunction' : 'SHA512',
+      'hashValue' : 'HASH',
+      'size' : '2'
+    });
+  }
 };

@@ -47,4 +47,39 @@ SourceVersion.prototype.buildUrl = function(mozUpdateUrl) {
   return path;
 }
 
+SourceVersion.prototype.clearUpdates = function() {
+  this.updates = [];
+};
+
+SourceVersion.prototype.findUpdate = function(update) {
+  var updates = this.updates.filter(function(localUpdate) {
+    
+    return    localUpdate.type == update.type &&
+              localUpdate.version == update.version &&
+              localUpdate.extensionVersion == update.extensionVersion &&
+              localUpdate.displayVersion == update.displayVersion &&
+              localUpdate.appVersion == update.appVersion &&
+              localUpdate.platformVersion == update.platformVersion &&
+              localUpdate.buildId == update.buildId &&
+              localUpdate.detailsUrl == update.detailsUrl ;
+  });
+  return updates.length == 1 ? updates[0] : null;
+};
+
+SourceVersion.prototype.findPatch = function(update, patch) {
+  var localUpdate = this.findUpdate(update);
+  if ( !localUpdate ) {
+    return null;
+  }
+  var patches = localUpdate.patches.filter(function(localPatch) {
+    return (  localPatch.type == patch.type &&
+              localPatch.url == patch.url &&
+              localPatch.localPath == patch.localPath &&
+              localPatch.hashFunction == patch.hashFunction &&
+              localPatch.hashValue == patch.hashValue &&
+              localPatch.size == patch.size );
+  });
+  return patches.length == 1 ? patches[0] : null;
+};
+
 module.exports = SourceVersion;
