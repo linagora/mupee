@@ -3,6 +3,7 @@
 var Loader = require('./rules-loader');
 
 var Rule = function(object) {
+  this._id = object._id;
   this.summary = object.summary;
   this.description = object.description;
   this.condition = object.condition;

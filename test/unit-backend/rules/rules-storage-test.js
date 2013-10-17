@@ -5,25 +5,21 @@ var chai = require('chai');
 var expect = chai.expect;
 
 var DbProvider = require('../../../backend/mongo-provider'),
-  RulesStorage = require('../../../backend/rules/rules-storage');
+  RulesStorage = require('../../../backend/rules/rules-storage'),
+  fixtures = require('./rule-fixtures'),
+  defaultRules = require('../../../backend/rules/default-rules');
 
 var db = DbProvider.db();
 
 describe('The RulesStorage module', function() {
   var manager = new RulesStorage(db);
 
-  var rules = {
-    ruleName: 'aRule'
-  };
-
-  var newRule = {
-    ruleName: 'aNewRule'
-  };
+  var rule = defaultRules.denyAllUpgradeForFirefox;
 
   var id;
 
   beforeEach(function(done) {
-    manager.save(rules, function(err, result) {
+    manager.save(rule, function(err, result) {
       id = result._id;
       done();
     });
@@ -34,19 +30,20 @@ describe('The RulesStorage module', function() {
       if (err) throw err;
       expect(record).to.exist;
       expect(record).to.have.property('_id');
-      expect(record.ruleName).to.equal('aRule');
+      expect(record.summary).to.equal('Deny all upgrade for Firefox');
       done();
     });
   });
 
   it('should allow finding rules by property from persistent storage', function(done) {
-    manager.findByVersion({ruleName: 'aRule'}, function(err, records) {
+    manager.findByProperties({summary: 'Deny all upgrade for Firefox'}, function(err, record) {
       if (err) throw err;
-      expect(records).to.be.an.array;
-      expect(records).to.have.length(1);
-      expect(records[0]).to.exist;
-      expect(records[0]).to.have.property('_id');
-      expect(records[0]).to.have.property('ruleName');
+      expect(record).to.exist;
+      expect(record).to.have.property('_id');
+      expect(record).to.have.property('summary');
+      expect(record).to.have.property('description');
+      expect(record).to.have.property('condition');
+      expect(record).to.have.property('action');
       done();
     });
   });
@@ -64,6 +61,23 @@ describe('The RulesStorage module', function() {
       });
     });
   });*/
+
+  it('should allow finding rules by condition from persistent storage', function(done) {
+    manager.findByCondition({
+        id : 'productEquals',
+        parameters : { product : 'Firefox' }
+      }, function(err, record) {
+        if (err) throw err;
+        expect(record).to.exist;
+        expect(record).to.have.property('_id');
+        expect(record).to.have.property('summary');
+        expect(record.summary).to.equal('Deny all upgrade for Firefox');
+        expect(record).to.have.property('description');
+        expect(record).to.have.property('condition');
+        expect(record).to.have.property('action');
+        done();
+    });
+  });
 
   afterEach(function(done) {
     db.collection('rules').drop(done);

@@ -1,7 +1,8 @@
 'use strict';
 
 var util = require('util'),
-  Storage = require('../storage');
+    Rule = require('./rule'),
+    Storage = require('../storage');
 
 var RulesStorage = function(db) {
   this.db = db;
@@ -10,13 +11,43 @@ var RulesStorage = function(db) {
 
 util.inherits(RulesStorage, Storage);
 
-RulesStorage.prototype.findByVersion = function(rule, callback) {
+function arrayToRule(err, result, callback) {
+  if (!err) {
+    if (result.length == 1) {
+      callback(null, new Rule(result[0]));
+    } else if (result.length === 0) {
+      callback(null, null);
+    } else {
+      callback(new Error('more than one result for this query !'), null);
+    }
+  } else {
+    callback(err, null);
+  }
+}
+
+RulesStorage.prototype.findByProperties = function(rule, callback) {
   this.db.collection('rules').find(
     rule,
     {},
     function(err, cursor) {
-      cursor.toArray(callback);
-    });
+      cursor.toArray(function(err, results) {
+        arrayToRule(err, results, callback);
+      });
+    }
+  );
+};
+
+RulesStorage.prototype.findByCondition = function(condition, callback) {
+  this.db.collection('rules').find({
+      condition : condition
+    },
+    {},
+    function(err, cursor) {
+      cursor.toArray(function(err, results) {
+        arrayToRule(err, results, callback);
+      });
+    }
+  );
 };
 
 module.exports = RulesStorage;
