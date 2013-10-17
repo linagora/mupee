@@ -6,9 +6,9 @@ var Rule = function(object) {
   this._id = object._id;
   this.summary = object.summary;
   this.description = object.description;
-  this.condition = object.condition;
+  this.predicate = object.predicate;
   this.action = object.action;
-  this.condition.matches = Loader.conditions[this.condition.id].for(this.condition.parameters);
+  this.predicate.matches = Loader.predicates[this.predicate.id].for(this.predicate.parameters);
   this.action.apply = Loader.actions[this.action.id].for(this.action.parameters);
 };
 

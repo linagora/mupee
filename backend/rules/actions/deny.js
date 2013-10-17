@@ -1,8 +1,8 @@
 'use strict';
 
-var RuleAction = require('../rule-action.js');
+var Action = require('../action.js');
 
-var deny = new RuleAction({
+var deny = new Action({
   id : 'deny',
   summary : 'Deny all upgrades',
   description : '',

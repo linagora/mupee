@@ -2,7 +2,7 @@
 
 var RuleParameterDefinition = require('./rule-parameter-definition');
 
-var RuleCondition = function(object) {
+var Predicate = function(object) {
   this.id = object.id;
   this.summary = object.summary;
   this.description = object.description;
@@ -15,10 +15,10 @@ var RuleCondition = function(object) {
   }
 };
 
-RuleCondition.prototype.for = function(parameters) {
+Predicate.prototype.for = function(parameters) {
   return function(candidate) {
     return this.predicate(candidate, parameters);
   }.bind(this);
 };
 
-module.exports = RuleCondition;
+module.exports = Predicate;

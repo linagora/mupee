@@ -1,13 +1,18 @@
 'use strict';
 
-var engine = new (require('../../rules-engine'));
+var engine = new (require('../../rules/engine'));
+var Rule = require('../../rules/rule');
 
 exports.listActions = function(request, response) {
   response.json(engine.listActions());
 };
 
 exports.findByPredicate = function(request, response) {
-  var predicate = predicateFromRequest(request);
+  var predicate;
+
+  if (request.body && request.body.predicate) {
+    predicate = toServerRuleComponent(request.body.predicate);
+  }
 
   if (!predicate) {
     return response.send(400);
@@ -18,12 +23,16 @@ exports.findByPredicate = function(request, response) {
       return response.send(500, err);
     }
 
-    response.send(result || 404);
+    response.send(result ? toClientRule(result) : 404);
   });
 };
 
 exports.create = function(request, response) {
-  var rule = ruleFromRequest(request);
+  var rule;
+
+  if (request.body && request.body.rule) {
+    rule = toServerRule(request.body.rule);
+  }
 
   if (!rule) {
     return response.send(400);
@@ -34,13 +43,16 @@ exports.create = function(request, response) {
       return response.send(500, err);
     }
 
-    response.send(result);
+    response.send(toClientRule(result));
   });
 };
 
 exports.update = function(request, response) {
   var id = request.params.id;
-  var rule = ruleFromRequest(request);
+
+  if (request.body && request.body.rule) {
+    var rule = toServerRule(request.body.rule);
+  }
 
   if (!rule) {
     return response.send(400);
@@ -51,7 +63,7 @@ exports.update = function(request, response) {
       return response.send(500, err);
     }
 
-    response.send(result || 404);
+    response.send(result ? toClientRule(result) : 404);
   });
 };
 
@@ -67,56 +79,65 @@ exports.delete = function(request, response) {
   });
 };
 
-/**
-{
-  id: 'branchAndProductEqual',
-  parameters: [
-    {
-      id: 'branch',
-      value: '17'
-    },
-    {
-      id: 'product',
-      value: 'Thunderbird'
-    }
-  ]
-}
- *
- * @param request The HTTP request
- * 
- * @returns PredicateDefinition
- */
-function predicateFromRequest(request) {
-  return request.body.predicate;
+function toServerParameters(clientParameters) {
+  var serverParameters = {};
+
+  if (clientParameters) {
+    clientParameters.forEach(function(parameter) {
+      serverParameters[parameter.id] = parameter.value;
+    });
+  }
+  return serverParameters;
 }
 
-/**
-{
-  id: 'rule-id',
-  predicate: {
-    id: 'productEquals',
-    parameters: [
-      {
-        id: 'product',
-        value: 'Thunderbird'
-      }
-    ]
-  },
-  action: {
-    id: 'action3',
-    parameters: [
-      {
-        id: 'branch',
-        value: '24'
-      }
-    ]
+function toClientParameters(serverParameters) {
+  var clientParameters = [];
+
+  Object.keys(serverParameters).forEach(function(id) {
+    clientParameters.push({
+      id : id,
+      value : serverParameters[id]
+    });
+  });
+  return clientParameters;
+}
+
+function toServerRuleComponent(clientRuleComponent) {
+  var serverRuleComponent;
+
+  if (clientRuleComponent.id) {
+    serverRuleComponent = {};
+    serverRuleComponent.id = clientRuleComponent.id;
+    serverRuleComponent.parameters = toServerParameters(clientRuleComponent.parameters);
+  }
+  return serverRuleComponent;
+}
+
+function toClientRuleComponent(serverRuleComponent) {
+  var clientRuleComponent = {};
+
+  clientRuleComponent.id = serverRuleComponent.id;
+  clientRuleComponent.parameters = toClientParameters(serverRuleComponent.parameters);
+  return clientRuleComponent;
+}
+
+function toServerRule(clientRule) {
+  return {
+    _id : clientRule._id,
+    summary : clientRule.summary,
+    description : clientRule.description,
+    predicate : clientRule.predicate ? toServerRuleComponent(clientRule.predicate) : undefined,
+    action : clientRule.action ? toServerRuleComponent(clientRule.action) : undefined
+  };
+}
+
+function toClientRule(serverRule) {
+  return {
+    _id : serverRule._id,
+    summary : serverRule.summary,
+    description : serverRule.description,
+    predicate : toClientRuleComponent(serverRule.predicate),
+    action : toClientRuleComponent(serverRule.action)
   }
 }
- * 
- * @param request The HTTP request
- * 
- * @returns RuleDefinition
- */
-function ruleFromRequest(request) {
-  return request.body.rule;
-}
+

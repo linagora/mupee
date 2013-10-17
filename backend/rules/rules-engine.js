@@ -15,17 +15,11 @@ RulesEngine.init = function (callbackAllFinished) {
 
   for (rule in rules) {
     operations.push(
-
       function (callback) {
-
-        RulesStorage.findByCondition(rule.condition, function(err, results){
-
+        RulesStorage.findByPredicate(rule.predicate, function(err, results){
           if (err) {
-
             callback(err, null);
-
           } else {
-
             if (!results.length) {
               manager.save(rule, function(err, result) {
                 if (err){
@@ -37,15 +31,11 @@ RulesEngine.init = function (callbackAllFinished) {
             } else{
               callback(null, null);
             }
-
           }
-
         });
       }
-
     );
   }
-
   async.series(operations, callbackAllFinished);
 };
 

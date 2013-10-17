@@ -5,9 +5,9 @@ require('chai').should();
 
 var Loader = require('../../../backend/rules/rules-loader');
 
-describe('The rule conditions', function() {
+describe('The rule predicate', function() {
   describe('product equal to firefox', function() {
-    var matchesFirefox = Loader.conditions.productEquals.for({ product : "Firefox"});
+    var matchesFirefox = Loader.predicates.productEquals.for({ product : "Firefox"});
 
     it('does not match if product is not Firefox', function() {
       var result = matchesFirefox({ product : "Thunderbird"});
@@ -21,6 +21,5 @@ describe('The rule conditions', function() {
       expect(result).to.be.true;
     });
   });
-
 });
 

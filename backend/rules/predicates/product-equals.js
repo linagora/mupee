@@ -1,8 +1,8 @@
 'use strict';
 
-var RuleCondition = require('../rule-condition.js');
+var Predicate = require('../predicate.js');
 
-var productEquals = new RuleCondition({
+var productEquals = new Predicate({
   id : 'productEquals',
   summary : 'product equals',
   description : 'true if product matches with candidate',

@@ -2,8 +2,8 @@
 
 var fs = require('fs'),
     Path = require('path');
-var RuleAction = require('./rule-action'),
-    RuleCondition = require('./rule-condition');
+var Action = require('./action'),
+    Predicate = require('./predicate');
 
 function hasJavascriptExtension(filename) {
   var dotJs = '.js'
@@ -27,12 +27,12 @@ var loadModules = exports.loadModules = function(pathRelSource, pathRelExecution
 };
 
 var loadActions = exports.loadActions = function() {
-  return loadModules('./actions', './backend/rules/actions/', RuleAction);
+  return loadModules('./actions', './backend/rules/actions/', Action);
 };
 
-var loadConditions = exports.loadConditions = function() {
-  return loadModules('./conditions', './backend/rules/conditions/', RuleCondition);
+var loadPredicates = exports.loadPredicates = function() {
+  return loadModules('./predicates', './backend/rules/predicates/', Predicate);
 };
 
 exports.actions = loadActions();
-exports.conditions = loadConditions();
+exports.predicates = loadPredicates();

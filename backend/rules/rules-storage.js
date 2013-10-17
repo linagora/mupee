@@ -37,9 +37,9 @@ RulesStorage.prototype.findByProperties = function(rule, callback) {
   );
 };
 
-RulesStorage.prototype.findByCondition = function(condition, callback) {
+RulesStorage.prototype.findByPredicate = function(predicate, callback) {
   this.db.collection('rules').find({
-      condition : condition
+      predicate : predicate
     },
     {},
     function(err, cursor) {

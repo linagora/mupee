@@ -11,7 +11,7 @@ var DbProvider = require('../../../backend/mongo-provider'),
 
 var db = DbProvider.db();
 
-describe('The RulesStorage module', function() {
+describe('The Rules Storage module', function() {
   var manager = new RulesStorage(db);
 
   var rule = defaultRules.denyAllUpgradeForFirefox;
@@ -42,7 +42,7 @@ describe('The RulesStorage module', function() {
       expect(record).to.have.property('_id');
       expect(record).to.have.property('summary');
       expect(record).to.have.property('description');
-      expect(record).to.have.property('condition');
+      expect(record).to.have.property('predicate');
       expect(record).to.have.property('action');
       done();
     });
@@ -62,8 +62,8 @@ describe('The RulesStorage module', function() {
     });
   });*/
 
-  it('should allow finding rules by condition from persistent storage', function(done) {
-    manager.findByCondition({
+  it('should allow finding rules by predicate from persistent storage', function(done) {
+    manager.findByPredicate({
         id : 'productEquals',
         parameters : { product : 'Firefox' }
       }, function(err, record) {
@@ -73,7 +73,7 @@ describe('The RulesStorage module', function() {
         expect(record).to.have.property('summary');
         expect(record.summary).to.equal('Deny all upgrade for Firefox');
         expect(record).to.have.property('description');
-        expect(record).to.have.property('condition');
+        expect(record).to.have.property('predicate');
         expect(record).to.have.property('action');
         done();
     });

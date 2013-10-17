@@ -1,8 +1,8 @@
 'use strict';
 
-var RuleCondition = require('../rule-condition.js');
+var Predicate = require('../predicate.js');
 
-var branchEquals = new RuleCondition({
+var branchEquals = new Predicate({
   id : 'branchEquals',
   summary : 'branch equals',
   description : 'true if the candidate SourceVersion branch is equal to the branch parameter',

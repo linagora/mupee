@@ -1,31 +1,29 @@
 'use strict';
 
-var Rule = require('./rule'),
-    productEquals = require('./conditions/product-equals'),
-    deny = require('./actions/deny');
+var Rule = require('./rule');
 
 var denyAllFirefox = module.exports.denyAllUpgradeForFirefox = new Rule({
   summary : 'Deny all upgrade for Firefox',
-  description : 'should return empty updates for satisfied condition',
-  condition : {
-    id : productEquals.id,
+  description : 'should return empty updates for all Firefox clients',
+  predicate : {
+    id : 'productEquals',
     parameters : { product : 'Firefox' }
   },
   action : {
-    id : deny.id,
+    id : 'deny',
     parameters : {}
   }
 });
 
 var denyAllThunderbird = module.exports.denyAllUpgradeForThunderbird = new Rule({
-  summary : 'Deny all upgrade for Firefox',
-  description : 'should return empty updates for satisfied condition',
-  condition : {
-    id : productEquals.id,
+  summary : 'Deny all upgrade for Thunderbird',
+  description : 'should return empty updates for all Thunderbird clients',
+  predicate : {
+    id : 'productEquals',
     parameters : { product : 'Thunderbird' }
   },
   action : {
-    id : deny.id,
+    id : 'deny',
     parameters : {}
   }
 });

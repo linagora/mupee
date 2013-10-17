@@ -6,10 +6,10 @@ require('chai').should();
 var fixtures = require('./rule-fixtures');
 
 describe('The Rule module', function() {
-  describe('condition.matches should be a function that evaluate a predicate and return', function() {
+  describe('predicate.matches should be a function that evaluate a predicate and return', function() {
     var rule = fixtures.versionTenToLatestMinor;
     it('false if it does not match', function() {
-      var matches = rule.condition.matches;
+      var matches = rule.predicate.matches;
       expect(matches).to.be.a.function;
       var result = matches({ branch : 10 });
       expect(result).to.be.a('boolean');
@@ -17,7 +17,7 @@ describe('The Rule module', function() {
     });
 
     it('true if it matches', function() {
-      var matches = rule.condition.matches;
+      var matches = rule.predicate.matches;
       expect(matches).to.be.a.function;
       var result = matches({ branch : 11 });
       expect(result).to.be.a('boolean');

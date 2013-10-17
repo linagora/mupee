@@ -1,10 +1,10 @@
 'use strict';
 
-var RuleAction = require('../rule-action.js');
+var Action = require('../action.js');
 
 var versionsCompare = require('./version-compare');
 
-var latestForBranch = new RuleAction({
+var latestForBranch = new Action({
   id : 'latestForBranch',
   summary : 'upgrade to latest major/minor version',
   description : '',
