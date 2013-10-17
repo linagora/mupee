@@ -43,8 +43,8 @@ describe('mupeeProduct', function() {
     }));
     describe("when the server response is not there yet", function() {
       it("should not have majorVersions set", function() {
-        expect(scope.majorVersions).to.be.an.array;
-        expect(scope.majorVersions).to.have.length(0);
+        expect(scope.versions).to.be.an.array;
+        expect(scope.versions).to.have.length(0);
       });
       it("should have the loadProgress flag set", function() {
         expect(scope.loadProgress).to.be.true;

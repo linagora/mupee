@@ -2,12 +2,33 @@ h1 {{product}} updates
 
 p Here is a list per version of your {{product}} policies:
 
-div(data-ng-show="loadProgress" class="center") Loading...
-div(data-ng-show="networkError" class="center") Oh my god ! We encountered an error :-(
-div(data-ng-show="!loadProgress && !networkError")
-  div(class="row" data-ng-repeat="majorVersion in majorVersions")
-    div(class="large-2 columns") version {{majorVersion}}
-    div(class="large-10 columns") Policy: allow upgrades to latest known version
+div.center(data-ng-show="loadProgress") Loading...
+div.center(data-ng-show="networkError") Oh my god ! We encountered an error :-(
 
-  div(class="center" data-ng-show="!majorVersions.length")
-    No {{product}} clients has connected to your Mupee yet
+div(data-ng-show="!loadProgress && !networkError")
+
+  div.row
+    article.twelve.columns(data-ng-repeat="version in versions")
+      header.row(data-ng-click="toggle(version)")
+          div.large-2.columns Version {{version.majorVersion}}
+          div.large-9.columns Policy: allow upgrades to latest known version
+          div.center.large-1.columns +
+      section.row(data-ng-class="{'open': version == directive.opened}")
+        div.row
+          div.large-2.columns
+            p locale: {{version.locale}}
+          div.large-2.columns
+            p channel: {{version.channel}}
+          div.large-8.columns
+            p os: {{version.os}}
+        div.row
+          div.large-2.columns
+            p Updates
+          div.large-10.columns
+            p(data-ng-show="!version.updates.length") None
+            div(data-ng-repeat="update in version.updates")
+              p type: {{update.type}}
+              p version: {{update.version}}
+              p url: {{update.detailsUrl}}
+
+  div.center(data-ng-show="!versions.length") No {{product}} clients has connected to your Mupee yet

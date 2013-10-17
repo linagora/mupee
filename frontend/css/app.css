@@ -1,9 +1,20 @@
-/* app css stylesheet */
-.center { text-align: center }
+@charset "UTF-8";
 
-nav h1 { 
+.center {
+    text-align: center;
+}
+
+.hAir {
+    padding: 0 1em;
+}
+
+.center {
+  text-align: center;
+}
+
+nav h1 {
   padding-left: 1em;
-  color: white 
+  color: white;
 }
 
 body > footer {
@@ -12,4 +23,40 @@ body > footer {
   padding-bottom: 1px;
   background-color: #333;
   color: #999;
+}
+
+.row .columns {
+    font-size: 13px;
+}
+
+header {
+  cursor: pointer;
+  border: solid 1px #cccccc;
+  background: #e7e7e7;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 20px;
+}
+
+header:hover {
+  background: #d7d7d7;
+}
+
+section {
+  overflow:hidden;
+  max-height:0;
+  opacity:0;
+  border: solid 1px #cccccc;
+  -webkit-transition: all 0.5s ease-out;
+  -moz-transition: all 0.5s ease-out;
+  transition: all 0.5s ease-out;
+}
+
+section.open {
+  max-height:500px;
+  opacity:1;
+}
+
+section div {
+  padding: 10px;
 }
