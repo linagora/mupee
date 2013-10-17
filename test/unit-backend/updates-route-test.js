@@ -93,7 +93,7 @@ describe('The Updates route', function() {
       var realSave = MetadataStorage.prototype.save;
       var realFindByVersion = MetadataStorage.prototype.findByVersion;
       it('when a client gets a cache-hit', function (done) {
-        var cachedDate = Date.now();
+        var cachedDate = Date.now() - 1;
         var cachedVersion = new SourceVersion({
           timestamp: cachedDate,
           product: 'Testing',
