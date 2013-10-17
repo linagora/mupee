@@ -31,4 +31,12 @@ Storage.prototype.update = function(id, rule, callback) {
   );
 };
 
+Storage.prototype.remove = function(id, callback) {
+  this.db.collection(this.collection).removeById(
+    new BSON.ObjectID(id),
+    {safe : true},
+    callback
+  );
+}
+
 module.exports = Storage;

@@ -1,32 +1,49 @@
 'use strict';
 
-var chai = require('chai');
+var chai = require('chai'),
+    async = require('async');
+
+var BSON = require('mongodb').BSONPure;
 
 var expect = chai.expect;
 
 var DbProvider = require('../../../backend/mongo-provider'),
-  RulesStorage = require('../../../backend/rules/rules-storage'),
-  fixtures = require('./rule-fixtures'),
-  defaultRules = require('../../../backend/rules/default-rules');
+    RulesStorage = require('../../../backend/rules/rules-storage');
+
+var fixtures = require('./rule-fixtures'),
+    defaultRules = require('../../../backend/rules/default-rules');
 
 var db = DbProvider.db();
 
 describe('The Rules Storage module', function() {
+
   var manager = new RulesStorage(db);
-
-  var rule = defaultRules.denyAllUpgradeForFirefox;
-
-  var id;
+  var rules = {
+    rule : defaultRules.denyAllUpgradesForFirefox,
+    ruleToModify : defaultRules.denyAllUpgradesForThunderbird,
+    ruleToDelete : fixtures.versionTenToLatestMinor
+  };
 
   beforeEach(function(done) {
-    manager.save(rule, function(err, result) {
-      id = result._id;
+
+    Object.keys(rules).forEach(function(key) {
+      delete rules[key]._id;
+    });
+    async.series(Object.keys(rules).map(function(key) {
+      return (function(callback) {
+        manager.save(rules[key], function(err, result) {
+          rules[key]._id = result._id;
+          callback(err, result);
+        });
+      });
+    }),
+    function (err, result) {
       done();
     });
   });
 
   it('should allow adding a rules to persistent storage', function(done) {
-    db.collection('rules').findOne({ _id: id }, {}, function(err, record) {
+    manager.findById(rules.rule._id.toString(), function(err, record) {
       if (err) throw err;
       expect(record).to.exist;
       expect(record).to.have.property('_id');
@@ -48,19 +65,47 @@ describe('The Rules Storage module', function() {
     });
   });
 
-/*  it('should allow replacing a rule in persistent storage', function(done) {
-    manager.save(newRule, function(err, updated) {
+  it('should allow replacing a rule in persistent storage', function(done) {
+    var replacingRule = rules.ruleToModify;
+
+    replacingRule.summary = 'a replacing rule';
+    manager.save(replacingRule, function(err, updated) {
       expect(updated).to.equal(1);
-      manager.findById(id, function(err, updatedRecord) {
-        if (err) throw err;é
-        expect(records).to.be.an.array;
-        expect(records).to.have.length(1);
-        expect(updatedRecord[0]).to.exist;
-        expect(updatedRecord[0].ruleName).to.equal('aNewRule');
+      manager.findById(replacingRule._id.toString(), function(err, record) {
+        if (err) throw err;
+        expect(record).to.exist;
+        expect(record.summary).to.equal('a replacing rule');
         done();
       });
     });
-  });*/
+  });
+
+  it('should allow updating a rule in persistent storage', function(done) {
+    var updatedRuleFields = {};
+
+    updatedRuleFields.description = 'an updated description';
+    manager.update(rules.ruleToModify._id.toString(), updatedRuleFields, function(err, record) {
+      if (err) throw err;
+      expect(record).to.equal(1);
+      manager.findById(rules.ruleToModify._id.toString(), function(err, record) {
+        if (err) throw err;
+        expect(record).to.exist;
+        expect(record.description).to.equal(updatedRuleFields.description);
+        done();
+      })
+    });
+  });
+
+  it('should allow deleting a rule from persistent storage', function(done) {
+    manager.remove(rules.ruleToDelete._id.toString(), function(err, result) {
+      if (err) throw err;
+      manager.findById(rules.ruleToDelete._id.toString(), function(err, record) {
+        if (err) throw err;
+        expect(record).to.be.null;
+        done();
+      });
+    });
+  });
 
   it('should allow finding rules by predicate from persistent storage', function(done) {
     manager.findByPredicate({

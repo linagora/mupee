@@ -2,7 +2,7 @@
 
 var Rule = require('./rule');
 
-var denyAllFirefox = module.exports.denyAllUpgradeForFirefox = new Rule({
+var denyAllFirefox = module.exports.denyAllUpgradesForFirefox = new Rule({
   summary : 'Deny all upgrade for Firefox',
   description : 'should return empty updates for all Firefox clients',
   predicate : {
@@ -15,7 +15,7 @@ var denyAllFirefox = module.exports.denyAllUpgradeForFirefox = new Rule({
   }
 });
 
-var denyAllThunderbird = module.exports.denyAllUpgradeForThunderbird = new Rule({
+var denyAllThunderbird = module.exports.denyAllUpgradesForThunderbird = new Rule({
   summary : 'Deny all upgrade for Thunderbird',
   description : 'should return empty updates for all Thunderbird clients',
   predicate : {

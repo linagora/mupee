@@ -1,7 +1,10 @@
 'use strict';
 
-var engine = new (require('../../rules/engine'));
+var RuleEngine = require('../../rules/engine');
+var DbProvider = require('../../mongo-provider');
 var Rule = require('../../rules/rule');
+
+var engine = new RuleEngine(DbProvider.db());
 
 exports.listActions = function(request, response) {
   response.json(engine.listActions());

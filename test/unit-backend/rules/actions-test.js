@@ -9,7 +9,7 @@ var Loader = require('../../../backend/rules/rules-loader'),
 describe('The rule actions', function() {
 
   it('block all versions upgrade for product equal Firefox', function() {
-    var rule = defaultRules.denyAllUpgradeForFirefox;
+    var rule = defaultRules.denyAllUpgradesForFirefox;
     var apply = rule.action.apply;
     apply.should.be.a.function;
     var result = apply({ updates : [
@@ -23,7 +23,7 @@ describe('The rule actions', function() {
   });
 
   it('block all versions upgrade for product equal Thunderbird', function() {
-    var rule = defaultRules.denyAllUpgradeForThunderbird;
+    var rule = defaultRules.denyAllUpgradesForThunderbird;
     var apply = rule.action.apply;
     apply.should.be.a.function;
     var result = apply({ updates : [
@@ -35,6 +35,5 @@ describe('The rule actions', function() {
     expect(result).to.be.an.array;
     expect(result.length).to.equal(0);
   });
-  
 });
 
