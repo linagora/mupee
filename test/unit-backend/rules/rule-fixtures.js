@@ -2,6 +2,8 @@
 
 var Rule = require('../../../backend/rules/rule'),
     branchEquals = require('../../../backend/rules/conditions/branch-equals'),
+    productEquals = require('../../../backend/rules/conditions/product-equals'),
+    deny = require('../../../backend/rules/actions/deny'),
     latestForBranch = require('../../../backend/rules/actions/latest-for-branch');
 
 module.exports.versionTenToLatestMinor = new Rule({
@@ -16,4 +18,3 @@ module.exports.versionTenToLatestMinor = new Rule({
     parameters : { type : 'minor' }
   }
 });
-

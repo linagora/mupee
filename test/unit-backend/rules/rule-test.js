@@ -3,9 +3,7 @@
 var expect = require('chai').expect;
 require('chai').should();
 
-var SourceVersion = require('../../../backend/source-version'),
-    Rule = require('../../../backend/rules/rule'),
-    fixtures = require('./rule-fixtures');
+var fixtures = require('./rule-fixtures');
 
 describe('The Rule module', function() {
   describe('condition.matches should be a function that evaluate a predicate and return', function() {
