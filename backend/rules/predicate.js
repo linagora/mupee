@@ -1,6 +1,6 @@
 'use strict';
 
-var RuleParameterDefinition = require('./parameter-definition');
+var ParameterDefinition = require('./parameter-definition');
 
 var Predicate = function(object) {
   this.id = object.id;
@@ -10,7 +10,7 @@ var Predicate = function(object) {
   this.parametersDefinitions = [];
   if (object.parametersDefinitions) {
     object.parametersDefinitions.forEach(function(paramDef) {
-        this.parametersDefinitions.push(new RuleParameterDefinition(paramDef));
+        this.parametersDefinitions.push(new ParameterDefinition(paramDef));
     }.bind(this));
   }
 };

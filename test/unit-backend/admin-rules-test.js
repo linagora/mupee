@@ -340,7 +340,7 @@ describe('The Rules Server module', function() {
     });
   });
 
-  it('should send 400 when there is no predicate in a findRuleByPredicate request', function(done) {
+  it('should send 400 when there is no predicate in a findByPredicate request', function(done) {
     var Engine = function () {};
 
     mockery.registerMock('../../rules/engine', Engine);
@@ -356,7 +356,7 @@ describe('The Rules Server module', function() {
     });
   });
 
-  it('should send 404 when there is no rule matching a findRuleByPredicate request', function(done) {
+  it('should send 404 when there is no rule matching a findByPredicate request', function(done) {
     var Engine = function () {};
 
     Engine.prototype.findByPredicate = function(predicate, callback) { callback(null, null); };
@@ -377,7 +377,7 @@ describe('The Rules Server module', function() {
     });
   });
 
-  it('should send 500 when there is an error in a findRuleByPredicate request', function(done) {
+  it('should send 500 when there is an error in a findByPredicate request', function(done) {
     var Engine = function () {};
 
     Engine.prototype.findByPredicate = function(predicate, callback) { callback('oh my god!'); };
@@ -398,7 +398,7 @@ describe('The Rules Server module', function() {
     });
   });
 
-  it('should return the rule in a findRuleByPredicate request', function(done) {
+  it('should return the rule in a findByPredicate request', function(done) {
     var Engine = function () {};
 
     Engine.prototype.findByPredicate = function(predicate, callback) { callback(null, serverRule); };

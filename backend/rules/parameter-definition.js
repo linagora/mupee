@@ -1,6 +1,6 @@
 'use strict';
 
-var RuleParameterDef = function(object) {
+var ParameterDef = function(object) {
   this.summary = object.summary;
   this.description = object.description;
   this.type = object.type;
@@ -8,4 +8,4 @@ var RuleParameterDef = function(object) {
   this.defaultValue = object.defaultValue;
 };
 
-module.exports = RuleParameterDef;
+module.exports = ParameterDef;

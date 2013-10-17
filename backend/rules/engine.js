@@ -1,7 +1,7 @@
 'use strict';
 
 var DefaultRules = require('./default-rules'),
-    RulesStorage = require('./storage'),
+    Storage = require('./storage'),
     Loader = require('./loader'),
     async = require('async');
 
@@ -29,32 +29,32 @@ function ensureRuleByPredicate(rule) {
   };
 }
 
-var RulesEngine = function(db, callback) {
+var Engine = function(db, callback) {
 
-  this.storage = new RulesStorage(db);
+  this.storage = new Storage(db);
   var operations = DefaultRules.list.map(ensureRuleByPredicate.bind(this));
 
   async.series(operations, callback);
 };
 
-RulesEngine.prototype.listActions = function () {
+Engine.prototype.listActions = function () {
   return Loader.actions;
 };
 
-RulesEngine.prototype.findByPredicate = function (predicate, callback) {
+Engine.prototype.findByPredicate = function (predicate, callback) {
   this.storage.findByPredicate(predicate, callback);
 };
 
-RulesEngine.prototype.create = function (rule, callback) {
+Engine.prototype.create = function (rule, callback) {
   this.storage.save(rule, callback);
 };
 
-RulesEngine.prototype.update = function (id, rule, callback) {
+Engine.prototype.update = function (id, rule, callback) {
   this.storage.update(id, rule, callback);
 };
 
-RulesEngine.prototype.delete = function (id, callback) {
+Engine.prototype.delete = function (id, callback) {
   this.storage.remove(id, callback)
 };
 
-module.exports = RulesEngine;
+module.exports = Engine;

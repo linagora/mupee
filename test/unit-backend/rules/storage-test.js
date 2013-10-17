@@ -8,14 +8,14 @@ var BSON = require('mongodb').BSONPure;
 var expect = chai.expect;
 
 var db = require('../../../backend/mongo-provider'),
-    RulesStorage = require('../../../backend/rules/storage');
+    Storage = require('../../../backend/rules/storage');
 
 var fixtures = require('./fixtures'),
     defaultRules = require('../../../backend/rules/default-rules');
 
 describe('The Rules Storage module', function() {
 
-  var manager = new RulesStorage(db);
+  var manager = new Storage(db);
   var rules = {
     rule : defaultRules.denyAllUpgradesForFirefox,
     ruleToModify : defaultRules.denyAllUpgradesForThunderbird,
