@@ -3,7 +3,7 @@
 var expect = require('chai').expect;
 require('chai').should();
 
-var Loader = require('../../../backend/rules/rules-loader'),
+var Loader = require('../../../backend/rules/loader'),
     defaultRules = require('../../../backend/rules/default-rules');
 
 describe('The rule actions', function() {

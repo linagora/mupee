@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 
-var Loader = require('../../../backend/rules/rules-loader'),
+var Loader = require('../../../backend/rules/loader'),
     Action = require('../../../backend/rules/action'),
     Predicate = require('../../../backend/rules/predicate');
 

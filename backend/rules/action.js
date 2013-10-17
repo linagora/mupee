@@ -1,6 +1,6 @@
 'use strict';
 
-var RuleParameterDefinition = require('./rule-parameter-definition');
+var RuleParameterDefinition = require('./parameter-definition');
 
 var RuleAction = function(object) {
   this.id = object.id;

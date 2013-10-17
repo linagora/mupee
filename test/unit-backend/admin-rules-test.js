@@ -61,7 +61,7 @@ describe('The Rules Server module', function() {
         }
       }
     };
-    mockery.registerMock('./rules-loader', Loader);
+    mockery.registerMock('./loader', Loader);
   });
 
   it('should return the rule when created', function(done) {

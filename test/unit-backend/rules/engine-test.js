@@ -3,7 +3,7 @@
 var expect = require('chai').expect;
 
 var db = require('../../../backend/mongo-provider'),
-    RulesStorage = require('../../../backend/rules/rules-storage'),
+    RulesStorage = require('../../../backend/rules/storage'),
     RulesEngine = require('../../../backend/rules/engine'),
     Rule = require('../../../backend/rules/rule');
 

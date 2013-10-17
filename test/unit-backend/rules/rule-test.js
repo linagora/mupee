@@ -3,7 +3,7 @@
 var expect = require('chai').expect;
 require('chai').should();
 
-var fixtures = require('./rule-fixtures');
+var fixtures = require('./fixtures');
 
 describe('The Rule module', function() {
   describe('predicate.matches should be a function that evaluate a predicate and return', function() {

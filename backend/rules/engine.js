@@ -1,8 +1,8 @@
 'use strict';
 
 var DefaultRules = require('./default-rules'),
-    RulesStorage = require('./rules-storage'),
-    Loader = require('./rules-loader'),
+    RulesStorage = require('./storage'),
+    Loader = require('./loader'),
     async = require('async');
 
 

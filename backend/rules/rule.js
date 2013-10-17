@@ -1,6 +1,6 @@
 'use strict';
 
-var Loader = require('./rules-loader');
+var Loader = require('./loader');
 
 var Rule = function(object) {
   this._id = object._id;
