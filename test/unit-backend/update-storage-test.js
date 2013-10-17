@@ -5,13 +5,11 @@ var chai = require('chai');
 var should = chai.should(),
     expect = chai.expect;
 
-var DbProvider = require('../../backend/mongo-provider'),
+var db = require('../../backend/mongo-provider'),
     UpdateStorage = require('../../backend/update-storage'),
     SourceVersion = require('../../backend/source-version'),
     Update = require('../../backend/update').Update,
     fixtures = require('./source-version-fixtures');
-
-var db = DbProvider.db();
 
 describe('The UpdateStorage module', function() {
   var manager = new UpdateStorage(db);

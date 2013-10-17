@@ -1,14 +1,15 @@
 var UpdateFetcher = require('./update-fetcher'),
     Path = require('path'),
-    db = require('./mongo-provider').db(),
+    db = require('./mongo-provider'),
     MetadataStorage = require('./update-storage'),
-    storage = new MetadataStorage(db),
     Downloader = require('./downloader'),
     logger = require('./logger'),
     config = require('./config'),
     async = require("async"),
     SourceVersion = require("./source-version"),
     Update = require('./update.js').Update;
+
+var storage = new MetadataStorage(db);
 
 function getDownloadTasks (localVersion, musVersion, updates) {
   var tasks = [];

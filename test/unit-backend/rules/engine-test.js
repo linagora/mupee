@@ -2,13 +2,12 @@
 
 var expect = require('chai').expect;
 
-var DbProvider = require('../../../backend/mongo-provider'),
+var db = require('../../../backend/mongo-provider'),
     RulesStorage = require('../../../backend/rules/rules-storage'),
     RulesEngine = require('../../../backend/rules/engine'),
     Rule = require('../../../backend/rules/rule');
 
 describe('The Rules Engine', function() {
-  var db = DbProvider.db();
   var storage = new RulesStorage(db);
 
   it('should ensure we have default rules in the database', function(done) {

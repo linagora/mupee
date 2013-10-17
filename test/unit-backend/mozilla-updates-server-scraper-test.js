@@ -2,7 +2,7 @@
 var chai = require("chai");
 var expect = chai.expect;
 var mockery = require("mockery");
-var DbProvider = require('../../backend/mongo-provider');
+var db = require('../../backend/mongo-provider');
 var SourceVersion = require('../../backend/source-version');
 var events = require('events');
 var util = require('util');
@@ -25,7 +25,6 @@ UpdateFetcher.fetch = function(version, callback) {};
 
 describe("The mozilla Updates Server Sraper module", function() {
   var id;
-  var db = DbProvider.db();
   var version = new SourceVersion(
     {
       product: "Thunderbird",

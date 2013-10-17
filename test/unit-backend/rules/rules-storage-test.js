@@ -7,13 +7,11 @@ var BSON = require('mongodb').BSONPure;
 
 var expect = chai.expect;
 
-var DbProvider = require('../../../backend/mongo-provider'),
+var db = require('../../../backend/mongo-provider'),
     RulesStorage = require('../../../backend/rules/rules-storage');
 
 var fixtures = require('./rule-fixtures'),
     defaultRules = require('../../../backend/rules/default-rules');
-
-var db = DbProvider.db();
 
 describe('The Rules Storage module', function() {
 

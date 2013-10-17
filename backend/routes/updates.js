@@ -1,7 +1,7 @@
 'use strict';
 
 var SourceVersion = require('../source-version'),
-  DbProvider = require('../mongo-provider'),
+  db = require('../mongo-provider'),
   MetadataStorage = require('../update-storage'),
   UpdateFetcher = require('../update-fetcher'),
   Downloader = require('../downloader'),
@@ -21,7 +21,6 @@ exports.emptyUpdates = function(request, response) {
 };
 
 exports.updateClient = function(request, response) {
-  var db = DbProvider.db();
   var storage = new MetadataStorage(db);
 
   var clientVersion = new SourceVersion(

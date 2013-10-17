@@ -1,14 +1,12 @@
 'use strict';
 
 var should = require('chai').should(),
-    DbProvider = require('../../backend/mongo-provider'),
+    db = require('../../backend/mongo-provider'),
     request = require('request'),
     fixtures = require('./source-version-fixtures'),
     UpdateStorage = require('../../backend/update-storage'),
     SourceVersion = require('../../backend/source-version'),
     versions = require('../../backend/routes/admin/versions');
-
-var db = DbProvider.db();
 
 describe('The update-server module', function() {
   var baseUri;
