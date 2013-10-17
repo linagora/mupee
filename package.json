@@ -2,8 +2,7 @@
   "name": "mupee",
   "version": "1.0.1",
   "author": "Linagora",
-  "description":
-    "Mupee is a proxy between the Mozilla.org update servers and your corporate Mozilla software.",
+  "description": "Mupee is a proxy between the Mozilla.org update servers and your corporate Mozilla software.",
   "engines": {
     "node": ">=0.10"
   },
@@ -28,17 +27,18 @@
     "mkdirp": "0.3.x",
     "async": "*",
     "passport": "*",
-    "passport-http": "*"
+    "passport-http": "*",
+    "async": "~0.2.9"
   },
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
     "nock": "*",
-    "phantomjs" : "*",
-    "karma" : "*",
-    "karma-junit-reporter" : "*",
-    "karma-jasmine" : "*",
-    "karma-ng-scenario" : "*",
+    "phantomjs": "*",
+    "karma": "*",
+    "karma-junit-reporter": "*",
+    "karma-jasmine": "*",
+    "karma-ng-scenario": "*",
     "karma-phantomjs-launcher": "*",
     "karma-mocha": "*",
     "mockery": "*"
