@@ -1,7 +1,6 @@
 'use strict';
 
 var should = require('chai').should(),
-    mongo = require('mongoskin'),
     request = require('request'),
     nock = require('nock'),
     mockery = require('mockery'),
@@ -23,7 +22,7 @@ describe('The Updates route', function() {
         mockery.registerMock('../logger', testLogger);
         nock.disableNetConnect();
         proxy = require('../../backend/routes/updates'),
-        db = mongo.db('localhost:27017/mozilla-updater?auto_reconnect', {safe: true});
+        db = require("../../backend/mongo-provider");
     });
 
     describe("when defined with version and extensionVersion", function(done) {
