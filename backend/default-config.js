@@ -18,7 +18,8 @@ module.exports = {
   fetch: {
     remoteHost: 'https://aus3.mozilla.org/update/3',
     autoCache: true,
-    refreshInterval: 24
+    refreshInterval: 24,
+    extensionsRemoteHost: 'https://versioncheck.addons.mozilla.org/update/VersionCheck.php'
   },
   server: {
     port: 1234,
