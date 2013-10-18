@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+  <RDF:Description about="urn:mozilla:extension:{e2fda1a4-762b-4020-b5ad-a41df1933103}">
+    <em:updates>
+      <RDF:Seq>
+        <RDF:li resource="urn:mozilla:extension:{e2fda1a4-762b-4020-b5ad-a41df1933103}:1.9.1"/>
+      </RDF:Seq>
+    </em:updates>
+  </RDF:Description>
+  <RDF:Description about="urn:mozilla:extension:{e2fda1a4-762b-4020-b5ad-a41df1933103}:1.9.1">
+    <em:version>1.9.1</em:version>
+    <em:targetApplication>
+      <RDF:Description>
+        <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id>
+        <em:minVersion>17.0</em:minVersion>
+        <em:maxVersion>17.*</em:maxVersion>
+        <em:updateLink>https://addons.cdn.mozilla.net/storage/public-staging/2313/lightning-1.9.1-sm+tb-linux.xpi</em:updateLink>
+        <em:updateInfoURL>https://addons.mozilla.org/versions/updateInfo/1428980/%APP_LOCALE%/</em:updateInfoURL>
+        <em:updateHash>sha256:5f190e99ce21de00a173bf37e0b76904a0306756075e72c779c42cee65cde4c6</em:updateHash>
+      </RDF:Description>
+    </em:targetApplication>
+  </RDF:Description>
+</RDF:RDF>
