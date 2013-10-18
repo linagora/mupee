@@ -44,5 +44,8 @@ module.exports = {
   },
   interface: {
     authModule: 'users'
+  },
+  scheduler: {
+    maxParallelTasks: 3
   }
 };
