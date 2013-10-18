@@ -8,4 +8,9 @@ data/
 .buildpath
 .project
 .settings
-
+*.jsee
+*.jse
+*.htmlee
+*.htmle
+*.txtee
+*.txte
