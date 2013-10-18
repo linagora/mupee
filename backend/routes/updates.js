@@ -3,11 +3,7 @@
 var SourceVersion = require('../source-version'),
   db = require('../mongo-provider'),
   MetadataStorage = require('../update-storage'),
-  UpdateFetcher = require('../update-fetcher'),
-  Downloader = require('../downloader'),
-  Path = require('path'),
-  fs = require('fs'),
-  updatesScraper = require("../mozilla-updates-server-scraper");
+  backgroundTasks = require("../background-tasks");
 
 var logger = require('../logger'),
     config = require('../config');
@@ -50,7 +46,7 @@ exports.updateClient = function(request, response) {
           logger.error("Unable to store new SourceVersion");
           return ;
         }
-        updatesScraper(clientVersion, function() { logger.debug("scraping finished"); });
+        backgroundTasks.addProductScraperTask(clientVersion);
       });
     }
     else {

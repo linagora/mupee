@@ -69,7 +69,7 @@ describe('The Updates route', function() {
         }, {
           send: function (data) {
             data.should.equal(emptyReply);
-            should.exist(db.collection('source-versions').findOne({product: 'Firefox'}, done));
+            should.exist(db.collection('source-versions').findOne({product: 'Thunderbird'}, done));
           }
         });
       });
