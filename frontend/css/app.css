@@ -60,3 +60,15 @@ section.open {
 section div {
   padding: 10px;
 }
+
+.bigIcon {
+  transform: rotate(10deg);
+  -webkit-transform: rotate(10deg);
+  transition: transform 0.3s ease-in;
+  -webkit-transition: -webkit-transform 0.3s ease-in;
+}
+
+.bigIcon:hover {
+  transform: rotate(20deg);
+  -webkit-transform: rotate(20deg);
+}
