@@ -5,6 +5,7 @@ var express = require('express'),
     path = require('path');
 
 var proxy = require('./backend/routes/updates'),
+    extensionProxy = require('./backend/routes/extension-updates'),
     versions = require('./backend/routes/admin/versions'),
     rules = require('./backend/routes/admin/rules'),
     routes = require('./backend/routes'),
@@ -43,6 +44,8 @@ app.get('/update/3/:product/:version/:build_id/:build_target/:locale/:channel/:o
         '/:distribution/:distribution_version/update.xml', proxy.updateClient);
 app.get('/update/3/*', proxy.emptyUpdates);
 app.use('/download', express.static(config.download.dir));
+
+app.use('/update/VersionCheck.php', extensionProxy.versionCheck);
 
 logger.info('Dumping server configuration :', config);
 app.set('port', config.server.port);
