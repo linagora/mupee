@@ -37,16 +37,17 @@ RulesStorage.prototype.findByProperties = function(rule, callback) {
   );
 };
 
-RulesStorage.prototype.findByPredicate = function(predicate, callback) {
+RulesStorage.prototype.findByPredicate = function(predicates, callback) {
   this.db.collection('rules').find({
-    predicate: predicate
-  },
-  {},
-  function(err, cursor) {
-    cursor.toArray(function(err, results) {
-      arrayToRule(err, results, callback);
-    });
-  });
+      predicates: predicates
+    },
+    {},
+    function(err, cursor) {
+      cursor.toArray(function(err, results) {
+        arrayToRule(err, results, callback);
+      });
+    }
+  );
 };
 
 module.exports = RulesStorage;

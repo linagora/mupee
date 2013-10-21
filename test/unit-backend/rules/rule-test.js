@@ -6,20 +6,16 @@ require('chai').should();
 var fixtures = require('./fixtures');
 
 describe('The Rule module', function() {
-  describe('predicate.matches should be a function that evaluate a predicate and return', function() {
-    var rule = fixtures.versionTenToLatestMinor;
+  var rule = fixtures.versionTenToLatestMinor;
+  describe('matches method should evaluate a predicate and return', function() {
     it('false if it does not match', function() {
-      var matches = rule.predicate.matches;
-      expect(matches).to.be.a.function;
-      var result = matches({ branch: 10 });
+      var result = rule.matches({ branch: 10 });
       expect(result).to.be.a('boolean');
       expect(result).to.be.true;
     });
 
     it('true if it matches', function() {
-      var matches = rule.predicate.matches;
-      expect(matches).to.be.a.function;
-      var result = matches({ branch: 11 });
+      var result = rule.matches({ branch: 11 });
       expect(result).to.be.a('boolean');
       expect(result).to.be.false;
       result.should.be.a.boolean;
@@ -27,7 +23,6 @@ describe('The Rule module', function() {
   });
 
   it('action.apply should be function that performs the rule action', function() {
-    var rule = fixtures.versionTenToLatestMinor;
     var apply = rule.action.apply;
     apply.should.be.a.function;
     var result = apply({ updates: [

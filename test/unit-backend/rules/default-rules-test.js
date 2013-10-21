@@ -12,12 +12,10 @@ describe('The Default Rule', function() {
   describe('deny all for Firefox', function() {
       var rule = defaultRules.denyAllUpgradesForFirefox;
       var candidate = fixtures.firefox3;
-      var matches = rule.predicate.matches;
-      matches.should.be.a.function;
       var apply = rule.action.apply;
       apply.should.be.a.function;
     it('should apply when candidate product is Firefox, and return an empty set of possible updates', function() {
-      expect(matches(candidate)).to.be.true;
+      expect(rule.matches(candidate)).to.be.true;
     });
 
     it('and prepare an empty update list to send back to the client', function() {
@@ -29,20 +27,18 @@ describe('The Default Rule', function() {
 
     it('should not apply when candidate product is not Firefox', function() {
       var wrongCandidate = fixtures.thunderbird3;
-      expect(matches(wrongCandidate)).to.be.false;
+      expect(rule.matches(wrongCandidate)).to.be.false;
     });
   });
 
   describe('deny all for Thunderbird', function() {
     var rule = defaultRules.denyAllUpgradesForThunderbird;
     var candidate = fixtures.thunderbird3;
-    var matches = rule.predicate.matches;
-    matches.should.be.a.function;
     var apply = rule.action.apply;
     apply.should.be.a.function;
 
     it('should apply when candidate product is Thunderbird', function() {
-      expect(matches(candidate)).to.be.true;
+      expect(rule.matches(candidate)).to.be.true;
     });
 
     it('and prepare an empty update list to send back to the client', function() {
@@ -54,7 +50,7 @@ describe('The Default Rule', function() {
 
     it('should not apply when candidate product is not Thunderbird', function() {
       var wrongCandidate = fixtures.firefox3;
-      expect(matches(wrongCandidate)).to.be.false;
+      expect(rule.matches(wrongCandidate)).to.be.false;
     });
   });
 });

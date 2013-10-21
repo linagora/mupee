@@ -27,6 +27,8 @@ describe('The Rules Engine', function() {
         if (err) { throw err; }
         expect(result).to.be.an.array;
         expect(result).to.have.length(2);
+        console.log(result[0]);
+        console.log(result[1]);
         expect(result[0]).to.be.null;
         expect(result[1]).to.be.null;
         done();

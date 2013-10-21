@@ -54,7 +54,7 @@ describe('The Rules Storage module', function() {
       expect(record).to.have.property('_id');
       expect(record).to.have.property('summary');
       expect(record).to.have.property('description');
-      expect(record).to.have.property('predicate');
+      expect(record).to.have.property('predicates');
       expect(record).to.have.property('action');
       done();
     });
@@ -103,10 +103,10 @@ describe('The Rules Storage module', function() {
   });
 
   it('should allow finding rules by predicate from persistent storage', function(done) {
-    manager.findByPredicate({
+    manager.findByPredicate([{
       id: 'productEquals',
       parameters: { product: 'Firefox' }
-    }, function(err, record) {
+    }], function(err, record) {
       if (err) { throw err; }
       expect(record).to.exist;
       expect(record).to.have.property('_id');

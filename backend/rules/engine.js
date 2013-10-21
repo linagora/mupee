@@ -8,7 +8,7 @@ var DefaultRules = require('./default-rules'),
 function ensureRuleByPredicate(rule) {
   var storage = this.storage;
   return function(callback) {
-    storage.findByPredicate(rule.predicate, function(err, result) {
+    storage.findByPredicate(rule.predicates, function(err, result){
       if (err) {
         callback(err, null);
       } else {
