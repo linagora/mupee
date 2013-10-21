@@ -6,7 +6,7 @@ var versionsCompare = require('./version-compare');
 
 var latestForBranch = new Action({
   id: 'latestForBranch',
-  summary: 'upgrade to latest major/minor version',
+  summary: 'upgrade to latest release of a specified version',
   description: '',
   action: function(parameters) {
     return function(candidate) {
@@ -23,9 +23,9 @@ var latestForBranch = new Action({
     };
   },
   parametersDefinitions: [{
-    identifier: 'version-type',
-    summary: 'version type',
-    description: 'a Mozilla product version type (major/minor)',
+    id: 'version',
+    summary: 'Version number',
+    description: 'Mozilla product major version number (i.e. "17")',
     type: 'string',
     mandatory: false,
     defaultValue: 'minor'
