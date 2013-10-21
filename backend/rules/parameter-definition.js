@@ -1,6 +1,7 @@
 'use strict';
 
 var ParameterDef = function(object) {
+  this.id = object.id;
   this.summary = object.summary;
   this.description = object.description;
   this.type = object.type;
