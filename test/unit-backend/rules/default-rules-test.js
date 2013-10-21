@@ -3,36 +3,59 @@
 var expect = require('chai').expect;
 require('chai').should();
 
-var defaultRules = require('../../../backend/rules/default-rules');
+var Loader = require('../../../backend/rules/loader'),
+    defaultRules = require('../../../backend/rules/default-rules'),
+    fixtures = require('../source-version-fixtures.js');
 
-describe('The rule actions', function() {
+describe('The Default Rule', function() {
 
-  it('block all versions upgrade for product equal Firefox', function() {
-    var rule = defaultRules.denyAllUpgradesForFirefox;
-    var apply = rule.action.apply;
-    apply.should.be.a.function;
-    var result = apply({ updates: [
-      { type: 'major', version: '17.0.1' },
-      { type: 'major', version: '24.0.1' },
-      { type: 'minor', version: '10.0.6' }
-    ]});
-    expect(result).not.to.be.null;
-    expect(result).to.be.an.array;
-    expect(result.length).to.equal(0);
+  describe('deny all for Firefox', function() {
+      var rule = defaultRules.denyAllUpgradesForFirefox;
+      var candidate = fixtures.firefox3;
+      var matches = rule.predicate.matches;
+      matches.should.be.a.function;
+      var apply = rule.action.apply;
+      apply.should.be.a.function;
+    it('should apply when candidate product is Firefox, and return an empty set of possible updates', function() {
+      expect(matches(candidate)).to.be.true;
+    });
+
+    it('and prepare an empty update list to send back to the client', function() {
+      var result = apply(candidate);
+      expect(result).not.to.be.null;
+      expect(result.updates).to.be.an.array;
+      expect(result.updates).to.have.length(0);
+    });
+
+    it('should not apply when candidate product is not Firefox', function() {
+      var wrongCandidate = fixtures.thunderbird3;
+      expect(matches(wrongCandidate)).to.be.false;
+    });
   });
 
-  it('block all versions upgrade for product equal Thunderbird', function() {
+  describe('deny all for Thunderbird', function() {
     var rule = defaultRules.denyAllUpgradesForThunderbird;
+    var candidate = fixtures.thunderbird3;
+    var matches = rule.predicate.matches;
+    matches.should.be.a.function;
     var apply = rule.action.apply;
     apply.should.be.a.function;
-    var result = apply({ updates: [
-      { type: 'major', version: '17.0.1' },
-      { type: 'major', version: '24.0.1' },
-      { type: 'minor', version: '10.0.6' }
-    ]});
-    expect(result).not.to.be.null;
-    expect(result).to.be.an.array;
-    expect(result.length).to.equal(0);
+
+    it('should apply when candidate product is Thunderbird', function() {
+      expect(matches(candidate)).to.be.true;
+    });
+
+    it('and prepare an empty update list to send back to the client', function() {
+      var result = apply(candidate);
+      expect(result).not.to.be.null;
+      expect(result.updates).to.be.an.array;
+      expect(result.updates).to.have.length(0);
+    });
+
+    it('should not apply when candidate product is not Thunderbird', function() {
+      var wrongCandidate = fixtures.firefox3;
+      expect(matches(wrongCandidate)).to.be.false;
+    });
   });
 });
 

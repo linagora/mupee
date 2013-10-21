@@ -6,9 +6,10 @@ var deny = new Action({
   id: 'deny',
   summary: 'Deny all upgrades',
   description: '',
-  action: function() {
-    return function() {
-      return [];
+  action: function(parameters) {
+    return function(version) {
+      version.clearUpdates();
+      return version;
     };
   },
   parametersDefinitions: []
