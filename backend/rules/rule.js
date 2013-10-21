@@ -4,8 +4,6 @@ var Loader = require('./loader');
 
 var Rule = function(object) {
   this._id = object._id;
-  this.summary = object.summary;
-  this.description = object.description;
   this.predicates = object.predicates;
   this.predicates.forEach(function(p) {
     p.matches = Loader.predicates[p.id].for(p.parameters);

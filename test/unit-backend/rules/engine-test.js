@@ -3,9 +3,18 @@
 var expect = require('chai').expect;
 
 var db = require('../../../backend/mongo-provider'),
-    Engine = require('../../../backend/rules/engine');
+    Storage = require('../../../backend/rules/storage'),
+    Engine = require('../../../backend/rules/engine'),
+    Rule = require('../../../backend/rules/rule'),
+    defaults = require('../../../backend/rules/default-rules');
 
 describe('The Rules Engine', function() {
+
+  before(function() {
+    defaults.list.forEach(function(rule) {
+      rule._id = null;
+    });
+  });
 
   it('should ensure we have default rules in the database', function(done) {
     new Engine(db, function(err, result) {
@@ -27,8 +36,6 @@ describe('The Rules Engine', function() {
         if (err) { throw err; }
         expect(result).to.be.an.array;
         expect(result).to.have.length(2);
-        console.log(result[0]);
-        console.log(result[1]);
         expect(result[0]).to.be.null;
         expect(result[1]).to.be.null;
         done();
@@ -37,6 +44,13 @@ describe('The Rules Engine', function() {
   });
 
   afterEach(function(done) {
+    defaults.list.forEach(function(rule) {
+      rule._id = null;
+    });
     db.collection('rules').drop(done);
+  });
+
+  after(function(done) {
+    db.close(done);
   });
 });

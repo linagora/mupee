@@ -5,7 +5,8 @@ var chai = require('chai'),
     expect = chai.expect;
 
 var db = require('../../../backend/mongo-provider'),
-    Storage = require('../../../backend/rules/rules-storage');
+    Storage = require('../../../backend/rules/storage'),
+    Rule = require('../../../backend/rules/rule');
 
 var fixtures = require('./fixtures'),
     defaultRules = require('../../../backend/rules/default-rules');
@@ -13,109 +14,105 @@ var fixtures = require('./fixtures'),
 describe('The Rules Storage module', function() {
 
   var manager = new Storage(db);
-  var rules = {
-    rule: defaultRules.denyAllUpgradesForFirefox,
-    ruleToModify: defaultRules.denyAllUpgradesForThunderbird,
-    ruleToDelete: fixtures.versionTenToLatestMinor
-  };
-
-  beforeEach(function(done) {
-
-    Object.keys(rules).forEach(function(key) {
-      delete rules[key]._id;
-    });
-    async.series(Object.keys(rules).map(function(key) {
-      return function(callback) {
-        manager.save(rules[key], function(err, result) {
-          rules[key]._id = result._id;
-          callback(err, result);
-        });
-      };
-    }),
-    function() {
-      done();
-    });
-  });
 
   it('should allow adding a rules to persistent storage', function(done) {
-    manager.findById(rules.rule._id.toString(), function(err, record) {
-      if (err) { throw err; }
+    var rule = new Rule(defaultRules.denyAllUpgradesForFirefox)
+    manager.save(rule, function(err, record) {
+      if (err) throw err;
       expect(record).to.exist;
       expect(record).to.have.property('_id');
-      expect(record.summary).to.equal('Deny all upgrade for Firefox');
-      done();
-    });
-  });
-
-  it('should allow finding rules by property from persistent storage', function(done) {
-    manager.findByProperties({summary: 'Deny all upgrade for Firefox'}, function(err, record) {
-      if (err) { throw err; }
-      expect(record).to.exist;
-      expect(record).to.have.property('_id');
-      expect(record).to.have.property('summary');
-      expect(record).to.have.property('description');
-      expect(record).to.have.property('predicates');
-      expect(record).to.have.property('action');
-      done();
+      console.log(rule._id);
+      manager.findById(record._id.toString(), function(err, record) {
+        if (err) throw err;
+        expect(record).to.exist;
+        expect(record).to.have.property('_id');
+        expect(record).to.have.property('predicates');
+        expect(record).to.have.property('action');
+        expect(record.action).to.have.property('parameters');
+        expect(record.action).to.have.property('id');
+        done();
+      });
     });
   });
 
   it('should allow replacing a rule in persistent storage', function(done) {
-    var replacingRule = rules.ruleToModify;
+    var ruleToReplace = new Rule(defaultRules.denyAllUpgradesForFirefox);
 
-    replacingRule.summary = 'a replacing rule';
-    manager.save(replacingRule, function(err, updated) {
-      expect(updated).to.equal(1);
-      manager.findById(replacingRule._id.toString(), function(err, record) {
-        if (err) { throw err; }
-        expect(record).to.exist;
-        expect(record.summary).to.equal('a replacing rule');
-        done();
+    manager.save(ruleToReplace, function(err, ruleToReplace) {
+      if (err) throw err;
+      ruleToReplace.action = null;
+      console.log(ruleToReplace._id);
+      manager.save(ruleToReplace, function(err, updated) {
+        if (err) throw err;
+        expect(updated).to.equal(1);
+        manager.findById(ruleToReplace._id.toString(), function(err, record) {
+          if (err) throw err;
+          expect(record).to.exist;
+          expect(record).to.have.property('_id');
+          expect(record._id).to.deep.equal(ruleToReplace._id);
+          expect(record).to.have.property('action');
+          expect(record.action).to.be.null;
+          done();
+        });
       });
     });
   });
 
   it('should allow updating a rule in persistent storage', function(done) {
+    var ruleToUpdate = new Rule(defaultRules.denyAllUpgradesForFirefox);
     var updatedRuleFields = {};
 
-    updatedRuleFields.description = 'an updated description';
-    manager.update(rules.ruleToModify._id.toString(), updatedRuleFields, function(err, record) {
-      if (err) { throw err; }
-      expect(record).to.equal(1);
-      manager.findById(rules.ruleToModify._id.toString(), function(err, record) {
-        if (err) { throw err; }
-        expect(record).to.exist;
-        expect(record.description).to.equal(updatedRuleFields.description);
-        done();
+    updatedRuleFields.predicates = [];
+    manager.save(ruleToUpdate, function(err, ruleToUpdate) {
+      if (err) throw err;
+      manager.update(ruleToUpdate._id.toString(), updatedRuleFields, function(err, record) {
+        if (err) throw err;
+        expect(record).to.equal(1);
+        manager.findById(ruleToUpdate._id.toString(), function(err, record) {
+          if (err) throw err;
+          expect(record).to.exist;
+          expect(record).to.have.property('predicates');
+          expect(record.predicates).to.be.an.array;
+          expect(record.predicates).to.have.length(0);
+          done();
+        })
       });
     });
   });
 
   it('should allow deleting a rule from persistent storage', function(done) {
-    manager.remove(rules.ruleToDelete._id.toString(), function(err) {
-      if (err) { throw err; }
-      manager.findById(rules.ruleToDelete._id.toString(), function(err, record) {
-        if (err) { throw err; }
-        expect(record).to.be.null;
-        done();
+    var ruleToDelete = new Rule(defaultRules.denyAllUpgradesForFirefox);
+
+    manager.save(ruleToDelete, function(err, record) {
+      if (err) throw err;
+      manager.remove(ruleToDelete._id.toString(), function(err, result) {
+        if (err) throw err;
+        manager.findById(ruleToDelete._id.toString(), function(err, record) {
+          if (err) throw err;
+          expect(record).to.be.null;
+          done();
+        });
       });
     });
   });
 
   it('should allow finding rules by predicate from persistent storage', function(done) {
-    manager.findByPredicate([{
-      id: 'productEquals',
-      parameters: { product: 'Firefox' }
-    }], function(err, record) {
-      if (err) { throw err; }
-      expect(record).to.exist;
-      expect(record).to.have.property('_id');
-      expect(record).to.have.property('summary');
-      expect(record.summary).to.equal('Deny all upgrade for Firefox');
-      expect(record).to.have.property('description');
-      expect(record).to.have.property('predicate');
-      expect(record).to.have.property('action');
-      done();
+    var ruleToFind = new Rule(defaultRules.denyAllUpgradesForFirefox);
+
+    manager.save(ruleToFind, function(err, record) {
+      if (err) throw err;
+      manager.findByPredicate([{
+        id : 'productEquals',
+        parameters : { product : 'Firefox' }
+      }], function(err, record) {
+        if (err) throw err;
+        expect(record).to.have.property('_id');
+        expect(record).to.have.property('predicates');
+        expect(record).to.have.property('action');
+        expect(record.action).to.have.property('parameters');
+        expect(record.action).to.have.property('id');
+        done();
+      });
     });
   });
 
