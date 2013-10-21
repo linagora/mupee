@@ -60,13 +60,13 @@ exports.update = function(request, response) {
   if (!rule) {
     return response.send(400);
   }
-
+  delete rule._id;
   engine.update(id, rule, function(err, result) {
     if (err) {
       return response.send(500, err);
     }
-
-    response.send(result ? toClientRule(result) : 404);
+    rule._id = id;
+    response.send(result ? toClientRule(rule) : 404);
   });
 };
 
