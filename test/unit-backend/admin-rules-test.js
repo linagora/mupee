@@ -125,7 +125,7 @@ describe('The Rules Server module', function() {
 
     rules.update({
       params: {
-        _id: 'rule-id'
+        id: 'rule-id'
       },
       body: {
         rule: rule
