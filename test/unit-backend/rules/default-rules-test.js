@@ -10,10 +10,11 @@ var Loader = require('../../../backend/rules/loader'),
 describe('The Default Rule', function() {
 
   describe('deny all for Firefox', function() {
-      var rule = defaultRules.denyAllUpgradesForFirefox;
-      var candidate = fixtures.firefox3;
-      var apply = rule.action.apply;
-      apply.should.be.a.function;
+    var rule = defaultRules.denyAllUpgradesForFirefox;
+    var candidate = fixtures.firefox3;
+    var apply = rule.action.apply;
+    apply.should.be.a.function;
+
     it('should apply when candidate product is Firefox, and return an empty set of possible updates', function() {
       expect(rule.matches(candidate)).to.be.true;
     });
