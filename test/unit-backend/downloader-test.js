@@ -5,9 +5,11 @@ var chai = require('chai'),
 
 chai.should();
 
-var Downloader = require('../../backend/downloader'),
+var Downloader,
     fs = require('fs'),
-    nock = require('nock');
+    nock = require('nock'),
+    testLogger = require('./test-logger'),
+    mockery = require("mockery");
 
 describe('The downloader module', function() {
   var url;
@@ -16,7 +18,10 @@ describe('The downloader module', function() {
   var downloader;
 
   before(function() {
+    mockery.enable({warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
     nock.disableNetConnect();
+    Downloader = require('../../backend/downloader'),
 
     url = 'http://www.obm.org/gpl.txt';
     destination = '/tmp/gpl.txt';
@@ -183,6 +188,9 @@ describe('The downloader module', function() {
 
   after(function() {
     nock.enableNetConnect();
+    mockery.deregisterAll();
+    mockery.resetCache();
+    mockery.disable();
   });
 
 });
