@@ -129,7 +129,7 @@ function toServerRule(clientRule) {
     _id : clientRule.id,
     summary : clientRule.summary,
     description : clientRule.description,
-    predicate : clientRule.predicate ? toServerRuleComponent(clientRule.predicate) : undefined,
+    predicates : clientRule.predicates ? clientRule.predicates.map(function(predicate) { return toServerRuleComponent(predicate); }) : undefined,
     action : clientRule.action ? toServerRuleComponent(clientRule.action) : undefined
   };
 }
@@ -139,7 +139,7 @@ function toClientRule(serverRule) {
     id : serverRule._id,
     summary : serverRule.summary,
     description : serverRule.description,
-    predicate : toClientRuleComponent(serverRule.predicate),
+    predicates : serverRule.predicates.map(function(predicate) {      return toClientRuleComponent(predicate)    }),
     action : toClientRuleComponent(serverRule.action)
   }
 }
