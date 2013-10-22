@@ -43,6 +43,9 @@ RulesStorage.prototype.findByPredicate = function(predicates, callback) {
     },
     {},
     function(err, cursor) {
+      if ( err ) {
+        return callback(err);
+      }
       cursor.toArray(function(err, results) {
         arrayToRule(err, results, callback);
       });
