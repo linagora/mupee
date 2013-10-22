@@ -21,7 +21,6 @@ describe('The Rules Storage module', function() {
       if (err) throw err;
       expect(record).to.exist;
       expect(record).to.have.property('_id');
-      console.log(rule._id);
       manager.findById(record._id.toString(), function(err, record) {
         if (err) throw err;
         expect(record).to.exist;
