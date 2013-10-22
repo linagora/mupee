@@ -12,22 +12,26 @@ var latestForBranch = new Action({
     return function(candidate) {
       var filtered = [];
       candidate.updates.forEach(function(update) {
-        if (update.type === parameters.type) {
+        if (update.version.split('.').shift() == parameters.branch) {
           filtered.push(update);
         }
       });
-      return filtered.length ?
-          filtered.sort(function(left, right) {
-            return - versionsCompare(left.version, right.version);
-          })[0] : null;
+      candidate.clearUpdates();
+      if ( filtered.length ) {
+        filtered.sort(function(left, right) {
+          return - versionsCompare(left.version, right.version);
+        });
+        candidate.addUpdate(filtered[0]);
+      }
+      return candidate;
     };
   },
   parametersDefinitions: [{
-    id: 'version',
+    id: 'branch',
     summary: 'Version number',
     description: 'Mozilla product major version number (i.e. "17")',
     type: 'string',
-    mandatory: false,
+    mandatory:  true,
     defaultValue: 'minor'
   }]
 });
