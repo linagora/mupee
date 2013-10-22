@@ -31,7 +31,7 @@ exports.findByPredicate = function(request, response) {
 
   engine.findByPredicate(predicates, function(err, result) {
     if (err) {
-      return response.send(500, err);
+      return response.send(500, ("message" in err) ? err.message : err );
     }
 
     response.send(result ? toClientRule(result) : 404);
