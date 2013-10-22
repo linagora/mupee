@@ -40,7 +40,6 @@ describe('The Rules Storage module', function() {
     manager.save(ruleToReplace, function(err, ruleToReplace) {
       if (err) throw err;
       ruleToReplace.action = null;
-      console.log(ruleToReplace._id);
       manager.save(ruleToReplace, function(err, updated) {
         if (err) throw err;
         expect(updated).to.equal(1);
