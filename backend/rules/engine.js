@@ -36,8 +36,8 @@ Engine.prototype.listActions = function() {
   return Loader.actions;
 };
 
-Engine.prototype.findByPredicate = function(predicate, callback) {
-  this.storage.findByPredicate(predicate, callback);
+Engine.prototype.findByPredicate = function(predicates, callback) {
+  this.storage.findByPredicate(predicates, callback);
 };
 
 Engine.prototype.create = function(rule, callback) {
