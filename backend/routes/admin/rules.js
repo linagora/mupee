@@ -62,13 +62,17 @@ exports.update = function(request, response) {
   var id = request.params.id;
   var rule;
 
-  if (request.body && request.body.rule) {
-    rule = toServerRule(request.body.rule);
+  if (!request.body || !request.body.rule) {
+    return response.send(400, "body should contain a rule object");
   }
-
-  if (!rule) {
-    return response.send(400);
+  var rule = toServerRule(request.body.rule);
+  
+  try {
+    rulesValidation.validateRuleObject(rule);
+  } catch (e) {
+    return response.send(400, e.message);
   }
+  
   delete rule._id;
   engine.update(id, rule, function(err, result) {
     if (err) {
