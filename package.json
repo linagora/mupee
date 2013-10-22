@@ -41,7 +41,12 @@
     "karma-ng-scenario": "*",
     "karma-phantomjs-launcher": "*",
     "karma-mocha": "*",
-    "mockery": "*"
+    "mockery": "*",
+    "grunt": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-concat": "*"
   },
   "keywords": [
     "mozilla",

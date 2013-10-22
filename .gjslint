@@ -1,0 +1,4 @@
+--nojsdoc
+-e frontend/lib,test/lib,backend/jstoxml.js
+-r frontend/js,test
+--strict
