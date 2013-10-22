@@ -2,7 +2,8 @@
 
 var db = require('../../mongo-provider');
 var Engine = require('../../rules/engine');
-
+var Rule = require('../../rules/rule');
+var rulesValidation = require("../../rules/validation");
 var engine = new Engine(db);
 
 exports.listActions = function(request, response) {
@@ -10,17 +11,25 @@ exports.listActions = function(request, response) {
 };
 
 exports.findByPredicate = function(request, response) {
-  var predicate;
-
-  if (request.body && request.body.predicate) {
-    predicate = toServerRuleComponent(request.body.predicate);
+  if (!request.body || !request.body.predicates || !("forEach" in request.body.predicates) ) {
+    return response.send(400, "body should contain a 'predicates' array");
   }
-
-  if (!predicate) {
+  var predicates = []
+  for (var i in request.body.predicates ) {
+    var predicate = toServerRuleComponent(request.body.predicates[i]);
+    try {
+      rulesValidation.validatePredicateObject(predicate);
+    } catch(e) {
+      return response.send(400, e.message);
+    }
+    predicates.push(predicate);
+  }
+  
+  if (!predicates || !predicates.length) {
     return response.send(400);
   }
 
-  engine.findByPredicate(predicate, function(err, result) {
+  engine.findByPredicate(predicates, function(err, result) {
     if (err) {
       return response.send(500, err);
     }
