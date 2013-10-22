@@ -4,8 +4,8 @@ var Action = require('../action.js');
 
 var deny = new Action({
   id: 'deny',
-  summary: 'Deny all upgrades',
-  description: '',
+  summary: 'deny upgrades',
+  description: 'This policy disable all upgrades',
   action: function(parameters) {
     return function(version) {
       version.clearUpdates();
