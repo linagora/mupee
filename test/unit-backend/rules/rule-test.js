@@ -25,17 +25,30 @@ describe('The Rule module', function() {
   it('action.apply should be function that performs the rule action', function() {
     var apply = rule.action.apply;
     apply.should.be.a.function;
-    var result = apply({ updates: [
-      { type: 'major', version: '17.0.1' },
-      { type: 'minor', version: '10.0.4' },
-      { type: 'major', version: '24.0.1' },
-      { type: 'minor', version: '10.0.3' },
-      { type: 'minor', version: '10.0.2' },
-      { type: 'minor', version: '10.0.6' }
-    ]});
+    var result = apply({ 
+      updates: [
+        { type: 'major', version: '17.0.1' },
+        { type: 'minor', version: '10.0.4' },
+        { type: 'major', version: '24.0.1' },
+        { type: 'minor', version: '10.0.3' },
+        { type: 'major', version: '17.0.4' },
+        { type: 'minor', version: '10.0.2' },
+        { type: 'minor', version: '10.0.6' },
+        { type: 'major', version: '17.0.3' }
+      ],
+      clearUpdates: function() {
+        this.updates = [];
+      },
+      addUpdate: function(update) {
+        this.updates.push(update);
+      }
+    });
     expect(result).not.to.be.null;
     expect(result).to.be.an.object;
-    expect(result.version).to.equal('10.0.6');
+    expect(result.updates).to.be.an.array;
+    expect(result.updates).to.have.length(1);
+    expect(result.updates[0].version).not.to.be.null;
+    expect(result.updates[0].version).to.equal('17.0.4');
   });
 });
 

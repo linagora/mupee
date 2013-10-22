@@ -12,6 +12,6 @@ module.exports.versionTenToLatestMinor = new Rule({
   }],
   action: {
     id: latestForBranch.id,
-    parameters: { type: 'minor' }
+    parameters: { branch: "17" }
   }
 });
