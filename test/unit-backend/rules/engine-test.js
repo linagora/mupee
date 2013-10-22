@@ -3,16 +3,13 @@
 var expect = require('chai').expect;
 
 var db = require('../../../backend/mongo-provider'),
-    Storage = require('../../../backend/rules/storage'),
-    Engine = require('../../../backend/rules/engine'),
-    Rule = require('../../../backend/rules/rule');
+    Engine = require('../../../backend/rules/engine');
 
 describe('The Rules Engine', function() {
-  var storage = new Storage(db);
 
   it('should ensure we have default rules in the database', function(done) {
-    var engine = new Engine(db, function(err, result) {
-      if (err) throw(err);
+    new Engine(db, function(err, result) {
+      if (err) { throw err; }
       expect(result).to.be.an.array;
       expect(result).to.have.length(2);
       expect(result[0]).to.be.a.Rule;
@@ -22,12 +19,12 @@ describe('The Rules Engine', function() {
   });
 
   it('should not try to insert the default rules if some already exist with the same predicate', function(done) {
-    var engine = new Engine(db, function(err, result) {
-      if (err) throw err;
+    new Engine(db, function(err, result) {
+      if (err) { throw err; }
       expect(result).to.be.an.array;
       expect(result).to.have.length(2);
-      var otherEngineThatWillTryToInsertDefaultsAgain = new Engine(db, function(err, result) {
-        if (err) throw err;
+      new Engine(db, function(err, result) {
+        if (err) { throw err; }
         expect(result).to.be.an.array;
         expect(result).to.have.length(2);
         expect(result[0]).to.be.null;

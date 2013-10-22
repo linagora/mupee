@@ -1,10 +1,71 @@
 'use strict';
 
-var db = require('../../mongo-provider')
+var db = require('../../mongo-provider');
 var Engine = require('../../rules/engine');
-var Rule = require('../../rules/rule');
 
 var engine = new Engine(db);
+
+function toServerParameters(clientParameters) {
+  var serverParameters = {};
+
+  if (clientParameters) {
+    clientParameters.forEach(function(parameter) {
+      serverParameters[parameter.id] = parameter.value;
+    });
+  }
+  return serverParameters;
+}
+
+function toClientParameters(serverParameters) {
+  var clientParameters = [];
+
+  Object.keys(serverParameters).forEach(function(id) {
+    clientParameters.push({
+      id: id,
+      value: serverParameters[id]
+    });
+  });
+  return clientParameters;
+}
+
+function toServerRuleComponent(clientRuleComponent) {
+  var serverRuleComponent;
+
+  if (clientRuleComponent.id) {
+    serverRuleComponent = {};
+    serverRuleComponent.id = clientRuleComponent.id;
+    serverRuleComponent.parameters = toServerParameters(clientRuleComponent.parameters);
+  }
+  return serverRuleComponent;
+}
+
+function toClientRuleComponent(serverRuleComponent) {
+  var clientRuleComponent = {};
+
+  clientRuleComponent.id = serverRuleComponent.id;
+  clientRuleComponent.parameters = toClientParameters(serverRuleComponent.parameters);
+  return clientRuleComponent;
+}
+
+function toServerRule(clientRule) {
+  return {
+    _id: clientRule._id,
+    summary: clientRule.summary,
+    description: clientRule.description,
+    predicate: clientRule.predicate ? toServerRuleComponent(clientRule.predicate) : undefined,
+    action: clientRule.action ? toServerRuleComponent(clientRule.action) : undefined
+  };
+}
+
+function toClientRule(serverRule) {
+  return {
+    _id: serverRule._id,
+    summary: serverRule.summary,
+    description: serverRule.description,
+    predicate: toClientRuleComponent(serverRule.predicate),
+    action: toClientRuleComponent(serverRule.action)
+  };
+}
 
 exports.listActions = function(request, response) {
   response.json(engine.listActions());
@@ -52,9 +113,10 @@ exports.create = function(request, response) {
 
 exports.update = function(request, response) {
   var id = request.params.id;
+  var rule;
 
   if (request.body && request.body.rule) {
-    var rule = toServerRule(request.body.rule);
+    rule = toServerRule(request.body.rule);
   }
 
   if (!rule) {
@@ -81,66 +143,4 @@ exports.delete = function(request, response) {
     response.send(result ? 200 : 404);
   });
 };
-
-function toServerParameters(clientParameters) {
-  var serverParameters = {};
-
-  if (clientParameters) {
-    clientParameters.forEach(function(parameter) {
-      serverParameters[parameter.id] = parameter.value;
-    });
-  }
-  return serverParameters;
-}
-
-function toClientParameters(serverParameters) {
-  var clientParameters = [];
-
-  Object.keys(serverParameters).forEach(function(id) {
-    clientParameters.push({
-      id : id,
-      value : serverParameters[id]
-    });
-  });
-  return clientParameters;
-}
-
-function toServerRuleComponent(clientRuleComponent) {
-  var serverRuleComponent;
-
-  if (clientRuleComponent.id) {
-    serverRuleComponent = {};
-    serverRuleComponent.id = clientRuleComponent.id;
-    serverRuleComponent.parameters = toServerParameters(clientRuleComponent.parameters);
-  }
-  return serverRuleComponent;
-}
-
-function toClientRuleComponent(serverRuleComponent) {
-  var clientRuleComponent = {};
-
-  clientRuleComponent.id = serverRuleComponent.id;
-  clientRuleComponent.parameters = toClientParameters(serverRuleComponent.parameters);
-  return clientRuleComponent;
-}
-
-function toServerRule(clientRule) {
-  return {
-    _id : clientRule._id,
-    summary : clientRule.summary,
-    description : clientRule.description,
-    predicate : clientRule.predicate ? toServerRuleComponent(clientRule.predicate) : undefined,
-    action : clientRule.action ? toServerRuleComponent(clientRule.action) : undefined
-  };
-}
-
-function toClientRule(serverRule) {
-  return {
-    _id : serverRule._id,
-    summary : serverRule.summary,
-    description : serverRule.description,
-    predicate : toClientRuleComponent(serverRule.predicate),
-    action : toClientRuleComponent(serverRule.action)
-  }
-}
 

@@ -6,7 +6,7 @@ var Action = require('./action'),
     Predicate = require('./predicate');
 
 function hasJavascriptExtension(filename) {
-  var dotJs = '.js'
+  var dotJs = '.js';
   return filename.indexOf(dotJs, filename.length - dotJs.length) !== -1;
 }
 
@@ -15,14 +15,13 @@ var loadModules = exports.loadModules = function(pathRelSource, pathRelExecution
   var modules = {};
   files
   .filter(hasJavascriptExtension)
-  .map(function(file) {
-    return('./' + Path.join(pathRelSource, file));
-  })
+  .map(function(file) { return ('./' + Path.join(pathRelSource, file)); })
   .forEach(function(path) {
-    var module = require(path);
-    if (module instanceof type && module.id)
-      modules[module.id] = module;
-  });
+        var module = require(path);
+        if (module instanceof type && module.id) {
+          modules[module.id] = module;
+        }
+      });
   return modules;
 };
 

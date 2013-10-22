@@ -1,7 +1,7 @@
 'use strict';
 
 var util = require('util'),
-  Storage = require('./storage');
+    Storage = require('./storage');
 
 var UpdateStorage = function(db) {
   this.db = db;
@@ -19,11 +19,11 @@ UpdateStorage.prototype.findByVersion = function(version, callback) {
     channel: version.channel,
     osVersion: version.osVersion,
     branch: version.branch
-    },
-    {},
-    function(err, cursor) {
-      cursor.nextObject(callback);
-    });
+  },
+  {},
+  function(err, cursor) {
+    cursor.nextObject(callback);
+  });
 };
 
 module.exports = UpdateStorage;

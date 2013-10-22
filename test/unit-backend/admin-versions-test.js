@@ -1,12 +1,12 @@
 'use strict';
 
-var should = require('chai').should(),
-    db = require('../../backend/mongo-provider'),
-    request = require('request'),
+var db = require('../../backend/mongo-provider'),
     fixtures = require('./source-version-fixtures'),
     UpdateStorage = require('../../backend/update-storage'),
     SourceVersion = require('../../backend/source-version'),
     versions = require('../../backend/routes/admin/versions');
+
+require('chai').should();
 
 describe('The update-server module', function() {
   var baseUri;
@@ -21,10 +21,10 @@ describe('The update-server module', function() {
 
   beforeEach(function(done) {
     storage.save(fixtures.withAllFields(), function(error, result) {
-      if (error) throw error;
+      if (error) { throw error; }
       id = result._id;
     }).save(fixtures.withEmptyUpdates(), function(error, result) {
-      if (error) throw error;
+      if (error) { throw error; }
       id2 = result._id;
       done();
     });

@@ -1,12 +1,11 @@
 'use strict';
 
 var SourceVersion = require('../source-version'),
-  db = require('../mongo-provider'),
-  MetadataStorage = require('../update-storage'),
-  backgroundTasks = require("../background-tasks");
+    db = require('../mongo-provider'),
+    MetadataStorage = require('../update-storage'),
+    backgroundTasks = require('../background-tasks');
 
-var logger = require('../logger'),
-    config = require('../config');
+var logger = require('../logger');
 
 exports.emptyUpdates = function(request, response) {
   response.send(new SourceVersion({}).updatesAsXML());
@@ -19,23 +18,22 @@ exports.emptyUpdates = function(request, response) {
 exports.updateClient = function(request, response) {
   var storage = new MetadataStorage(db);
 
-  var clientVersion = new SourceVersion(
-    {
-      product: request.params.product,
-      version: request.params.version,
-      buildId: request.params.build_id,
-      buildTarget: request.params.build_target,
-      locale: request.params.locale,
-      channel: request.params.channel,
-      osVersion: request.params.os_version,
-      parameters: request.query
-    });
+  var clientVersion = new SourceVersion({
+    product: request.params.product,
+    version: request.params.version,
+    buildId: request.params.build_id,
+    buildTarget: request.params.build_target,
+    locale: request.params.locale,
+    channel: request.params.channel,
+    osVersion: request.params.os_version,
+    parameters: request.query
+  });
 
-    storage.findByVersion(clientVersion, function(error, storedVersion) {
+  storage.findByVersion(clientVersion, function(error, storedVersion) {
     if (error) {
-      logger.error('while retrieving client version from cache :',error);
+      logger.error('while retrieving client version from cache :', error);
       response.send(clientVersion.updatesAsXML());
-      return ;
+      return;
     }
     if (!storedVersion) {
       logger.info('client with IP [%s] gets cache-miss for url: [%s]:', request.ip, request.url);
@@ -43,8 +41,8 @@ exports.updateClient = function(request, response) {
       clientVersion.timestamp = Date.now();
       storage.save(clientVersion, function(err) {
         if (err) {
-          logger.error("Unable to store new SourceVersion");
-          return ;
+          logger.error('Unable to store new SourceVersion');
+          return;
         }
         backgroundTasks.addProductScraperTask(clientVersion);
       });
@@ -54,7 +52,7 @@ exports.updateClient = function(request, response) {
       response.send(new SourceVersion(storedVersion).updatesAsXML());
 
       storedVersion.timestamp = Date.now();
-      storage.save(storedVersion, function(error, stored) {
+      storage.save(storedVersion, function(error) {
         if (error) {
           logger.error('while updating timestamp in storage: ', error);
         }

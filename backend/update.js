@@ -43,11 +43,11 @@ Update.prototype.asXML = function() {
     patches.push({
       _name: 'patch',
       _attrs: {
-      type: patch.type,
-      URL: patch.localPath ? config.server.url + ':' + config.server.port + '/download/' + patch.localPath : patch.url,
-      hashFunction: patch.hashFunction,
-      hashValue: patch.hashValue,
-      size: patch.size
+        type: patch.type,
+        URL: patch.localPath ? config.server.url + ':' + config.server.port + '/download/' + patch.localPath : patch.url,
+        hashFunction: patch.hashFunction,
+        hashValue: patch.hashValue,
+        size: patch.size
       }
     });
   });
@@ -75,7 +75,7 @@ Update.prototype.asXML = function() {
       '\'': '&apos;',
       '&': '&amp;'
     },
-    ignoreNullAttrs : true
+    ignoreNullAttrs: true
   });
 };
 

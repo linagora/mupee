@@ -1,14 +1,13 @@
 'use strict';
 
-var chai = require('chai');
+var chai = require('chai'),
+    expect = chai.expect;
 
-var expect = chai.expect,
-    should = chai.should();
+chai.should();
 
 var Downloader = require('../../backend/downloader'),
     fs = require('fs'),
-    nock = require('nock'),
-    mockery = require("mockery");
+    nock = require('nock');
 
 describe('The downloader module', function() {
   var url;
@@ -25,7 +24,7 @@ describe('The downloader module', function() {
   });
 
   beforeEach(function() {
-    downloader = new Downloader;
+    downloader = new Downloader();
   });
 
   it('should download a file with no missing data when "finish" event is emitted', function(done) {
@@ -35,7 +34,7 @@ describe('The downloader module', function() {
     var expectedData = fs.readFileSync(testingFilePath, 'utf8');
     downloader.on('finish', function() {
       fs.readFile(destination, 'utf8', function(err, dataFromFile) {
-        if (err) throw err;
+        if (err) { throw err; }
         expect(dataFromFile).to.equal(expectedData);
         done();
       });
@@ -48,22 +47,16 @@ describe('The downloader module', function() {
 
     nock('http://www.obm.org')
       .get('/gpl.txt')
-      .reply(200, "DATA");
+      .reply(200, 'DATA');
 
     downloader.on('finish', function() {
       fs.readFile(destWithFolders, 'utf8', function(err, dataFromFile) {
-        if (err) {
-          throw err;
-        }
-
-        expect(dataFromFile).to.equal("DATA");
-        fs.unlink(destWithFolders, function (err) {
-          if (err) {
-            throw err;
-          }
-
+        if (err) { throw err; }
+        expect(dataFromFile).to.equal('DATA');
+        fs.unlink(destWithFolders, function(err) {
+          if (err) { throw err; }
           done();
-        })
+        });
       });
     });
     downloader.download(url, destWithFolders);
@@ -80,7 +73,7 @@ describe('The downloader module', function() {
   it('should send an event "error" on error with the url', function(done) {
     nock('http://www.obm.org').get('/gpl.txt')
         .reply(404);
-    fs.unlink(destination, function(err) {
+    fs.unlink(destination, function() {
       downloader.on('error', function(err) {
         err.should.equal('Not Found');
         done();
@@ -92,37 +85,29 @@ describe('The downloader module', function() {
   it('should send a "finish" event only when all files are downloaded', function(done) {
     nock('http://www.obm.org')
       .get('/dummy/1')
-      .reply(200, "1")
+      .reply(200, '1')
       .get('/dummy/2')
-      .reply(200, "2");
+      .reply(200, '2');
 
     downloader.on('finish', function() {
       fs.readFile('/tmp/mup/1', 'utf8', function(err, dataFromFile) {
-        if (err) {
-          throw err;
-        }
+        if (err) { throw err; }
 
-        expect(dataFromFile).to.equal("1");
-        fs.unlink('/tmp/mup/1', function (err) {
-          if (err) {
-            throw err;
-          }
+        expect(dataFromFile).to.equal('1');
+        fs.unlink('/tmp/mup/1', function(err) {
+          if (err) { throw err; }
 
           fs.readFile('/tmp/mup/2', 'utf8', function(err, dataFromFile) {
-            if (err) {
-              throw err;
-            }
+            if (err) { throw err; }
 
-            expect(dataFromFile).to.equal("2");
-            fs.unlink('/tmp/mup/2', function (err) {
-              if (err) {
-                throw err;
-              }
-            })
+            expect(dataFromFile).to.equal('2');
+            fs.unlink('/tmp/mup/2', function(err) {
+              if (err) { throw err; }
+            });
 
             done();
           });
-        })
+        });
       });
     });
     downloader.downloadAll([{
@@ -163,10 +148,10 @@ describe('The downloader module', function() {
       .get('/dummy/2')
       .reply(403);
 
-    downloader.on('finish-task', function(err, task) {
+    downloader.on('finish-task', function() {
       count++;
     });
-    downloader.on('finish', function(err) {
+    downloader.on('finish', function() {
       count.should.equal(2);
       done();
     });
@@ -180,7 +165,6 @@ describe('The downloader module', function() {
   });
 
   it('should not download the file if it already exists', function(done) {
-    var destWithFolders = '/tmp/data/in/folder';
 
     var realstat = fs.stat;
     fs.stat = function(file, cb) {
@@ -196,7 +180,7 @@ describe('The downloader module', function() {
       destination: '/tmp/mup/1'
     }]);
   });
-  
+
   after(function() {
     nock.enableNetConnect();
   });

@@ -1,8 +1,8 @@
+'use strict';
+
 var expect = require('chai').expect;
 
-var Loader = require('../../../backend/rules/loader'),
-    Action = require('../../../backend/rules/action'),
-    Predicate = require('../../../backend/rules/predicate');
+var Loader = require('../../../backend/rules/loader');
 
 describe('The Rule Loader module', function() {
   describe('dynamically loads modules from file system and', function() {
@@ -44,7 +44,7 @@ describe('The Rule Loader module', function() {
     var predicates = Loader.predicates;
     expect(predicates).to.be.an.object;
     expect(Object.keys(predicates).length).to.be.at.least(1);
-    for (predicate in predicates) {
+    for (var predicate in predicates) {
       expect(predicate).to.be.a.Predicate;
     }
   });
@@ -53,7 +53,7 @@ describe('The Rule Loader module', function() {
     var actions = Loader.actions;
     expect(actions).to.be.an.object;
     expect(Object.keys(actions).length).to.be.at.least(1);
-    for (action in actions) {
+    for (var action in actions) {
       expect(action).to.be.an.Action;
     }
   });

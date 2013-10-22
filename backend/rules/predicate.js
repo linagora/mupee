@@ -10,7 +10,7 @@ var Predicate = function(object) {
   this.parametersDefinitions = [];
   if (object.parametersDefinitions) {
     object.parametersDefinitions.forEach(function(paramDef) {
-        this.parametersDefinitions.push(new ParameterDefinition(paramDef));
+      this.parametersDefinitions.push(new ParameterDefinition(paramDef));
     }.bind(this));
   }
 };

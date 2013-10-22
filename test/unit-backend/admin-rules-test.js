@@ -1,19 +1,17 @@
 'use strict';
 
-var chai = require('chai'),
-    should = chai.should(),
-    expect = chai.expect,
-    mockery = require('mockery');
+require('chai').should();
+var mockery = require('mockery');
 
 describe('The Rules Server module', function() {
 
   var rule = {
-    _id : 'rule-id',
-    summary : '',
-    description : '',
-    predicate : {
-      id : 'productEquals',
-      parameters : [{
+    _id: 'rule-id',
+    summary: '',
+    description: '',
+    predicate: {
+      id: 'productEquals',
+      parameters: [{
         id: 'product',
         value: 'Thunderbird'
       }]
@@ -28,36 +26,36 @@ describe('The Rules Server module', function() {
   };
 
   var serverRule = {
-    _id : 'rule-id',
-    summary : '',
-    description : '',
-    predicate : {
-      id : 'productEquals',
-      parameters : {
-        product : 'Thunderbird'
+    _id: 'rule-id',
+    summary: '',
+    description: '',
+    predicate: {
+      id: 'productEquals',
+      parameters: {
+        product: 'Thunderbird'
       }
     },
-    action : {
-      id : 'action3',
-      parameters : {
-        branch : 24
+    action: {
+      id: 'action3',
+      parameters: {
+        branch: 24
       }
     }
-  }
+  };
 
   beforeEach(function() {
     mockery.enable({warnOnUnregistered: false, useCleanCache: true});
     var Loader = {
-      predicates : {
-        productEquals : {
-          id : 'productEquals',
-          for : function(object) { return function() { return true; }}
+      predicates: {
+        productEquals: {
+          id: 'productEquals',
+          for: 'function() { return function() { return true; }};'
         }
       },
-      actions : {
-        action3 : {
-          id : 'action3',
-          for : function(object) { return function() { return null; }}
+      actions: {
+        action3: {
+          id: 'action3',
+          for: 'function() { return function() { return null; }};'
         }
       }
     };
@@ -65,9 +63,9 @@ describe('The Rules Server module', function() {
   });
 
   it('should return the rule when created', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
-    Engine.prototype.create = function(rule, callback) { callback(null, serverRule) };
+    Engine.prototype.create = function(rule, callback) { callback(null, serverRule); };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
@@ -76,7 +74,7 @@ describe('The Rules Server module', function() {
         rule: rule
       }
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.deep.equal(rule);
         done();
       }
@@ -84,7 +82,7 @@ describe('The Rules Server module', function() {
   });
 
   it('should send 400 when there is no rule in a create request', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
@@ -92,7 +90,7 @@ describe('The Rules Server module', function() {
     rules.create({
       body: {}
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.equal(400);
         done();
       }
@@ -100,9 +98,9 @@ describe('The Rules Server module', function() {
   });
 
   it('should send 500 when there is an error in a create request', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
-    Engine.prototype.create = function(rule, callback) { callback('oh my god!') };
+    Engine.prototype.create = function(rule, callback) { callback('oh my god!'); };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
@@ -111,7 +109,7 @@ describe('The Rules Server module', function() {
         rule: {}
       }
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.equal(500);
         done();
       }
@@ -119,9 +117,9 @@ describe('The Rules Server module', function() {
   });
 
   it('should return the rule when updated', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
-    Engine.prototype.update = function(id, rule, callback) { callback(null, serverRule) };
+    Engine.prototype.update = function(id, rule, callback) { callback(null, serverRule); };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
@@ -133,7 +131,7 @@ describe('The Rules Server module', function() {
         rule: rule
       }
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.deep.equal(rule);
         done();
       }
@@ -141,7 +139,7 @@ describe('The Rules Server module', function() {
   });
 
   it('should send 400 when there is no rule in a modify request', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
@@ -152,7 +150,7 @@ describe('The Rules Server module', function() {
       },
       body: {}
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.equal(400);
         done();
       }
@@ -160,9 +158,9 @@ describe('The Rules Server module', function() {
   });
 
   it('should send 500 when there is an error in a update request', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
-    Engine.prototype.update = function(id, rule, callback) { callback('oh my god!') };
+    Engine.prototype.update = function(id, rule, callback) { callback('oh my god!'); };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
@@ -174,7 +172,7 @@ describe('The Rules Server module', function() {
         rule: {}
       }
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.equal(500);
         done();
       }
@@ -182,9 +180,9 @@ describe('The Rules Server module', function() {
   });
 
   it('should send 404 when rule does not exist in a update request', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
-    Engine.prototype.update = function(id, rule, callback) { callback(null, null) };
+    Engine.prototype.update = function(id, rule, callback) { callback(null, null); };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
@@ -196,7 +194,7 @@ describe('The Rules Server module', function() {
         rule: {}
       }
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.equal(404);
         done();
       }
@@ -204,31 +202,9 @@ describe('The Rules Server module', function() {
   });
 
   it('should return 200 when a rule is deleted', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
-    Engine.prototype.delete = function(id, callback) { callback(null, true) };
-    mockery.registerMock('../../rules/engine', Engine);
-    var rules = require('../../backend/routes/admin/rules');
-
-    rules.delete({
-      params: {
-        id: 'rule-id'
-      },
-      body : {
-        rule: null
-      }
-    }, {
-      send: function (result) {
-        result.should.equal(200);
-        done();
-      }
-    });
-  });
-
-  it('should return 404 when a rule does not exist in a delete request', function(done) {
-    var Engine = function () {};
-
-    Engine.prototype.delete = function(id, callback) { callback(null, false) };
+    Engine.prototype.delete = function(id, callback) { callback(null, true); };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
@@ -240,7 +216,29 @@ describe('The Rules Server module', function() {
         rule: null
       }
     }, {
-      send: function (result) {
+      send: function(result) {
+        result.should.equal(200);
+        done();
+      }
+    });
+  });
+
+  it('should return 404 when a rule does not exist in a delete request', function(done) {
+    var Engine = function() {};
+
+    Engine.prototype.delete = function(id, callback) { callback(null, false); };
+    mockery.registerMock('../../rules/engine', Engine);
+    var rules = require('../../backend/routes/admin/rules');
+
+    rules.delete({
+      params: {
+        id: 'rule-id'
+      },
+      body: {
+        rule: null
+      }
+    }, {
+      send: function(result) {
         result.should.equal(404);
         done();
       }
@@ -248,9 +246,9 @@ describe('The Rules Server module', function() {
   });
 
   it('should return 500 when there is an error in a delete request', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
-    Engine.prototype.delete = function(id, callback) { callback('oh my god!') };
+    Engine.prototype.delete = function(id, callback) { callback('oh my god!'); };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
@@ -262,7 +260,7 @@ describe('The Rules Server module', function() {
         rule: null
       }
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.equal(500);
         done();
       }
@@ -279,31 +277,31 @@ describe('The Rules Server module', function() {
       {
         id: 'action2',
         summary: 'Upgrade to latest version',
-        description: 'Allows clients to upgrade to the latest minor version of the latest branch',
+        description: 'Allows clients to upgrade to the latest minor version of the latest branch'
       },
       {
         id: 'action3',
         summary: 'Upgrade to given version',
         description: 'Allows clients to upgrade to the latest minor version of a given branch',
         parametersDefinitions: [
-        {
-          id: 'branch',
-          summary: 'Target branch',
-          description: 'The target branch',
-          type: 'number',
+          {
+            id: 'branch',
+            summary: 'Target branch',
+            description: 'The target branch',
+            type: 'number',
             mandatory: true
           }
         ]
       }
     ];
-    var Engine = function () {};
+    var Engine = function() {};
 
     Engine.prototype.listActions = function() { return threeActions; };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
     rules.listActions({}, {
-      json: function (result) {
+      json: function(result) {
         result.should.deep.equal(threeActions);
         done();
       }
@@ -311,14 +309,14 @@ describe('The Rules Server module', function() {
   });
 
   it('should return an empty list to a listAction request when there is no actions', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
     Engine.prototype.listActions = function() { return []; };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
     rules.listActions({}, {
-      json: function (result) {
+      json: function(result) {
         result.should.deep.equal([]);
         done();
       }
@@ -326,14 +324,14 @@ describe('The Rules Server module', function() {
   });
 
   it('should send 400 when there is no body in the request', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
     rules.findByPredicate({
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.equal(400);
         done();
       }
@@ -341,7 +339,7 @@ describe('The Rules Server module', function() {
   });
 
   it('should send 400 when there is no predicate in a findByPredicate request', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
@@ -349,7 +347,7 @@ describe('The Rules Server module', function() {
     rules.findByPredicate({
       body: {}
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.equal(400);
         done();
       }
@@ -357,7 +355,7 @@ describe('The Rules Server module', function() {
   });
 
   it('should send 404 when there is no rule matching a findByPredicate request', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
     Engine.prototype.findByPredicate = function(predicate, callback) { callback(null, null); };
     mockery.registerMock('../../rules/engine', Engine);
@@ -366,11 +364,11 @@ describe('The Rules Server module', function() {
     rules.findByPredicate({
       body: {
         predicate: {
-          id : 'branchEquals'
+          id: 'branchEquals'
         }
       }
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.equal(404);
         done();
       }
@@ -378,7 +376,7 @@ describe('The Rules Server module', function() {
   });
 
   it('should send 500 when there is an error in a findByPredicate request', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
     Engine.prototype.findByPredicate = function(predicate, callback) { callback('oh my god!'); };
     mockery.registerMock('../../rules/engine', Engine);
@@ -387,11 +385,11 @@ describe('The Rules Server module', function() {
     rules.findByPredicate({
       body: {
         predicate: {
-          id : 'branchEquals'
+          id: 'branchEquals'
         }
       }
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.equal(500);
         done();
       }
@@ -399,7 +397,7 @@ describe('The Rules Server module', function() {
   });
 
   it('should return the rule in a findByPredicate request', function(done) {
-    var Engine = function () {};
+    var Engine = function() {};
 
     Engine.prototype.findByPredicate = function(predicate, callback) { callback(null, serverRule); };
     mockery.registerMock('../../rules/engine', Engine);
@@ -416,7 +414,7 @@ describe('The Rules Server module', function() {
         }
       }
     }, {
-      send: function (result) {
+      send: function(result) {
         result.should.deep.equal(rule);
         done();
       }

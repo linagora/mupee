@@ -12906,7 +12906,7 @@ function $CacheFactoryProvider() {
     cacheFactory.info = function() {
       var info = {};
       forEach(caches, function(cache, cacheId) {
-        info[cacheId] = cache.info();
+        info[cacheId] = cache.info("successfully stored " + stored);
       });
       return info;
     };

@@ -57,6 +57,6 @@ app.get('/admin/rules/actions', rules.listActions);
 
 app.get('/:name', routes.index);
 
-http.createServer(app).listen(app.get('port'), function() {
+http.createServer(app).listen(app.get('port'), function () {
   logger.info('mozilla-updater server listening on port %d', app.get('port'));
 });

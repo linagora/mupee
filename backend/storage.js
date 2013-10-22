@@ -24,19 +24,19 @@ Storage.prototype.findById = function(id, callback) {
 
 Storage.prototype.update = function(id, rule, callback) {
   this.db.collection(this.collection).update(
-    {'_id': new BSON.ObjectID(id)},
-    rule,
-    {safe: true},
-    callback
+      {'_id': new BSON.ObjectID(id)},
+      rule,
+      {safe: true},
+      callback
   );
 };
 
 Storage.prototype.remove = function(id, callback) {
   this.db.collection(this.collection).removeById(
-    new BSON.ObjectID(id),
-    {safe : true},
-    callback
+      new BSON.ObjectID(id),
+      {safe: true},
+      callback
   );
-}
+};
 
 module.exports = Storage;

@@ -11,7 +11,7 @@ describe('The Rule module', function() {
     it('false if it does not match', function() {
       var matches = rule.predicate.matches;
       expect(matches).to.be.a.function;
-      var result = matches({ branch : 10 });
+      var result = matches({ branch: 10 });
       expect(result).to.be.a('boolean');
       expect(result).to.be.true;
     });
@@ -19,7 +19,7 @@ describe('The Rule module', function() {
     it('true if it matches', function() {
       var matches = rule.predicate.matches;
       expect(matches).to.be.a.function;
-      var result = matches({ branch : 11 });
+      var result = matches({ branch: 11 });
       expect(result).to.be.a('boolean');
       expect(result).to.be.false;
       result.should.be.a.boolean;
@@ -30,13 +30,13 @@ describe('The Rule module', function() {
     var rule = fixtures.versionTenToLatestMinor;
     var apply = rule.action.apply;
     apply.should.be.a.function;
-    var result = apply({ updates : [
-      { type : 'major', version : '17.0.1' },
-      { type : 'minor', version : '10.0.4' },
-      { type : 'major', version : '24.0.1' },
-      { type : 'minor', version : '10.0.3' },
-      { type : 'minor', version : '10.0.2' },
-      { type : 'minor', version : '10.0.6' }
+    var result = apply({ updates: [
+      { type: 'major', version: '17.0.1' },
+      { type: 'minor', version: '10.0.4' },
+      { type: 'major', version: '24.0.1' },
+      { type: 'minor', version: '10.0.3' },
+      { type: 'minor', version: '10.0.2' },
+      { type: 'minor', version: '10.0.6' }
     ]});
     expect(result).not.to.be.null;
     expect(result).to.be.an.object;

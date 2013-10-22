@@ -1,10 +1,10 @@
 'use strict';
 
-var request = require('request');
-var parser = require('libxml-to-js');
-var Update = require('./update.js').Update;
-var Patch = require('./update.js').Patch;
-var SourceVersion = require("./source-version");
+var request = require('request'),
+    parser = require('libxml-to-js'),
+    Update = require('./update.js').Update,
+    Patch = require('./update.js').Patch,
+    SourceVersion = require('./source-version');
 
 var mozUpdateUrl = require('./config.js').fetch.remoteHost;
 
@@ -24,18 +24,18 @@ exports.fetch = function(version, callback) {
       }
 
       var update = new Update(result.update['@']);
-      update['buildId'] = result.update['@'].buildID;
-      update['detailsUrl'] = result.update['@'].detailsURL;
+      update.buildId = result.update['@'].buildID;
+      update.detailsUrl = result.update['@'].detailsURL;
 
       var patchToAdd = result.update.patch;
 
-      if(!(patchToAdd instanceof Array)){
+      if (!(patchToAdd instanceof Array)) {
         patchToAdd = [patchToAdd];
       }
 
       var addPatchToUpdate = function(parsedPatch) {
         var patch = new Patch(parsedPatch['@']);
-        patch['url'] = parsedPatch['@'].URL;
+        patch.url = parsedPatch['@'].URL;
         update.addPatch(patch);
       };
 

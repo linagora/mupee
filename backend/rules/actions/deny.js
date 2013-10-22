@@ -3,15 +3,15 @@
 var Action = require('../action.js');
 
 var deny = new Action({
-  id : 'deny',
-  summary : 'Deny all upgrades',
-  description : '',
-  action : function(parameters) {
-    return function(candidate) {
+  id: 'deny',
+  summary: 'Deny all upgrades',
+  description: '',
+  action: function() {
+    return function() {
       return [];
     };
   },
-  parametersDefinitions : []
+  parametersDefinitions: []
 });
 
 module.exports = deny;

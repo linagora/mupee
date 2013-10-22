@@ -13,4 +13,4 @@ module.exports = function(a, b) {
     }
   }
   return a.length - b.length;
-}
+};

@@ -13,7 +13,7 @@ util.inherits(RulesStorage, Storage);
 
 function arrayToRule(err, result, callback) {
   if (!err) {
-    if (result.length == 1) {
+    if (result.length === 1) {
       callback(null, new Rule(result[0]));
     } else if (result.length === 0) {
       callback(null, null);
@@ -27,27 +27,26 @@ function arrayToRule(err, result, callback) {
 
 RulesStorage.prototype.findByProperties = function(rule, callback) {
   this.db.collection('rules').find(
-    rule,
-    {},
-    function(err, cursor) {
-      cursor.toArray(function(err, results) {
-        arrayToRule(err, results, callback);
-      });
-    }
+      rule,
+      {},
+      function(err, cursor) {
+        cursor.toArray(function(err, results) {
+          arrayToRule(err, results, callback);
+        });
+      }
   );
 };
 
 RulesStorage.prototype.findByPredicate = function(predicate, callback) {
   this.db.collection('rules').find({
-      predicate : predicate
-    },
-    {},
-    function(err, cursor) {
-      cursor.toArray(function(err, results) {
-        arrayToRule(err, results, callback);
-      });
-    }
-  );
+    predicate: predicate
+  },
+  {},
+  function(err, cursor) {
+    cursor.toArray(function(err, results) {
+      arrayToRule(err, results, callback);
+    });
+  });
 };
 
 module.exports = RulesStorage;

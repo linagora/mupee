@@ -1,35 +1,37 @@
-module.exports = function(config){
-    config.set({
-      basePath: '../../',
+'use strict';
 
-      files: [
-        'frontend/lib/angular/angular.js',
-        'frontend/lib/angular/angular-*.js',
-        'test/lib/angular/angular-mocks-mocha.js',
-        'test/lib/chai.js',
-        'frontend/js/*.js',
-        'test/unit-frontend/**/*.js'
-      ],
+module.exports = function(config) {
+  config.set({
+    basePath: '../../',
 
-      frameworks: ['mocha'],
-      colors: true,
-      singleRun: true,
-      autoWatch: true,
-      browsers: ['PhantomJS'],
+    files: [
+      'frontend/lib/angular/angular.js',
+      'frontend/lib/angular/angular-*.js',
+      'test/lib/angular/angular-mocks-mocha.js',
+      'test/lib/chai.js',
+      'frontend/js/*.js',
+      'test/unit-frontend/**/*.js'
+    ],
 
-      reporters: ['progress'],
-      plugins: [
-              'karma-junit-reporter',
-              'karma-chrome-launcher',
-              'karma-firefox-launcher',
-              'karma-jasmine',
-              'karma-phantomjs-launcher',
-              'karma-mocha'
-              ],
+    frameworks: ['mocha'],
+    colors: true,
+    singleRun: true,
+    autoWatch: true,
+    browsers: ['PhantomJS'],
 
-      junitReporter: {
-        outputFile: 'test_out/unit.xml',
-        suite: 'unit-frontend'
-      }
-    });
+    reporters: ['progress'],
+    plugins: [
+      'karma-junit-reporter',
+      'karma-chrome-launcher',
+      'karma-firefox-launcher',
+      'karma-jasmine',
+      'karma-phantomjs-launcher',
+      'karma-mocha'
+    ],
+
+    junitReporter: {
+      outputFile: 'test_out/unit.xml',
+      suite: 'unit-frontend'
+    }
+  });
 };

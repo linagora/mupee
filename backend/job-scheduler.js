@@ -6,42 +6,33 @@ var maxParallelJobs = require('./config').scheduler.maxParallelTasks;
 
 function getLength(queue) {
   return Object.keys(queue).length;
-};
+}
 
-function runningJobsCount () {
+function runningJobsCount() {
   return getLength(runningJobs);
 }
 
-function queuedJobsCount () {
+function queuedJobsCount() {
   return getLength(queuedJobs);
 }
 
 function getFirstHash(queue) {
   var hashes = Object.keys(queue);
-  if ( hashes.length ) {
+  if (hashes.length) {
     return hashes[0];
   }
   return null;
-};
-
-
-function addJob(jobHash, job) {
-  if ( !jobHash || queuedJobs[jobHash] || runningJobs[jobHash] ) {
-    return false;
-  }
-  queuedJobs[jobHash] = job;
-  process.nextTick(consumeQueue);
-};
+}
 
 function consumeQueue() {
-  if ( runningJobsCount() >= maxParallelJobs ) {
-    return ;
+  if (runningJobsCount() >= maxParallelJobs) {
+    return;
   }
-  if ( !queuedJobsCount() ) {
-    return ;
+  if (!queuedJobsCount()) {
+    return;
   }
   launchJob(getFirstHash(queuedJobs));
-};
+}
 
 function launchJob(jobHash) {
   var job = queuedJobs[jobHash];
@@ -51,7 +42,15 @@ function launchJob(jobHash) {
     delete runningJobs[jobHash];
     process.nextTick(consumeQueue);
   });
-};
+}
+
+function addJob(jobHash, job) {
+  if (!jobHash || queuedJobs[jobHash] || runningJobs[jobHash]) {
+    return false;
+  }
+  queuedJobs[jobHash] = job;
+  process.nextTick(consumeQueue);
+}
 
 exports = module.exports = {
   addJob: addJob,
