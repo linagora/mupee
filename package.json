@@ -28,7 +28,8 @@
     "async": "*",
     "passport": "*",
     "passport-http": "*",
-    "async": "~0.2.9"
+    "async": "~0.2.9",
+    "clone": "~0.1.11"
   },
   "devDependencies": {
     "mocha": "*",

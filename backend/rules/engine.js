@@ -44,8 +44,8 @@ Engine.prototype.create = function(rule, callback) {
   this.storage.save(rule, callback);
 };
 
-Engine.prototype.update = function(id, rule, callback) {
-  this.storage.update(id, rule, callback);
+Engine.prototype.update = function(rule, callback) {
+  this.storage.update(rule, callback);
 };
 
 Engine.prototype.delete = function(id, callback) {

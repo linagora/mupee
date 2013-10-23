@@ -1,6 +1,7 @@
 'use strict';
 
 var BSON = require('mongodb').BSONPure;
+var clone = require("clone");
 
 var Storage = function(db, collection) {
   this.db = db;
@@ -8,7 +9,12 @@ var Storage = function(db, collection) {
 };
 
 Storage.prototype.save = function(rule, callback) {
-  this.db.collection(this.collection).save(rule, {safe: true}, callback);
+  if (!rule._id) {
+    rule._id = new BSON.ObjectID();
+  }
+  this.db.collection(this.collection).save(rule, {safe: true}, function(err,resp) {
+    callback(err, err ? null : rule);
+  });
   return this;
 };
 
@@ -22,12 +28,19 @@ Storage.prototype.findById = function(id, callback) {
   this.db.collection(this.collection).findOne({'_id': new BSON.ObjectID(id)}, callback);
 };
 
-Storage.prototype.update = function(id, rule, callback) {
+Storage.prototype.update = function(rule, callback) {
+  var data = clone(rule);
+  var id = rule._id;
+  delete data._id;
+  var cb = function(err,resp) {
+    data._id = id;
+    callback(err,data);
+  };
   this.db.collection(this.collection).update(
-      {'_id': new BSON.ObjectID(id)},
-      rule,
-      {safe: true},
-      callback
+    {'_id': new BSON.ObjectID(id+"")},
+    data,
+    {safe: true},
+    cb
   );
 };
 
