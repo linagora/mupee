@@ -61,6 +61,8 @@ app.put('/admin/rules/:id', rules.update);
 app.delete('/admin/rules/:id', rules.delete);
 app.get('/admin/rules/actions', rules.listActions);
 
+app.post('/admin/upload/extension', express.bodyParser(), extensionProxy.uploadXpi);
+
 app.get('/:name', routes.index);
 
 http.createServer(app).listen(app.get('port'), function () {
