@@ -36,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'frontend')));
 app.get('/', passport.authenticate('basic'), routes.index);
 app.get('/:name', passport.authenticate('basic'), routes.index);
 app.get('/partials/:name', passport.authenticate('basic'), routes.partials);
+app.get('/directives/:name', passport.authenticate('basic'), routes.directives);
 
 app.get('/update/3/:product/:version/:build_id/:build_target/:locale/:channel/:os_version' +
         '/:distribution/:distribution_version/update.xml', proxy.updateClient);
