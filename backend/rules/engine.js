@@ -14,11 +14,7 @@ function ensureRuleByPredicate(rule) {
       } else {
         if (!result) {
           storage.save(rule, function(err, result) {
-            if (err) {
-              callback(err, null);
-            } else {
-              callback(null, result);
-            }
+            callback(err, result);
           });
         } else {
           callback(null, null);
