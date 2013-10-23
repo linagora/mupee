@@ -3,8 +3,7 @@
 var expect = require('chai').expect;
 require('chai').should();
 
-var Loader = require('../../../backend/rules/loader'),
-    defaultRules = require('../../../backend/rules/default-rules'),
+var defaultRules = require('../../../backend/rules/default-rules'),
     fixtures = require('../source-version-fixtures.js');
 
 describe('The Default Rule', function() {

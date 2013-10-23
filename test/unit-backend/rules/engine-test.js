@@ -18,11 +18,12 @@ describe('The Rules Engine', function() {
           throw err;
         }
         var engine = new Engine(db, function(err, result) {
-          if (err) throw(err);
+          if (err) { throw (err); }
+          expect(engine).to.exist;
           expect(result).to.be.an.array;
           expect(result).to.have.length(2);
-          expect(result[0]).to.be.a.Rule;
-          expect(result[1]).to.be.a.Rule;
+          expect(result[0]).to.be.instanceof(Rule);
+          expect(result[1]).to.be.instanceof(Rule);
           done();
         });
       });

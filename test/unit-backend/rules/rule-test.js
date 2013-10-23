@@ -25,7 +25,7 @@ describe('The Rule module', function() {
   it('action.apply should be function that performs the rule action', function() {
     var apply = rule.action.apply;
     apply.should.be.a.function;
-    var result = apply({ 
+    var result = apply({
       updates: [
         { type: 'major', version: '17.0.1' },
         { type: 'minor', version: '10.0.4' },

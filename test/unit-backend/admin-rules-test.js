@@ -1,9 +1,6 @@
 'use strict';
 
-var chai = require('chai'),
-    should = chai.should(),
-    expect = chai.expect,
-    mockery = require('mockery'),
+var mockery = require('mockery'),
     testLogger = require('./test-logger');
 
 describe('The Rules Server module', function() {
@@ -25,7 +22,7 @@ describe('The Rules Server module', function() {
   };
 
   var serverRule = {
-    _id:  'rule-id',
+    _id: 'rule-id',
     summary: '',
     description: '',
     predicates: [{
@@ -36,7 +33,7 @@ describe('The Rules Server module', function() {
     }],
     action: {
       id: 'action3',
-      parameters:  {}
+      parameters: {}
     }
   };
 
@@ -51,7 +48,7 @@ describe('The Rules Server module', function() {
           summary: 'product equals',
           description: 'true if product matches with candidate',
           predicate: function(candidate, parameters) {
-            if (candidate.product == parameters.product) {
+            if (candidate.product === parameters.product) {
               return true;
             } else {
               return false;
@@ -64,7 +61,7 @@ describe('The Rules Server module', function() {
             type: 'string',
             mandatory: true
           }],
-          for: function(object) { return function() { return true; }}
+          for: function(object) { return function() { return true; };}
         }
       },
       actions: {
@@ -72,14 +69,14 @@ describe('The Rules Server module', function() {
           id: 'action3',
           summary: 'deny upgrades',
           description: 'This policy disable all upgrades',
-          action : function(parameters) {
+          action: function(parameters) {
             return function(version) {
               version.clearUpdates();
               return version;
             };
           },
           parametersDefinitions: [],
-          for: function(object) { return function() { return null; }}
+          for: function(object) { return function() { return null; };}
         }
       }
     };
@@ -98,7 +95,7 @@ describe('The Rules Server module', function() {
         rule: rule
       }
     }, {
-      send: function (result, details) {
+      send: function(result, details) {
         result.should.deep.equal(rule);
         done();
       }
@@ -114,7 +111,7 @@ describe('The Rules Server module', function() {
     rules.create({
       body: {}
     }, {
-      send: function (result, details) {
+      send: function(result, details) {
         result.should.equal(400);
         done();
       }
@@ -393,7 +390,7 @@ describe('The Rules Server module', function() {
         }]
       }
     }, {
-      send: function (result, details) {
+      send: function(result, details) {
         result.should.equal(404);
         done();
       }

@@ -9,7 +9,7 @@ var Downloader,
     fs = require('fs'),
     nock = require('nock'),
     testLogger = require('./test-logger'),
-    mockery = require("mockery");
+    mockery = require('mockery');
 
 describe('The downloader module', function() {
   var url;
