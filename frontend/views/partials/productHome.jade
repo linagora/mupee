@@ -1,5 +1,8 @@
 h1 {{product}} updates
 
+div Default policy for your {{product}} updates:
+  span(data-upgrade-action data-product="product")
+
 p Here is a list per version of your {{product}} policies:
 
 div.center(data-ng-show="loadProgress") Loading...
@@ -11,7 +14,8 @@ div(data-ng-show="!loadProgress && !networkError")
     article.twelve.columns(data-ng-repeat="version in versions")
       header.row(data-ng-click="toggle(version)")
           div.large-2.columns Version {{version.majorVersion}}
-          div.large-9.columns Policy: allow upgrades to latest known version
+          div.large-9.columns Policy :
+                                span(data-upgrade-action data-product="product" data-version="version")
           div.center.large-1.columns +
       section.row(data-ng-class="{'open': version == directive.opened}")
         div.row

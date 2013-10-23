@@ -1,12 +1,12 @@
 'use strict';
 
-angular.module('mupeeProduct', ['mupeeRouteSegment', 'mupeeVersion'])
-  .controller('productHome', ['mupeeProduct', 'versionAPI', '$scope',
-      function(mupeeProduct, versionAPI, $scope) {
-        $scope.product = mupeeProduct.getCurrent();
-        $scope.loadProgress = true;
-        $scope.networkError = false;
-        $scope.versions = [];
+angular.module("mupeeProduct", ["mupeeRouteSegment", "mupeeVersion", "mupeeUpgradeAction"])
+  .controller("productHome", ["mupeeProduct", "versionAPI", "$scope",
+    function(mupeeProduct, versionAPI, $scope) {
+      $scope.product = mupeeProduct.getCurrent();
+      $scope.loadProgress = true;
+      $scope.networkError = false;
+      $scope.versions = [];
 
         versionAPI.getProductVersions($scope.product, function(err, versions) {
           $scope.loadProgress = false;
