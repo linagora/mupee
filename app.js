@@ -15,6 +15,15 @@ var proxy = require('./backend/routes/updates'),
 
 var app = exports.modules = express();
 
+app.use(express.logger({
+  stream: {
+    write: function (str) {
+      logger.debug(str);
+    }
+  }
+}));
+
+
 passport.use(new BasicStrategy(require('./backend/auth/' + config.interface.authModule)));
 app.use(passport.initialize());
 app.use(express.methodOverride());
@@ -27,14 +36,6 @@ app.use(express.static(path.join(__dirname, 'frontend')));
 app.get('/', passport.authenticate('basic'), routes.index);
 app.get('/:name', passport.authenticate('basic'), routes.index);
 app.get('/partials/:name', passport.authenticate('basic'), routes.partials);
-
-app.use(express.logger({
-  stream: {
-    write: function (str) {
-      logger.debug(str);
-    }
-  }
-}));
 
 app.get('/update/3/:product/:version/:build_id/:build_target/:locale/:channel/:os_version' +
         '/:distribution/:distribution_version/update.xml', proxy.updateClient);
