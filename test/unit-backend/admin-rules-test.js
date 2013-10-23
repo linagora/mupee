@@ -1,7 +1,10 @@
 'use strict';
 
-require('chai').should();
-var mockery = require('mockery');
+var chai = require('chai'),
+    should = chai.should(),
+    expect = chai.expect,
+    mockery = require('mockery'),
+    testLogger = require('./test-logger');
 
 describe('The Rules Server module', function() {
 
@@ -9,53 +12,74 @@ describe('The Rules Server module', function() {
     _id: 'rule-id',
     summary: '',
     description: '',
-    predicate: {
-      id: 'productEquals',
-      parameters: [{
-        id: 'product',
-        value: 'Thunderbird'
-      }]
-    },
-    action: {
-      id: 'action3',
-      parameters: [{
-        id: 'branch',
-        value: 24
-      }]
-    }
-  };
-
-  var serverRule = {
-    _id: 'rule-id',
-    summary: '',
-    description: '',
-    predicate: {
+    predicates: [{
       id: 'productEquals',
       parameters: {
         product: 'Thunderbird'
       }
-    },
+    }],
     action: {
       id: 'action3',
+      parameters: {}
+    }
+  };
+
+  var serverRule = {
+    _id:  'rule-id',
+    summary: '',
+    description: '',
+    predicates: [{
+      id: 'productEquals',
       parameters: {
-        branch: 24
+        product: 'Thunderbird'
       }
+    }],
+    action: {
+      id: 'action3',
+      parameters:  {}
     }
   };
 
   beforeEach(function() {
     mockery.enable({warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
     var Loader = {
       predicates: {
         productEquals: {
           id: 'productEquals',
-          for: 'function() { return function() { return true; }};'
+          summary: 'product equals',
+          description: 'true if product matches with candidate',
+          predicate: function(candidate, parameters) {
+            if (candidate.product == parameters.product) {
+              return true;
+            } else {
+              return false;
+            }
+          },
+          parametersDefinitions: [{
+            id: 'product',
+            summary: 'product name',
+            description: 'a Mozilla product name',
+            type: 'string',
+            mandatory: true
+          }],
+          for: function(object) { return function() { return true; }}
         }
       },
       actions: {
         action3: {
           id: 'action3',
-          for: 'function() { return function() { return null; }};'
+          summary: 'deny upgrades',
+          description: 'This policy disable all upgrades',
+          action : function(parameters) {
+            return function(version) {
+              version.clearUpdates();
+              return version;
+            };
+          },
+          parametersDefinitions: [],
+          for: function(object) { return function() { return null; }}
         }
       }
     };
@@ -74,7 +98,7 @@ describe('The Rules Server module', function() {
         rule: rule
       }
     }, {
-      send: function(result) {
+      send: function (result, details) {
         result.should.deep.equal(rule);
         done();
       }
@@ -90,7 +114,7 @@ describe('The Rules Server module', function() {
     rules.create({
       body: {}
     }, {
-      send: function(result) {
+      send: function (result, details) {
         result.should.equal(400);
         done();
       }
@@ -106,7 +130,7 @@ describe('The Rules Server module', function() {
 
     rules.create({
       body: {
-        rule: {}
+        rule: rule
       }
     }, {
       send: function(result) {
@@ -119,7 +143,7 @@ describe('The Rules Server module', function() {
   it('should return the rule when updated', function(done) {
     var Engine = function() {};
 
-    Engine.prototype.update = function(id, rule, callback) { callback(null, serverRule); };
+    Engine.prototype.update = function(rule, callback) { callback(null, serverRule); };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
@@ -160,7 +184,7 @@ describe('The Rules Server module', function() {
   it('should send 500 when there is an error in a update request', function(done) {
     var Engine = function() {};
 
-    Engine.prototype.update = function(id, rule, callback) { callback('oh my god!'); };
+    Engine.prototype.update = function(rule, callback) { callback('oh my god!'); };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
@@ -169,7 +193,7 @@ describe('The Rules Server module', function() {
         id: 'rule-id'
       },
       body: {
-        rule: {}
+        rule: rule
       }
     }, {
       send: function(result) {
@@ -182,7 +206,7 @@ describe('The Rules Server module', function() {
   it('should send 404 when rule does not exist in a update request', function(done) {
     var Engine = function() {};
 
-    Engine.prototype.update = function(id, rule, callback) { callback(null, null); };
+    Engine.prototype.update = function(rule, callback) { callback(null, null); };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
@@ -191,7 +215,7 @@ describe('The Rules Server module', function() {
         id: 'ishouldntexist'
       },
       body: {
-        rule: {}
+        rule: rule
       }
     }, {
       send: function(result) {
@@ -363,12 +387,13 @@ describe('The Rules Server module', function() {
 
     rules.findByPredicate({
       body: {
-        predicate: {
-          id: 'branchEquals'
-        }
+        predicates: [{
+          id: 'productEquals',
+          parameters: {product: 'Firefox'}
+        }]
       }
     }, {
-      send: function(result) {
+      send: function (result, details) {
         result.should.equal(404);
         done();
       }
@@ -378,15 +403,16 @@ describe('The Rules Server module', function() {
   it('should send 500 when there is an error in a findByPredicate request', function(done) {
     var Engine = function() {};
 
-    Engine.prototype.findByPredicate = function(predicate, callback) { callback('oh my god!'); };
+    Engine.prototype.findByPredicate = function(predicate, callback) { callback(new Error('oh my god!')); };
     mockery.registerMock('../../rules/engine', Engine);
     var rules = require('../../backend/routes/admin/rules');
 
     rules.findByPredicate({
       body: {
-        predicate: {
-          id: 'branchEquals'
-        }
+        predicates: [{
+          id: 'productEquals',
+          parameters: {product: 'Firefox'}
+        }]
       }
     }, {
       send: function(result) {
@@ -405,13 +431,10 @@ describe('The Rules Server module', function() {
 
     rules.findByPredicate({
       body: {
-        predicate: {
+        predicates: [{
           id: 'productEquals',
-          parameters: [{
-            id: 'product',
-            value: 'Thunderbird'
-          }]
-        }
+          parameters: {product: 'Thunderbird'}
+        }]
       }
     }, {
       send: function(result) {

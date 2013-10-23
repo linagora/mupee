@@ -15,8 +15,13 @@ describe('The Rules Storage module', function() {
 
   var manager = new Storage(db);
 
+  before(function(done) {
+    db.collection('rules').drop(function() {done()});
+  });
+
+  
   it('should allow adding a rules to persistent storage', function(done) {
-    var rule = new Rule(defaultRules.denyAllUpgradesForFirefox)
+    var rule = new Rule(defaultRules.denyAllUpgradesForFirefox);
     manager.save(rule, function(err, record) {
       if (err) throw err;
       expect(record).to.exist;
@@ -36,13 +41,12 @@ describe('The Rules Storage module', function() {
 
   it('should allow replacing a rule in persistent storage', function(done) {
     var ruleToReplace = new Rule(defaultRules.denyAllUpgradesForFirefox);
-
     manager.save(ruleToReplace, function(err, ruleToReplace) {
       if (err) throw err;
       ruleToReplace.action = null;
       manager.save(ruleToReplace, function(err, updated) {
         if (err) throw err;
-        expect(updated).to.equal(1);
+        expect(updated).to.deep.equal(ruleToReplace);
         manager.findById(ruleToReplace._id.toString(), function(err, record) {
           if (err) throw err;
           expect(record).to.exist;
@@ -63,9 +67,10 @@ describe('The Rules Storage module', function() {
     updatedRuleFields.predicates = [];
     manager.save(ruleToUpdate, function(err, ruleToUpdate) {
       if (err) throw err;
-      manager.update(ruleToUpdate._id.toString(), updatedRuleFields, function(err, record) {
+      ruleToUpdate.predicates = [];
+      manager.update(ruleToUpdate, function(err, record) {
         if (err) throw err;
-        expect(record).to.equal(1);
+        expect(record).to.exist;
         manager.findById(ruleToUpdate._id.toString(), function(err, record) {
           if (err) throw err;
           expect(record).to.exist;

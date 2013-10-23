@@ -63,7 +63,7 @@ describe('The UpdateStorage module', function() {
     var newVersion = version;
     newVersion.updates.push(newUpdate);
     manager.save(newVersion, function(err, updated) {
-      expect(updated).to.equal(1);
+      expect(err).to.be.null;
       manager.findByVersion(versionQuery, function(err, updatedRecord) {
         if (err) { throw err; }
         expect(updatedRecord).to.exist;
