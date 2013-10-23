@@ -51,8 +51,8 @@ app.all('/admin/*', passport.authenticate('basic'));
 app.get('/admin/versions', versions.findAll);
 app.get('/admin/versions/:id', versions.findOne);
 
-app.post('/admin/rules/', rules.create);
-app.get('/admin/rules/', rules.findByPredicate);
+app.post('/admin/rules/?', rules.create);
+app.get('/admin/rules/?', rules.findByPredicate);
 app.put('/admin/rules/:id', rules.update);
 app.delete('/admin/rules/:id', rules.delete);
 app.get('/admin/rules/actions', rules.listActions);
