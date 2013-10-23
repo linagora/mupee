@@ -1,0 +1,26 @@
+span 
+  span(data-ng-show='mode == modes.DISPLAY') 
+    span(class=' hAir')
+      span(class='label') {{activeActionSummary}}
+    button(data-ng-click="startEdition()" class="tiny") Modify...
+  span(data-ng-show='mode == modes.LOAD') Loading...
+  span(data-ng-show='mode == modes.RECORD') Recording changes...
+  span(data-ng-show='mode == modes.EDIT')
+    div(class='small-8 small-centered')
+      form(name='actionForm' data-ng-submit='submitForm()')
+        fieldset
+          legend Edit policy
+          div(class='row')
+            div(class='small-8')
+              div(class='row')
+                div(class='small-4 columns')
+                  label(for='actionDropDown' class='right inline') Choose the policy : 
+                div(class='small-8 columns')
+                  select(id='actionDropDown' name="action" data-ng-model="edition.activeActionId" data-ng-options="a.id as a.summary for (k, a) in upgradeActionList" data-ng-change="updateSelectedForm()")
+          
+          div(data-ng-repeat="parameter in edition.parameters" data-ng-form name='parameterNestedForm')
+            {{parameter.summary}}: 
+            input(type="{{parameter.type}}" data-ng-model='parameter.value' 
+  data-ng-required='{{parameter.mandatory}}' class='small-6' placeholder='{{parameter.summary}}')
+          p
+          input(type='submit' value='record' data-ng-disabled='')
