@@ -1,19 +1,52 @@
 'use strict';
 
-var jstoxml = require('./jstoxml');
+var jstoxml = require('./jstoxml'),
+    Errors = require('./application-errors');
+
+function validateExtensionUpdate(object) {
+  if (!object) {
+    throw new Errors.BadContructorArgumentError('ExtensionUpdate');
+  }
+
+  var requiredProperties = ['version', 'targetApplication'];
+
+  requiredProperties.forEach(function(property) {
+    if (!object[property]) {
+      throw new Errors.PropertyMissingError('ExtensionUpdate', property);
+    }
+  });
+}
+
+function validateExtensionTargetApplicationObject(object) {
+  if (!object) {
+    throw new Errors.BadContructorArgumentError('ExtensionTargetApplication');
+  }
+
+  var requiredProperties = ['id', 'minVersion', 'maxVersion'];
+
+  requiredProperties.forEach(function(property) {
+    if (!object[property]) {
+      throw new Errors.PropertyMissingError('ExtensionTargetApplication', property);
+    }
+  });
+}
 
 var ExtensionTargetApplication = function(object) {
-  this.id = object.id || null;
-  this.minVersion = object.minVersion || null;
-  this.maxVersion = object.maxVersion || null;
+  validateExtensionTargetApplicationObject(object);
+
+  this.id = object.id;
+  this.minVersion = object.minVersion;
+  this.maxVersion = object.maxVersion;
   this.updateLink = object.updateLink || null;
   this.updateInfoURL = object.updateInfoURL || null;
   this.updateHash = object.updateHash || null;
 };
 
 var ExtensionUpdate = function(object) {
+  validateExtensionUpdate(object);
+
   this.version = object.version || null;
-  this.targetApplication = new ExtensionTargetApplication(object.targetApplication || {});
+  this.targetApplication = new ExtensionTargetApplication(object.targetApplication);
 };
 
 var ExtensionSourceVersion = function(object) {

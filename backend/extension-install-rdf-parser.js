@@ -60,6 +60,12 @@ exports = module.exports = function(data, callback) {
     extension.targetPlatforms = getElementValuesIgnoringNS(root, 'targetPlatform', function(node) { return node['#'] || node; });
     extension.targetApplications = getElementValuesIgnoringNS(root, 'targetApplication', parseTargetApplication);
 
-    callback(null, new Extension(extension));
+    try {
+      extension = new Extension(extension);
+    } catch (err) {
+      return callback(err);
+    }
+
+    callback(null, extension);
   });
 };

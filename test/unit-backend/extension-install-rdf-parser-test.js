@@ -67,4 +67,28 @@ describe('The ExtensionInstallRDFParser module', function() {
     });
   });
 
+  it('should fail if install.rdf have no id', function() {
+    var rdf = fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.2.2-install-no-id.rdf'));
+
+    parseRdf(rdf, function(err) {
+      expect(err).to.exist;
+    });
+  });
+
+  it('should fail if install.rdf have no version', function() {
+    var rdf = fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.2.2-install-no-version.rdf'));
+
+    parseRdf(rdf, function(err) {
+      expect(err).to.exist;
+    });
+  });
+
+  it('should fail if install.rdf have no targetApplications', function() {
+    var rdf = fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.2.2-install-no-targetApplication.rdf'));
+
+    parseRdf(rdf, function(err) {
+      expect(err).to.exist;
+    });
+  });
+
 });

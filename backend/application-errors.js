@@ -93,6 +93,15 @@ var UnknownSourceVersionUpdateError = function(id) {
 util.inherits(UnknownSourceVersionUpdateError, AbstractError);
 UnknownSourceVersionUpdateError.prototype.name = 'Unknown SourceVersion Update';
 
+var NotEnoughElementsError = function(id, expectedLength) {
+  var msg = 'The array \'' + id + '\' is expected to have at least ' + expectedLength + ' element(s)';
+
+  this.id = id;
+  NotEnoughElementsError.super_.call(this, msg, this.constructor);
+};
+util.inherits(NotEnoughElementsError, AbstractError);
+NotEnoughElementsError.prototype.name = 'Not enough elements';
+
 module.exports = {
   UnknownActionError: UnknownActionError,
   UnknownPredicateError: UnknownPredicateError,
@@ -102,5 +111,6 @@ module.exports = {
   MandatoryParameterError: MandatoryParameterError,
   BadParameterTypeError: BadParameterTypeError,
   UnknownParameterError: UnknownParameterError,
-  UnknownSourceVersionUpdateError: UnknownSourceVersionUpdateError
+  UnknownSourceVersionUpdateError: UnknownSourceVersionUpdateError,
+  NotEnoughElementsError: NotEnoughElementsError
 };

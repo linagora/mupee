@@ -9,11 +9,76 @@ var fs = require('fs'),
 
 describe('The ExtensionSourceVersion module', function() {
 
+  it('should fail when creating an ExtensionUpdate with no object', function(done) {
+    try {
+      new ExtensionUpdate();
+    } catch (err) {
+      done();
+    }
+  });
+
+  it('should fail when creating an ExtensionUpdate with a null object', function(done) {
+    try {
+      new ExtensionUpdate(null);
+    } catch (err) {
+      done();
+    }
+  });
+
+  it('should fail when creating an ExtensionUpdate with no version property', function(done) {
+    try {
+      new ExtensionUpdate({});
+    } catch (err) {
+      done();
+    }
+  });
+
+  it('should fail when creating an ExtensionUpdate with no targetApplication property', function(done) {
+    try {
+      new ExtensionUpdate({ version: '1234' });
+    } catch (err) {
+      done();
+    }
+  });
+
+  it('should fail when creating an ExtensionUpdate with a targetApplication with no id', function(done) {
+    try {
+      new ExtensionUpdate({ version: '1234', targetApplication: {} });
+    } catch (err) {
+      done();
+    }
+  });
+
+  it('should fail when creating an ExtensionUpdate with a targetApplication with no minVersion', function(done) {
+    try {
+      new ExtensionUpdate({ version: '1234', targetApplication: { id: 'id' } });
+    } catch (err) {
+      done();
+    }
+  });
+
+  it('should fail when creating an ExtensionUpdate with a targetApplication with no maxVersion', function(done) {
+    try {
+      new ExtensionUpdate({ version: '1234', targetApplication: { id: 'id', minVersion: '1.0' } });
+    } catch (err) {
+      done();
+    }
+  });
+
+  it('should allow creating an ExtensionUpdate object if validation passes', function() {
+    new ExtensionUpdate({ version: '1234', targetApplication: { id: 'id', minVersion: '1.0', maxVersion: '1.*' } });
+  });
+
   it('should add an update when addUpdate() is called', function() {
     var version = fixtures.ltn123TB17WithUpdate();
 
     version.addUpdate(new ExtensionUpdate({
-      version: '0.0.0'
+      version: '0.0.0',
+      targetApplication: {
+        id: 'id',
+        minVersion: '1.0',
+        maxVersion: '1.*'
+      }
     }));
 
     expect(version.updates.length).to.equal(2);
