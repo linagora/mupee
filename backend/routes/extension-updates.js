@@ -6,7 +6,10 @@ var ExtensionSourceVersion = require('../extension-source-version').ExtensionSou
     Zip = require('adm-zip'),
     Path = require('path'),
     config = require('../config'),
-    fs = require('fs-extra');
+    fs = require('fs'),
+    fse = require('fs-extra'),
+    db = require('../mongo-provider'),
+    ExtensionStorage = require('../extension-storage');
 
 function badRequest(res, err, filename) {
   logger.error(filename ? filename + ': ' + err : err);
@@ -44,14 +47,52 @@ exports.uploadXpi = function(req, res) {
     logger.info('Handling upload of extension %s v%s (%s, %d byte(s))', extension.id, extension.version, file.name, file.size);
     res.send(extension);
 
-    var newPath = Path.join(config.download.dir, 'Extensions', extension.id, extension.version, file.name);
+    var storage = new ExtensionStorage(db);
+    var storeExtension = function() {
+      extension.localPath = Path.join('Extensions', extension.id, extension.version, file.name);
 
-    fs.copy(file.path, newPath, function(err) {
+      var newPath = Path.join(config.download.dir, extension.localPath);
+
+      storage.save(extension, function(err) {
+        if (err) {
+          logger.warn('While saving metadata for extension %s in database: ', err);
+        }
+      });
+      fse.copy(file.path, newPath, function(err) {
+        if (err) {
+          return logger.error('Cannot copy uploaded extensions %s to %s. ', file.name, newPath, err);
+        }
+
+        logger.info('Successfully stored uploaded extension %s in %s', file.name, newPath);
+      });
+    };
+
+    storage.findByExtension(extension, function(err, existingExtensions) {
       if (err) {
-        return logger.error('Cannot copy uploaded extensions %s to %s. ', file.name, newPath, err);
+        logger.warn('While fetching an existing extension from storage: ', err);
       }
 
-      logger.info('Successfully stored uploaded extension %s in %s', file.name, newPath);
+      if (existingExtensions && existingExtensions.length > 0) {
+        var existingExtension = existingExtensions[0];
+
+        fs.exists(Path.join(config.download.dir, existingExtension.localPath), function(exists) {
+          if (exists) {
+            return logger.debug('Extension %s already exists in database and file storage, nothing to do.', file.name);
+          }
+
+          logger.warn('Extension %s exists in database but the file isn\'t present on the file system ' +
+              'or the metadata is outdated, copying file and replacing metadata...', file.name);
+          storage.remove(existingExtension._id.toString(), function(err) {
+            if (err) {
+              logger.warn('While removing outdated metadata from storage: ', err);
+            }
+          });
+
+          storeExtension();
+        });
+      } else {
+        storeExtension();
+      }
     });
   });
 };
