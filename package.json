@@ -31,7 +31,9 @@
     "passport-http": "0.2.2",
     "clone": "0.1.11",
     "mozilla-version-comparator": "1.0.2",
-    "browserify": "2.35.0"
+    "browserify": "2.35.0",
+    "adm-zip": "~0.4.3",
+    "fs-extra": "~0.8.1"
   },
   "devDependencies": {
     "mocha": "1.13.0",
