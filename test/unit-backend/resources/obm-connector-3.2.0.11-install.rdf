@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://www.mozilla.org/2004/em-rdf#">
+  <rdf:Description rdf:about="urn:mozilla:install-manifest">
+    <id>obm-connector@aliasource.fr</id>
+    <name>OBM Connector</name>
+    <version>3.2.0.11</version>
+    <creator>Linagora Group</creator>
+    <developer>Damiano Albani, Paul Rouget, Nicolas Lascombes and countless others</developer>
+    <homepageURL>http://obm.org/doku.php?id=obmmozillacalendar</homepageURL>
+    <description>OBM Calendar provider</description>
+    <iconURL>chrome://obm-extension/skin/icons/ico_connecteur_32.png</iconURL>
+    <aboutURL>chrome://obm-extension/content/about.xul</aboutURL>
+    <updateURL>http://obm.org/mozilla-addons/update.rdf</updateURL>
+    <updateKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnValvfChAU8UDyqPRJrJlC1dV8j9OBCFrZ0ypFuBrLGol5+4//3/op/ECd3bmPPlXhPeICZPPfive+QNuICCoDBR9DCcxm1D3ZEDuWetnmJh1J6RInewJKbOakrujND75/v1XkMgduAXPeWIBJH/U9dfaANZ7GOWFUPRNp0eB9wIDAQAB</updateKey>
+    <targetApplication>
+      <rdf:Description> <!-- Thunderbird -->
+        <id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</id>
+        <minVersion>2.0</minVersion>
+        <maxVersion>17.*</maxVersion>
+        <!--<maxVersion>@THUNDERBIRD_VERSION@</maxVersion>-->
+      </rdf:Description>
+    </targetApplication>
+  </rdf:Description>
+</rdf:RDF>
