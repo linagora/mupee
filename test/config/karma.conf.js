@@ -17,21 +17,27 @@ module.exports = function(config) {
     colors: true,
     singleRun: true,
     autoWatch: true,
-    browsers: ['PhantomJS'],
-
-    reporters: ['progress'],
+    browsers: ['PhantomJS', 'SlimerJS', 'Chrome', 'Firefox'],
+    reporters: ['coverage', 'spec'],
+    preprocessors: {
+      'frontend/js/*.js': ['coverage']
+    },
     plugins: [
       'karma-junit-reporter',
       'karma-chrome-launcher',
       'karma-firefox-launcher',
       'karma-jasmine',
       'karma-phantomjs-launcher',
-      'karma-mocha'
+      'karma-mocha',
+      'karma-coverage',
+      'karma-spec-reporter',
+      'karma-slimerjs-launcher'
     ],
 
     junitReporter: {
       outputFile: 'test_out/unit.xml',
       suite: 'unit-frontend'
-    }
+    },
+    coverageReporter: {type: 'text', dir: '/tmp'}
   });
 };

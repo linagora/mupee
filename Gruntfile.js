@@ -51,7 +51,23 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test-frontend', 'run tests', function() {
     var done = this.async();
-    require('child_process').exec('sh ./scripts/test-frontend.sh', function(err, stdout) {
+    require('child_process').exec('sh ./scripts/test-frontend.sh PhantomJS', function(err, stdout) {
+      grunt.log.write(stdout);
+      done(err);
+    });
+  });
+
+  grunt.registerTask('test-ui-chrome', 'run tests', function() {
+    var done = this.async();
+    require('child_process').exec('sh ./scripts/test-frontend.sh Chrome', function(err, stdout) {
+      grunt.log.write(stdout);
+      done(err);
+    });
+  });
+
+  grunt.registerTask('test-ui-firefox', 'run tests', function() {
+    var done = this.async();
+    require('child_process').exec('sh ./scripts/test-frontend.sh Firefox', function(err, stdout) {
       grunt.log.write(stdout);
       done(err);
     });

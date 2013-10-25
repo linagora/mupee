@@ -37,7 +37,9 @@
     "nock": "*",
     "phantomjs": "*",
     "karma": "*",
+    "karma-coverage": "*",
     "karma-junit-reporter": "*",
+    "karma-spec-reporter": "*",
     "karma-jasmine": "*",
     "karma-ng-scenario": "*",
     "karma-phantomjs-launcher": "*",
@@ -47,7 +49,8 @@
     "grunt-contrib-jshint": "*",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-watch": "*",
-    "grunt-contrib-concat": "*"
+    "grunt-contrib-concat": "*",
+    "karma-slimerjs-launcher": "~0.1.2"
   },
   "keywords": [
     "mozilla",
