@@ -5,6 +5,7 @@ module.exports = function(config) {
     basePath: '../../',
 
     files: [
+      'frontend/lib/jquery/jquery.js',
       'frontend/lib/angular/angular.js',
       'frontend/lib/angular/angular-*.js',
       'test/lib/angular/angular-mocks-mocha.js',
