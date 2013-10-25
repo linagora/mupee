@@ -1,17 +1,33 @@
 'use strict';
 
 var Rule = require('../../../backend/rules/rule'),
+    latestForBranch = require('../../../backend/rules/actions/latest-for-branch'),
     branchEquals = require('../../../backend/rules/predicates/branch-equals'),
-    latestForBranch = require('../../../backend/rules/actions/latest-for-branch');
+    productEquals = require('../../../backend/rules/predicates/product-equals');
 
-module.exports.versionTenToLatestMinor = new Rule({
-  _id: 'versionTenToLatestMinor',
+module.exports.version10ToLatest17 = new Rule({
+  _id: 'version10ToLatest17',
   predicates: [{
     id: branchEquals.id,
-    parameters: { branch: 10 }
+    parameters: {branch: 10}
   }],
   action: {
     id: latestForBranch.id,
-    parameters: { branch: '17' }
+    parameters: {branch: 17}
+  }
+});
+
+module.exports.thunderbird10ToLatest17 = new Rule({
+  _id: 'thunderbird10ToLatest17',
+  predicates: [{
+    id: branchEquals.id,
+    parameters: {branch: 10}
+  },{
+    id: productEquals.id,
+    parameters: {product: 'Thunderbird'}
+  }],
+  action: {
+    id: latestForBranch.id,
+    parameters: {branch: 17}
   }
 });

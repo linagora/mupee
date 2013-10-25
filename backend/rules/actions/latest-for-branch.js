@@ -2,37 +2,23 @@
 
 var Action = require('../action.js');
 
-var versionsCompare = require('./version-compare');
+var filterLatestForBranch = require('./filter-latest-for-branch');
 
 var latestForBranch = new Action({
   id: 'latestForBranch',
-  summary: 'upgrade to latest release of a specified version',
-  description: '',
+  summary: 'upgrade to latest release of a given branch',
+  description: 'this policy send updates only for the latest available release of a given branch (major version)',
   action: function(parameters) {
     return function(candidate) {
-      var filtered = [];
-      candidate.updates.forEach(function(update) {
-        if (update.version.split('.').shift() == parameters.branch) {
-          filtered.push(update);
-        }
-      });
-      candidate.clearUpdates();
-      if ( filtered.length ) {
-        filtered.sort(function(left, right) {
-          return - versionsCompare(left.version, right.version);
-        });
-        candidate.addUpdate(filtered[0]);
-      }
-      return candidate;
-    };
+      return filterLatestForBranch(parameters.branch, candidate);
+    }
   },
   parametersDefinitions: [{
     id: 'branch',
-    summary: 'Version number',
-    description: 'Mozilla product major version number (i.e. "17")',
-    type: 'string',
+    summary: 'branch (major version number)',
+    description: 'a Mozilla product branch (major version number)',
+    type: 'number',
     mandatory:  true,
-    defaultValue: 'minor'
   }]
 });
 

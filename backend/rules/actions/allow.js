@@ -2,17 +2,16 @@
 
 var Action = require('../action.js');
 
-var deny = new Action({
-  id: 'deny',
-  summary: 'deny all upgrades',
-  description: 'this policy disable all updates',
+var allow = new Action({
+  id: 'allow',
+  summary: 'allow all upgrades',
+  description: 'this policy enable all available updates',
   action: function(parameters) {
     return function(version) {
-      version.clearUpdates();
       return version;
     };
   },
   parametersDefinitions: []
 });
 
-module.exports = deny;
+module.exports = allow;

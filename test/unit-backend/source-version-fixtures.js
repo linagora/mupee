@@ -217,6 +217,15 @@ exports.thunderbird3 = new SourceVersion({
   },
   updates: [{
     type: 'major',
+    version: '12.0.2',
+    extensionVersion: '12.0.2',
+    displayVersion: null,
+    appVersion: null,
+    platformVersion: null,
+    buildId: '20120428123100',
+    detailsUrl: 'https://www.mozilla.org/fr/thunderbird/12.0/details/index.html'
+  },{
+    type: 'major',
     version: '12.0.1',
     extensionVersion: '12.0.1',
     displayVersion: null,
@@ -239,6 +248,33 @@ exports.thunderbird3 = new SourceVersion({
       hashValue: '936c2bf828f116c394a464c95ee7de10a0d41cd4fadf4deec7c644d915aeda96b3cf0df70ed1edda7abe3b173925efe12a95216c80ce2d9bf2e40e3809ea74aa',
       size: 19620770
     }]
+  },{
+    type: 'minor',
+    version: '3.1.21',
+    extensionVersion: '3.1.21',
+    displayVersion: null,
+    appVersion: null,
+    platformVersion: null,
+    buildId: '20120428123100',
+    detailsUrl: 'https://www.mozilla.org/fr/thunderbird/12.0/details/index.html'
+  },{
+    type: 'major',
+    version: '3.2.0',
+    extensionVersion: '3.2.0',
+    displayVersion: null,
+    appVersion: null,
+    platformVersion: null,
+    buildId: '20120428123100',
+    detailsUrl: 'https://www.mozilla.org/fr/thunderbird/12.0/details/index.html'
+  },{
+    type: 'major',
+    version: null,
+    extensionVersion: null,
+    displayVersion: '3.3.0',
+    appVersion: '3.3.0',
+    platformVersion: '3.3.0',
+    buildId: '20120428123100',
+    detailsUrl: 'https://www.mozilla.org/fr/thunderbird/12.0/details/index.html'
   },{
     type: 'minor',
     version: null,
