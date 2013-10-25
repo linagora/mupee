@@ -9,7 +9,8 @@ var ExtensionSourceVersion = require('../extension-source-version').ExtensionSou
     fs = require('fs'),
     fse = require('fs-extra'),
     db = require('../mongo-provider'),
-    ExtensionStorage = require('../extension-storage');
+    ExtensionStorage = require('../extension-storage'),
+    checksum = require('checksum');
 
 function badRequest(res, err, filename) {
   logger.error(filename ? filename + ': ' + err : err);
@@ -49,21 +50,26 @@ exports.uploadXpi = function(req, res) {
 
     var storage = new ExtensionStorage(db);
     var storeExtension = function() {
-      extension.localPath = Path.join('Extensions', extension.id, extension.version, file.name);
+      checksum.file(file.path, function(err, sum) {
+        extension.localFile = {
+          path: Path.join('Extensions', extension.id, extension.version, file.name),
+          hash: 'sha1:' + sum
+        };
 
-      var newPath = Path.join(config.download.dir, extension.localPath);
+        var newPath = Path.join(config.download.dir, extension.localFile.path);
 
-      storage.save(extension, function(err) {
-        if (err) {
-          logger.warn('While saving metadata for extension %s in database: ', err);
-        }
-      });
-      fse.copy(file.path, newPath, function(err) {
-        if (err) {
-          return logger.error('Cannot copy uploaded extensions %s to %s. ', file.name, newPath, err);
-        }
+        storage.save(extension, function(err) {
+          if (err) {
+            logger.warn('While saving metadata for extension %s in database: ', err);
+          }
+        });
+        fse.copy(file.path, newPath, function(err) {
+          if (err) {
+            return logger.error('Cannot copy uploaded extensions %s to %s. ', file.name, newPath, err);
+          }
 
-        logger.info('Successfully stored uploaded extension %s in %s', file.name, newPath);
+          logger.info('Successfully stored uploaded extension %s in %s', file.name, newPath);
+        });
       });
     };
 
@@ -75,7 +81,7 @@ exports.uploadXpi = function(req, res) {
       if (existingExtensions && existingExtensions.length > 0) {
         var existingExtension = existingExtensions[0];
 
-        fs.exists(Path.join(config.download.dir, existingExtension.localPath), function(exists) {
+        fs.exists(Path.join(config.download.dir, existingExtension.localFile.path), function(exists) {
           if (exists) {
             return logger.debug('Extension %s already exists in database and file storage, nothing to do.', file.name);
           }

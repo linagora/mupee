@@ -183,7 +183,7 @@ describe('The ExtensionUpdates route', function() {
     };
 
     var Storage = function() {};
-    Storage.prototype.findByExtension = function(extension, callback) { callback(null, [{ _id: 'id', localPath: 'mupeeTestingFile' }]); };
+    Storage.prototype.findByExtension = function(extension, callback) { callback(null, [{ _id: 'id', localFile: { path: 'mupeeTestingFile' } }]); };
     Storage.prototype.save = function(extension, callback) { callback(null); };
     Storage.prototype.remove = function(id, callback) { callback(null); };
 
@@ -214,7 +214,7 @@ describe('The ExtensionUpdates route', function() {
     };
 
     var Storage = function() {};
-    Storage.prototype.findByExtension = function(extension, callback) { callback(null, [{ _id: 'id', localPath: 'mupeeTestingFile' }]); };
+    Storage.prototype.findByExtension = function(extension, callback) { callback(null, [{ _id: 'id', localFile: { path: 'mupeeTestingFile' } }]); };
     Storage.prototype.save = function(extension, callback) { callback(null); };
     Storage.prototype.remove = function(id, callback) { callback(null); done(); };
 
@@ -245,7 +245,7 @@ describe('The ExtensionUpdates route', function() {
     };
 
     var Storage = function() {};
-    Storage.prototype.findByExtension = function(extension, callback) { callback(null, [{ _id: 'id', localPath: 'mupeeTestingFile' }]); };
+    Storage.prototype.findByExtension = function(extension, callback) { callback(null, [{ _id: 'id', localFile: { path: 'mupeeTestingFile' } }]); };
     Storage.prototype.save = function(extension, callback) { callback(null); done(); };
     Storage.prototype.remove = function(id, callback) { callback(null); };
 
@@ -296,6 +296,41 @@ describe('The ExtensionUpdates route', function() {
     });
   });
 
+  it('should compute the sha1 of the uploaded file before saving metadata', function(done) {
+    var Zip = function() {};
+    Zip.prototype.getEntry = function() { return this; };
+    Zip.prototype.readAsText = function() { return fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.2.2-install.rdf')); };
+
+    var fsExtra = {
+      copy: function() {}
+    };
+
+    var Storage = function() {};
+    Storage.prototype.findByExtension = function(extension, callback) { callback(null); };
+    Storage.prototype.save = function(extension, callback) {
+      extension.localFile.hash.should.equal('sha1:1c75d05a0018eed4292b43c7f4663a79166761f1');
+      callback(null);
+
+      done();
+    };
+
+    mockery.registerMock('fs-extra', fsExtra);
+    mockery.registerMock('adm-zip', Zip);
+    mockery.registerMock('../extension-storage', Storage);
+    proxy = require('../../backend/routes/extension-updates');
+
+    proxy.uploadXpi({
+      files: {
+        file: {
+          name: 'ltn122Linux.xpi',
+          path: Path.join(__dirname, '/resources/sha1sum.test')
+        }
+      }
+    }, {
+      send: function() {}
+    });
+  });
+
   it('should do nothing if the extension is known and valid', function(done) {
     var Zip = function() {};
     Zip.prototype.getEntry = function() { return this; };
@@ -313,7 +348,7 @@ describe('The ExtensionUpdates route', function() {
     };
 
     var Storage = function() {};
-    Storage.prototype.findByExtension = function(extension, callback) { callback(null, [{ _id: 'id', localPath: 'mupeeTestingFile' }]); done(); };
+    Storage.prototype.findByExtension = function(extension, callback) { callback(null, [{ _id: 'id', localFile: { path: 'mupeeTestingFile' } }]); done(); };
     Storage.prototype.save = function(extension, callback) { throw 'This test should not call Storage.save()'; };
     Storage.prototype.remove = function(id, callback) { throw 'This test should not call Storage.remove()'; };
 
