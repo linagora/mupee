@@ -1,8 +1,7 @@
 span 
   span(data-ng-show='mode == modes.DISPLAY') 
-    span(class=' hAir')
-      span(class='label') {{activeActionSummary}}
-    button(data-ng-click="startEdition()" class="tiny") Modify...
+    span(class='hAir')
+      span(class='label' data-ng-click="startEdition()") {{activeActionSummary}}
   span(data-ng-show='mode == modes.LOAD') Loading...
   span(data-ng-show='mode == modes.RECORD') Recording changes...
   span(data-ng-show='mode == modes.EDIT')
@@ -23,4 +22,5 @@ span
             input(type="{{parameter.type}}" data-ng-model='parameter.value' 
   data-ng-required='{{parameter.mandatory}}' class='small-6' placeholder='{{parameter.summary}}')
           p
-          input(type='submit' value='record' data-ng-disabled='')
+          input(type='submit' value='record' data-ng-disabled='') 
+          button(class='tiny' data-ng-click='mode = modes.DISPLAY') cancel

@@ -2,9 +2,6 @@
 
 (function() {
 
-  function getAction(actionList, actionId) {
-    return (actionId in actionList) ? actionList[actionId] : null;
-  }
   function getParameter(action, parameterId) {
     if (! ('parametersDefinitions' in action)) {
       return;
@@ -27,17 +24,13 @@
     return back;
   }
 
-  angular.module('mupeeUpgradeAction', [])
-  .directive('upgradeAction', ['actionListDisplay', 'actionAPI', '$q', 'inheritedAction',
-            function(actionListDisplay, actionAPI, $q, inheritedAction) {
+  angular.module('mupeeUpgradeAction', ['mupeeAPI'])
+  .directive('upgradeAction', ['actionListDisplay', 'API', '$q', 'inheritedAction',
+             'buildRuleJSON', 'productAndVersionPredicates',
+            function(actionListDisplay, API, $q, inheritedAction, buildRuleJSON,
+                     productAndVersionPredicates) {
 
-    function setDefaultsFromRule($scope, actualRule, actionList) {
-      $scope.activeAction = actualRule.action ? actualRule.action : inheritedAction;
-      $scope.actualRuleId = actualRule._id ? actualRule._id : 0;
-      $scope.activeActionSummary = actionListDisplay(getAction(actionList, $scope.activeAction.id), $scope.activeAction);
-    }
-
-    function controller($scope, $element, $attrs) {
+    function controller($scope) {
       $scope.modes = {
         LOAD: 'load',
         RECORD: 'record',
@@ -46,18 +39,31 @@
       };
       $scope.mode = $scope.modes.LOAD;
 
-      $q.all([actionAPI.getActionList(), actionAPI.getRule($scope.targetProduct, $scope.targetVersion)])
-      .then(function(promisesResults) {
-        var upgradeActionList = promisesResults[0];
-        var actualRule = promisesResults[1];
-        $scope.mode = $scope.modes.DISPLAY;
-        $scope.upgradeActionList = angular.copy(upgradeActionList);
-        setDefaultsFromRule($scope, actualRule, $scope.upgradeActionList);
-      });
+      $q.all(
+        [
+          API.action.list(),
+          API.rule.findByPredicate(productAndVersionPredicates($scope.targetProduct, $scope.targetVersion))
+        ]
+      )
+      .then(
+        function(promisesResults) {
+          var upgradeActionList = promisesResults[0];
+          var actualRule = promisesResults[1];
+          if (!actualRule) {
+            actualRule = {_id: 0, action: inheritedAction, parameters: {}};
+          }
+          $scope.mode = $scope.modes.DISPLAY;
+          $scope.upgradeActionList = angular.copy(upgradeActionList);
+          if ($scope.targetVersion) {
+            $scope.upgradeActionList[inheritedAction.id] = inheritedAction;
+          }
+          setDefaultsFromRule(actualRule);
+        }
+      );
 
       $scope.startEdition = function() {
         $scope.mode = $scope.modes.EDIT;
-        var actionDef = getAction($scope.upgradeActionList, $scope.activeAction.id);
+        var actionDef = getAction($scope.activeAction.id);
         $scope.edition = {
           activeActionId: $scope.activeAction.id,
           parameters: $scope.activeAction.parameters ? fillParameters($scope.activeAction.parameters, actionDef) : []
@@ -65,7 +71,7 @@
       };
 
       $scope.updateSelectedForm = function() {
-        var action = getAction($scope.upgradeActionList, $scope.edition.activeActionId);
+        var action = getAction($scope.edition.activeActionId);
         if ($scope.edition.activeActionId === $scope.activeAction.id) {
           $scope.edition.parameters = fillParameters($scope.activeAction.parameters, action);
         } else if (action.parametersDefinitions) {
@@ -78,17 +84,34 @@
       $scope.submitForm = function() {
         console.log('submit: ', $scope.edition);
         $scope.mode = $scope.modes.RECORD;
-        var ruleJSON = actionAPI.buildRuleJSON(
+        if ($scope.edition.activeActionId === $scope.activeAction.id &&
+          $scope.edition.activeActionId === inheritedAction.id) {
+          //noop
+          $scope.mode = $scope.modes.DISPLAY;
+          return;
+        }
+
+        var ruleJSON = buildRuleJSON(
           $scope.targetProduct,
           $scope.actualRuleId,
           $scope.edition,
           $scope.targetVersion
         );
-        actionAPI.recordRule(ruleJSON).then(function(data) {
-          setDefaultsFromRule($scope, data, $scope.upgradeActionList);
+        API.rule.record(ruleJSON).then(function(data) {
+          setDefaultsFromRule(data);
           $scope.mode = $scope.modes.DISPLAY;
         });
       };
+
+      function getAction(actionId) {
+        return (actionId in $scope.upgradeActionList) ? $scope.upgradeActionList[actionId] : null;
+      }
+
+      function setDefaultsFromRule(actualRule) {
+        $scope.activeAction = actualRule.action ? actualRule.action : inheritedAction;
+        $scope.actualRuleId = actualRule._id ? actualRule._id : 0;
+        $scope.activeActionSummary = actionListDisplay(getAction($scope.activeAction.id), $scope.activeAction);
+      }
     }
 
     var directive = {
@@ -99,96 +122,28 @@
         'targetVersion': '=version'
       },
       templateUrl: 'directives/upgradeAction',
-      controller: ['$scope', '$element', '$attrs', controller]
+      controller: ['$scope', controller]
     };
 
     return directive;
 
   }])
-  .factory('actionAPI', ['$http', '$q', function($http, $q) {
 
-    function buildPredicates(product, version) {
-      var predicates = [
-        {
-          id: 'productEquals',
-          parameters: {product: product}
-        }
-      ];
-
-      if (version && version !== '*') {
-        predicates.push({
-          id: 'branchEquals',
-          parameters: {branch: parseInt(version.majorVersion, 10)}
-        });
-      }
-      return predicates;
-    }
-
-    function getRule(product, version) {
-      var query = {predicates: buildPredicates(product, version)};
-
-      var deferred = $q.defer();
-      $http.post('/admin/rules', query, {
-        headers: { 'X-http-method-override': 'GET' }
-      })
-      .success(function(data) { deferred.resolve(data); })
-      .error(function(data, status) {
-        if (status === 404) { return deferred.resolve({}); }
-        deferred.reject(status, data);
-      });
-      return deferred.promise;
-    }
-
-    function getActionList() {
-      var deferred = $q.defer();
-      $http.get('/admin/rules/actions')
-      .success(function(data) { deferred.resolve(data); })
-      .error(function(data, status) { deferred.reject(status, data); });
-      return deferred.promise;
-    }
-
-    function postRule(data) {
-      var deferred = $q.defer();
-      $http.post('/admin/rules', data)
-      .success(function(data) { deferred.resolve(data); })
-      .error(function(data, status) { deferred.reject(status, data); });
-      return deferred.promise;
-    }
-
-    function putRule(data) {
-      var deferred = $q.defer();
-      $http.put('/admin/rules/' + encodeURIComponent(data.rule._id), data)
-      .success(function(data) { deferred.resolve(data); })
-      .error(function(data, status) { deferred.reject(status, data); });
-      return deferred.promise;
-    }
-
-    function deleteRule(data) {
-      var deferred = $q.defer();
-      $http.delete('/admin/rules', data)
-      .success(function(data) { deferred.resolve(data); })
-      .error(function(data, status) { deferred.reject(status, data); });
-      return deferred.promise;
-    }
-
-    function recordRule(data) {
-      if (!data.rule._id) {
-        return postRule(data);
-      }
-      if (data.rule.action.id === 0) {
-        return deleteRule(data);
-      }
-      return putRule(data);
-    }
-
+  .factory('buildRuleJSON', ['inheritedAction', 'productAndVersionPredicates',
+           function(inheritedAction, productAndVersionPredicates) {
     function buildRuleJSON(product, ruleId, action, version) {
+      var predicates = productAndVersionPredicates(product, version);
       var ruleData = {
-        predicates: buildPredicates(product, version),
+        predicates: predicates,
         action: {
           id: action.activeActionId,
           parameters: {}
         }
       };
+
+      if (action.activeActionId === inheritedAction.id) {
+        ruleData.action.id = null;
+      }
 
       for (var i = 0; i < action.parameters.length; i++) {
         var p = action.parameters[i];
@@ -196,17 +151,11 @@
       }
       if (ruleId) { ruleData._id = ruleId; }
 
-      return {rule: ruleData};
+      return ruleData;
     }
-
-    return {
-      getRule: getRule,
-      getActionList: getActionList,
-      recordRule: recordRule,
-      buildRuleJSON: buildRuleJSON
-    };
-
+    return buildRuleJSON;
   }])
+
   .factory('actionListDisplay', function() {
     function getParametersDisplay(action, parameters) {
       if (!parameters) {
@@ -239,11 +188,22 @@
       return display;
     };
   })
+
+  .factory('productAndVersionPredicates', ['buildPredicate', function(buildPredicate) {
+    return function productAndVersionPredicates(product, version) {
+      var predicates = [buildPredicate('productEquals', {product: product})];
+      if (version) {
+        predicates.push(buildPredicate('branchEquals', {branch: parseInt(version.majorVersion, 10)}));
+      }
+      return predicates;
+    };
+  }])
+
   .value('inheritedAction', {
-    id: 0,
+    id: '_inherited',
     summary: 'use defaults',
     description: 'no specific policy was targeted for this version or IP range.',
-    parameters: []
+    parametersDefinitions: []
   });
 
 })();
