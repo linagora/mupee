@@ -3,7 +3,8 @@
 var SourceVersion = require('../source-version'),
     db = require('../mongo-provider'),
     MetadataStorage = require('../update-storage'),
-    backgroundTasks = require('../background-tasks');
+    backgroundTasks = require('../background-tasks'),
+    engine = require('../rules/engine');
 
 var logger = require('../logger');
 
@@ -52,7 +53,7 @@ exports.updateClient = function(request, response) {
     }
     else {
       logger.info('client with IP [%s] gets cache-hit for url: [%s]', request.ip, request.url);
-      response.send(SourceVersion.emptyUpdatesXML());
+      response.send(engine.evaluate(new SourceVersion(storedVersion)).updatesAsXML());
 
       storedVersion.timestamp = Date.now();
       storage.save(storedVersion, function(error) {

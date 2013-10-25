@@ -4,7 +4,12 @@ var DefaultRules = require('./default-rules'),
     Storage = require('./storage'),
     Rule = require('./rule'),
     Loader = require('./loader'),
-    async = require('async');
+    async = require('async'),
+    db = require('../mongo-provider'),
+    events = require('events'),
+    util = require('util'),
+    config = require('../config'),
+    logger = require('../logger');
 
 function ensureRuleByPredicate(rule) {
   var storage = this.storage;
@@ -98,6 +103,20 @@ Engine.prototype.remove = function(id, callback) {
     removeFromCache(this.cache, id);
     callback(err, result);
   }.bind(this));
+};
+
+Engine.prototype.evaluate = function(candidate) {
+  for (var i in this.cache) {
+    var rule = this.cache[i];
+
+    if (rule.matches(candidate)) {
+      logger.debug('Applying rule %s to candidate %s/%s', rule.action.id, candidate.product, candidate.version);
+      return rule.action.apply(candidate);
+    }
+  }
+
+  logger.debug('Applying default rule %s to candidate %s/%s', config.rules.defaultRule, candidate.product, candidate.version);
+  return Loader.actions[config.rules.defaultRule].action()(candidate);
 };
 
 module.exports = Engine;

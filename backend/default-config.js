@@ -48,5 +48,8 @@ module.exports = {
   },
   scheduler: {
     maxParallelTasks: 3
+  },
+  rules: {
+    defaultRule: 'deny'
   }
 };
