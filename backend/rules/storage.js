@@ -25,25 +25,13 @@ function arrayToRule(err, result, callback) {
   }
 }
 
-RulesStorage.prototype.findByProperties = function(rule, callback) {
-  this.db.collection('rules').find(
-      rule,
-      {},
-      function(err, cursor) {
-        cursor.toArray(function(err, results) {
-          arrayToRule(err, results, callback);
-        });
-      }
-  );
-};
-
 RulesStorage.prototype.findByPredicate = function(predicates, callback) {
   this.db.collection('rules').find({
       predicates: predicates
     },
     {},
     function(err, cursor) {
-      if ( err ) {
+      if (err) {
         return callback(err);
       }
       cursor.toArray(function(err, results) {
@@ -51,6 +39,47 @@ RulesStorage.prototype.findByPredicate = function(predicates, callback) {
       });
     }
   );
+};
+
+RulesStorage.prototype.save = function(rule, callback) {
+  RulesStorage.super_.prototype.save.apply(this, [rule, function(err, result) {
+    if (err) {
+      callback(err, result)
+    } else {
+      callback(err, new Rule(result));
+    };
+  }]);
+  return this;
+};
+
+RulesStorage.prototype.findAll = function(query, callback) {
+  RulesStorage.super_.prototype.findAll.apply(this, [query, function(err, results) {
+    if (err) {
+      callback(err, results);
+    } else {
+      callback(err, results.map(function(rule) {return new Rule(rule)}));
+    }
+  }]);
+};
+
+RulesStorage.prototype.findById = function(id, callback) {
+  RulesStorage.super_.prototype.findById.apply(this, [id, function(err, result) {
+    if (err || !result) {
+      callback(err, result);
+    } else {
+      callback(err, new Rule(result));
+    }
+  }]);
+};
+
+RulesStorage.prototype.update = function(rule, callback) {
+  RulesStorage.super_.prototype.update.apply(this, [rule, function(err, result) {
+    if (err) {
+      callback(err, result);
+    } else {
+      callback(err, new Rule(result));
+    }
+  }]);
 };
 
 module.exports = RulesStorage;

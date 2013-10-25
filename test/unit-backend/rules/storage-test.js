@@ -17,7 +17,6 @@ describe('The Rules Storage module', function() {
     db.collection('rules').drop(function() {done();});
   });
 
-
   it('should allow adding a rules to persistent storage', function(done) {
     var rule = new Rule(defaultRules.denyAllUpgradesForFirefox);
     manager.save(rule, function(err, record) {
@@ -41,7 +40,7 @@ describe('The Rules Storage module', function() {
     var ruleToReplace = new Rule(defaultRules.denyAllUpgradesForFirefox);
     manager.save(ruleToReplace, function(err, ruleToReplace) {
       if (err) { throw err; }
-      ruleToReplace.action = null;
+      ruleToReplace.action = {id: 'allow', parameters: {}};
       manager.save(ruleToReplace, function(err, updated) {
         if (err) { throw err; }
         expect(updated).to.deep.equal(ruleToReplace);
@@ -51,7 +50,7 @@ describe('The Rules Storage module', function() {
           expect(record).to.have.property('_id');
           expect(record._id).to.deep.equal(ruleToReplace._id);
           expect(record).to.have.property('action');
-          expect(record.action).to.be.null;
+          expect(record.action.id).to.equal('allow');
           done();
         });
       });
@@ -60,21 +59,18 @@ describe('The Rules Storage module', function() {
 
   it('should allow updating a rule in persistent storage', function(done) {
     var ruleToUpdate = new Rule(defaultRules.denyAllUpgradesForFirefox);
-    var updatedRuleFields = {};
 
-    updatedRuleFields.predicates = [];
     manager.save(ruleToUpdate, function(err, ruleToUpdate) {
       if (err) { throw err; }
-      ruleToUpdate.predicates = [];
+      ruleToUpdate.action.id = 'allow';
       manager.update(ruleToUpdate, function(err, record) {
         if (err) { throw err; }
         expect(record).to.exist;
         manager.findById(ruleToUpdate._id.toString(), function(err, record) {
           if (err) { throw err; }
           expect(record).to.exist;
-          expect(record).to.have.property('predicates');
-          expect(record.predicates).to.be.an.array;
-          expect(record.predicates).to.have.length(0);
+          expect(record).to.have.property('action');
+          expect(record.action.id).to.equal('allow');
           done();
         });
       });

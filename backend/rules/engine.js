@@ -22,23 +22,25 @@ function ensureRuleByPredicate(rule) {
   };
 };
 
+function weightComparator(left, right) {
+  return right.weight - left.weight;
+}
+
 function initRuleCache(callback) {
   this.storage.findAll({}, function(err, result) {
     if (!err) {
-      this.ruleList = result.map(function(rule) {
+      this.cache = result.map(function(rule) {
           return new Rule(rule);
         }
-      ).sort(function(left, right) {
-        return right.weight - left.weight;
-      });
+      ).sort(weightComparator);
     }
-    callback(err, this.ruleList);
+    callback(err, this.cache);
   }.bind(this));
 };
 
 var Engine = function(db, callback) {
   this.storage = new Storage(db);
-  this.ruleList = [];
+  this.cache = [];
   this.db = db;
 
   async.series(
@@ -62,16 +64,40 @@ Engine.prototype.findByPredicate = function(predicates, callback) {
   this.storage.findByPredicate(predicates, callback);
 };
 
-Engine.prototype.create = function(rule, callback) {
-  this.storage.save(rule, callback);
+function addToCache(cache, rule) {
+  cache.push(rule);
+  cache.sort(weightComparator);
+}
+
+function removeFromCache(cache, ruleId) {
+  for (var i = 0, len = cache.length; i < len; i++) {
+    if (cache[i]._id == ruleId) {
+      cache.splice(i, 1);
+      return;
+    }
+  }
+}
+
+Engine.prototype.add = function(rule, callback) {
+  this.storage.save(rule, function(err, result) {
+    addToCache(this.cache, rule);
+    callback(err, result);
+  }.bind(this));
 };
 
 Engine.prototype.update = function(rule, callback) {
-  this.storage.update(rule, callback);
+  this.storage.update(rule, function(err, result) {
+    removeFromCache(this.cache, rule._id);
+    addToCache(this.cache, rule);
+    callback(err, result);
+  }.bind(this));
 };
 
 Engine.prototype.remove = function(id, callback) {
-  this.storage.remove(id, callback);
+  this.storage.remove(id.toString(), function(err, result) {
+    removeFromCache(this.cache, id);
+    callback(err, result);
+  }.bind(this));
 };
 
 module.exports = Engine;

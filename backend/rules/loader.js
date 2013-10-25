@@ -2,6 +2,7 @@
 
 var fs = require('fs'),
     Path = require('path');
+
 var Action = require('./action'),
     Predicate = require('./predicate');
 
