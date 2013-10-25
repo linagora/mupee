@@ -10,16 +10,11 @@ var db = require('../../../backend/mongo-provider'),
 describe('The Rules Engine', function() {
   it('should ensure we have default rules in the database', function(done) {
     db.collection('rules').insert({test: true}, {safe: true}, function(err) {
-      if (err) {
-        throw err;
-      }
+      if (err) {throw err;}
       db.collection('rules').drop(function(err) {
-        if (err) {
-          throw err;
-        }
-        var engine = new Engine(db, function(err, result) {
-          if (err) { throw (err); }
-          expect(engine).to.exist;
+        if (err) {throw err;}
+        new Engine(db, function(err, result) {
+          if (err) {throw (err);}
           expect(result).to.be.an.array;
           expect(result).to.have.length(2);
           expect(result[0]).to.be.instanceof(Rule);
@@ -30,17 +25,17 @@ describe('The Rules Engine', function() {
     });
   });
 
-  it('should not try to insert the default rules if some already exist with the same predicate', function(done) {
+  it('should not insert default rules if some exist with the mandatory predicates', function(done) {
     new Engine(db, function(err, result) {
-      if (err) { throw err; }
+      if (err) {throw err;}
       expect(result).to.be.an.array;
       expect(result).to.have.length(2);
       new Engine(db, function(err, result) {
-        if (err) { throw err; }
+        if (err) {throw err;}
         expect(result).to.be.an.array;
         expect(result).to.have.length(2);
-        expect(result[0]).to.be.null;
-        expect(result[1]).to.be.null;
+        expect(result[0]).to.be.instanceof(Rule);
+        expect(result[1]).to.be.instanceof(Rule);
         done();
       });
     });
