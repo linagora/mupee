@@ -101,9 +101,13 @@ function scrap(clientVersion, callback) {
           logger.error('while retrieving client version from cache :', error);
           return cb(error);
         }
-        var localSourceVersion = new SourceVersion(localVersion);
-        localSourceVersion._id = localVersion._id;
-        return cb(error, localSourceVersion);
+        try {
+          var localSourceVersion = new SourceVersion(localVersion);
+          localSourceVersion._id = localVersion._id;
+          return cb(error, localSourceVersion);
+        } catch(error) {
+          return cb(error);
+        }
       });
     }
   ],

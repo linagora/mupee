@@ -16,7 +16,15 @@ exports.fetch = function(version, callback) {
     if (error) {
       return callback(error, version);
     }
-    var musVersion = new SourceVersion(version);
+    
+    var musVersion;
+    
+    try {
+      musVersion = new SourceVersion(version);
+    } catch(error) {
+      return callback(error, version);
+    }
+    
     parser(body, function(error, result) {
 
       if (!result.update) {
@@ -36,8 +44,12 @@ exports.fetch = function(version, callback) {
         update.addPatch(patch);
       };
 
-      patchToAdd.map(addPatchToUpdate);
-      musVersion.addUpdate(update);
+      try {
+        patchToAdd.map(addPatchToUpdate);
+        musVersion.addUpdate(update);
+      } catch(error) {
+        return callback(error, version);
+      }
 
       callback(null, musVersion);
     });

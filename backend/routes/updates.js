@@ -8,26 +8,29 @@ var SourceVersion = require('../source-version'),
 var logger = require('../logger');
 
 exports.emptyUpdates = function(request, response) {
-  response.send(new SourceVersion({}).updatesAsXML());
-};
-
-exports.emptyUpdates = function(request, response) {
-  response.send(new SourceVersion({}).updatesAsXML());
+  response.send(SourceVersion.emptyUpdatesXML());
 };
 
 exports.updateClient = function(request, response) {
-  var storage = new MetadataStorage(db);
+  var storage = new MetadataStorage(db),
+      clientVersion;
 
-  var clientVersion = new SourceVersion({
-    product: request.params.product,
-    version: request.params.version,
-    buildID: request.params.build_id,
-    buildTarget: request.params.build_target,
-    locale: request.params.locale,
-    channel: request.params.channel,
-    osVersion: request.params.os_version,
-    parameters: request.query
-  });
+  try {
+    clientVersion = new SourceVersion({
+      product: request.params.product,
+      version: request.params.version,
+      buildID: request.params.build_id,
+      buildTarget: request.params.build_target,
+      locale: request.params.locale,
+      channel: request.params.channel,
+      osVersion: request.params.os_version,
+      parameters: request.query
+    });
+  } catch(error) {
+    logger.warning('Unable to convert updateClient request to a SourceVersion:', error);
+    response.send(SourceVersion.emptyUpdatesXML());
+    return;
+  }
 
   storage.findByVersion(clientVersion, function(error, storedVersion) {
     if (error) {
@@ -49,7 +52,7 @@ exports.updateClient = function(request, response) {
     }
     else {
       logger.info('client with IP [%s] gets cache-hit for url: [%s]', request.ip, request.url);
-      response.send(new SourceVersion(storedVersion).updatesAsXML());
+      response.send(SourceVersion.emptyUpdatesXML());
 
       storedVersion.timestamp = Date.now();
       storage.save(storedVersion, function(error) {

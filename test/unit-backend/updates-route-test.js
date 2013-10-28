@@ -94,7 +94,7 @@ describe('The Updates route', function() {
         timestamp: cachedDate,
         product: 'Testing',
         version: '0.0.0',
-        buildId: '20120428123112',
+        buildID: '20120428123112',
         buildTarget: 'WINNT_x86-msvc',
         locale: 'fr',
         channel: 'release',
