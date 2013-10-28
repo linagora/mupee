@@ -11,13 +11,7 @@ var ExtensionStorage = function(db) {
 util.inherits(ExtensionStorage, Storage);
 
 ExtensionStorage.prototype.findByExtension = function(extension, callback) {
-  this.db.collection(this.collection).find({
-    id: extension.id,
-    version: extension.version,
-    targetPlatforms: extension.targetPlatforms
-  },
-  {},
-  function(err, cursor) {
+  this.db.collection(this.collection).find(extension, {}, function(err, cursor) {
     cursor.toArray(callback);
   });
 };

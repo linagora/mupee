@@ -30,7 +30,7 @@
     "passport": "0.1.17",
     "passport-http": "0.2.2",
     "clone": "0.1.11",
-    "mozilla-version-comparator": "1.0.2",
+    "mozilla-version-comparator": "~1.0.2",
     "browserify": "2.35.0",
     "adm-zip": "~0.4.3",
     "fs-extra": "~0.8.1",

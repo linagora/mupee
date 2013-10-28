@@ -70,6 +70,24 @@ describe('The ExtensionUpdateStorage module', function() {
     });
   });
 
+  it('should allow finding an extension in persistent storage, by ID only', function(done) {
+    manager.save(fixtures.obmConnector32011(), function(err, result) {
+      manager.findByExtension({
+        id: 'obm-connector@aliasource.fr'
+      }, function(err, records) {
+        if (err) {
+          throw err;
+        }
+
+        var record = records[0];
+
+        expect(record).to.exist;
+        expect(record).to.have.property('_id');
+        done();
+      });
+    });
+  });
+
   afterEach(function(done) {
     db.collection('extensions').drop(done);
   });

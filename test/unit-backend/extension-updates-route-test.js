@@ -4,7 +4,8 @@ var mockery = require('mockery'),
     testLogger = require('./test-logger'),
     fs = require('fs'),
     Path = require('path'),
-    fixtures = require('./extension-fixtures');
+    fixtures = require('./extension-fixtures'),
+    updatesFixture = require('./extension-source-version-fixtures');
 
 describe('The ExtensionUpdates route', function() {
   var proxy;
@@ -131,7 +132,7 @@ describe('The ExtensionUpdates route', function() {
       }
     }, {
       send: function(data) {
-        data.should.deep.equal(fixtures.ltn122Linux());
+        JSON.stringify(data).should.deep.equal(JSON.stringify(fixtures.ltn122Linux()));
         done();
       }
     });
@@ -370,6 +371,239 @@ describe('The ExtensionUpdates route', function() {
     }, {
       send: function() {}
     });
+  });
+
+  describe('The VersionCheck endpoint', function() {
+
+    it('should send empty updates if there\'s an issue accessing the updates storage', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback('TerribleFailure'); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/lightning-noupdates.rdf'), {encoding: 'utf-8'}));
+          done();
+        }
+      });
+    });
+
+    it('should send empty updates if there\'s an issue accessing the extensions storage', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback('TerribleFailure'); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/lightning-noupdates.rdf'), {encoding: 'utf-8'}));
+          done();
+        }
+      });
+    });
+
+    it('should save a new extension-source-version if none exists yet', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) {
+        extension.should.not.have.property('_id');
+
+        callback();
+        done();
+      };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, []); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function(data) {}
+      });
+    });
+
+    it('should update an existing extension-source-version if one already exists', function(done) {
+      var ts = Date.now() - 1;
+
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, [{ _id: 'ExistingId', timestamp: ts }]); };
+      UpdStorage.prototype.save = function(extension, callback) {
+        extension.should.have.property('_id', 'ExistingId');
+        extension.timestamp.should.not.equal(ts);
+
+        callback();
+        done();
+      };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, []); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function(data) {}
+      });
+    });
+
+    it('should send empty updates if no extensions exists in storage', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) { callback(); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, []); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/lightning-noupdates.rdf'), {encoding: 'utf-8'}));
+          done();
+        }
+      });
+    });
+
+    it('should send empty updates if no extensions are compatible with target platform', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) { callback(); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, [fixtures.ltn122Linux(), fixtures.ltn191Windows()]); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/lightning-noupdates.rdf'), {encoding: 'utf-8'}));
+          done();
+        }
+      });
+    });
+
+    it('should send empty updates if no extensions are compatible with target application', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) { callback(); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, [fixtures.ltn122Linux()]); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/lightning-noupdates.rdf'), {encoding: 'utf-8'}));
+          done();
+        }
+      });
+    });
+
+    it('should send an update if an extension is compatible with target application and platform', function(done) {
+      var ltn191Linux = fixtures.ltn191Linux();
+      ltn191Linux.localFile = {
+        path: 'Extensions/{e2fda1a4-762b-4020-b5ad-a41df1933103}/1.9.1/test.xpi',
+        hash: 'sha1:1234'
+      };
+
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) { callback(); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, [ltn191Linux]); };
+
+      mockery.registerMock('../config', {
+        server: {
+          url: 'http://localhost',
+          port: 1234
+        }
+      });
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.9.1-localFile.rdf'), {encoding: 'utf-8'}));
+          done();
+        }
+      });
+    });
+
+    it('should send the latest update if multiple extensions are compatible with target application and platform', function(done) {
+      var ltn191Linux = fixtures.ltn191Linux();
+      ltn191Linux.localFile = {
+        path: 'Extensions/{e2fda1a4-762b-4020-b5ad-a41df1933103}/1.9.1/test.xpi',
+        hash: 'sha1:1234'
+      };
+
+      var ltn192Linux = fixtures.ltn192Linux();
+      ltn192Linux.localFile = {
+        path: 'Extensions/{e2fda1a4-762b-4020-b5ad-a41df1933103}/1.9.2/test.xpi',
+        hash: 'sha1:1234'
+      };
+
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) { callback(); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, [ltn191Linux, ltn192Linux]); };
+
+      mockery.registerMock('../config', {
+        server: {
+          url: 'http://localhost',
+          port: 1234
+        }
+      });
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.9.2-localFile.rdf'), {encoding: 'utf-8'}));
+          done();
+        }
+      });
+    });
+
   });
 
   afterEach(function(done) {

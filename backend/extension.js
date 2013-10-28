@@ -2,7 +2,8 @@
 
 var ExtensionTargetApplication = require('./extension-source-version').ExtensionTargetApplication,
     Errors = require('./application-errors'),
-    util = require('util');
+    util = require('util'),
+    mvc = require('mozilla-version-comparator');
 
 function validateExtensionObject(object) {
   if (!object) {
@@ -40,6 +41,48 @@ var Extension = function(object) {
   this.targetApplications = object.targetApplications.map(function(targetApplication) {
     return new ExtensionTargetApplication(targetApplication);
   });
+};
+
+Extension.prototype.canBeInstalledOn = function(platform) {
+  if (!platform) {
+    throw new Errors.MandatoryParameterError('platform');
+  }
+
+  if (!this.targetPlatforms.length) {
+    return true;
+  }
+
+  for (var i in this.targetPlatforms) {
+    if (platform.match('^' + this.targetPlatforms[i])) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+Extension.prototype.canBeInstalledOnOSAndArch = function(os, arch) {
+  if (!os) {
+    throw new Errors.MandatoryParameterError('os');
+  }
+
+  if (!arch) {
+    throw new Errors.MandatoryParameterError('arch');
+  }
+
+  return this.canBeInstalledOn(os + '_' + arch);
+};
+
+Extension.prototype.getCompatibleTargetApplication = function(id, version) {
+  for (var i in this.targetApplications) {
+    var app = this.targetApplications[i];
+
+    if (app.id === id && mvc(version, app.minVersion) >= 0 && mvc(version, app.maxVersion) <= 0) {
+      return app;
+    }
+  }
+
+  return null;
 };
 
 module.exports = {
