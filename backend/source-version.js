@@ -61,7 +61,7 @@ SourceVersion.prototype.findUpdate = function(update) {
            localUpdate.appVersion === update.appVersion &&
            localUpdate.platformVersion === update.platformVersion &&
            localUpdate.buildID === update.buildID &&
-           localUpdate.detailsUrl === update.detailsUrl;
+           localUpdate.detailsURL === update.detailsURL;
   });
   return updates.length === 1 ? updates[0] : null;
 };

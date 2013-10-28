@@ -25,7 +25,7 @@ describe('The Update module', function() {
       version: '3.5.3',
       extensionVersion: '3.5.3',
       buildID: '20090824101458',
-      detailsUrl: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/',
+      detailsURL: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/',
       patches: [
         {
           type: 'complete',
@@ -58,7 +58,7 @@ describe('The Update module', function() {
       version: '3.5.3',
       extensionVersion: '3.5.3',
       buildID: '20090824101458',
-      detailsUrl: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/'
+      detailsURL: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/'
     });
 
     update.asXML().should.equal(expectedXML);
@@ -76,7 +76,7 @@ describe('The Update module', function() {
       displayVersion: 'd3.5.3',
       platformVersion: 'p3.5.3',
       buildID: '20090824101458',
-      detailsUrl: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/'
+      detailsURL: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/'
     });
 
     update.asXML().should.equal(expectedXml);
@@ -90,7 +90,7 @@ describe('The Update module', function() {
         version: '3.5.3',
         extensionVersion: '3.5.3',
         buildID: '20090824101458',
-        detailsUrl: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/',
+        detailsURL: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/',
         patches: [
           {
             type: 'complete',

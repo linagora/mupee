@@ -38,14 +38,14 @@ describe('The SourceVersion module', function() {
           'version': '23.0.3',
           'extensionVersion': '23.0.3',
           'buildID': '20100824101458',
-          'detailsUrl': 'http://www.mozilla.com/en-US/firefox/23.0.3/releasenotes/'
+          'detailsURL': 'http://www.mozilla.com/en-US/firefox/23.0.3/releasenotes/'
         },
         {
           'type': 'major',
           'version': '24.0.1',
           'extensionVersion': '24.0.1',
           'buildID': '20110824101458',
-          'detailsUrl': 'http://www.mozilla.com/en-US/firefox/24.0.1/releasenotes/'
+          'detailsURL': 'http://www.mozilla.com/en-US/firefox/24.0.1/releasenotes/'
         }
       ]
     });

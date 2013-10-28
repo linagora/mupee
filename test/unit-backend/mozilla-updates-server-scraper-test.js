@@ -65,7 +65,7 @@ describe('The mozilla Updates Server Sraper module', function() {
         'appVersion': '17.0.9',
         'platformVersion': '17.0.9',
         'buildID': '20130911173805',
-        'detailsUrl': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform',
+        'detailsURL': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform',
         'patches': [
           {
             'type': 'complete',
@@ -101,7 +101,7 @@ describe('The mozilla Updates Server Sraper module', function() {
         'appVersion': '17.0.10',
         'platformVersion': '17.0.10',
         'buildID': '20131011173805',
-        'detailsUrl': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform',
+        'detailsURL': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform',
         'patches': [
           {
             'type': 'complete',

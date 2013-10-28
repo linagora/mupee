@@ -20,7 +20,7 @@ var Update = function(object) {
   this.appVersion = object.appVersion;
   this.platformVersion = object.platformVersion;
   this.buildID = object.buildID;
-  this.detailsUrl = object.detailsUrl;
+  this.detailsURL = object.detailsURL;
   this.patches = [];
   if (object.patches) {
     object.patches.forEach(function(patch) {
@@ -62,7 +62,7 @@ Update.prototype.asXML = function() {
       appVersion: this.appVersion,
       platformVersion: this.platformVersion,
       buildID: this.buildID,
-      detailsURL: this.detailsUrl
+      detailsURL: this.detailsURL
     },
     _content: patches
   };

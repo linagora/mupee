@@ -54,7 +54,7 @@ describe('The UpdateFetcher module', function() {
           'version': '3.6.18',
           'extensionVersion': '3.6.18',
           'buildID': '20110614230723',
-          'detailsUrl': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
+          'detailsURL': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
           'patches': [
             {
               'type': 'complete',
@@ -137,7 +137,7 @@ describe('The UpdateFetcher module', function() {
           'appVersion': '24.0',
           'platformVersion': '24.0',
           'buildID': '20130911175743',
-          'detailsUrl': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform=win32&version=24.0',
+          'detailsURL': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform=win32&version=24.0',
           'patches': [
             {
               'type': 'complete',

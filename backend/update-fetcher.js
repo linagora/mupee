@@ -24,7 +24,6 @@ exports.fetch = function(version, callback) {
       }
 
       var update = new Update(result.update['@']);
-      update.detailsUrl = result.update['@'].detailsURL;
 
       var patchToAdd = result.update.patch;
 

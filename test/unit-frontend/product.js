@@ -25,7 +25,7 @@ describe('mupeeProduct', function() {
           'appVersion': null,
           'platformVersion': null,
           'buildId': '20110614230723',
-          'detailsUrl': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
+          'detailsURL': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
           'patches': [
             {
               'type': 'complete',
@@ -51,7 +51,7 @@ describe('mupeeProduct', function() {
           'appVersion': null,
           'platformVersion': null,
           'buildId': '20110614230724',
-          'detailsUrl': 'https://www.mozilla.com/en-US/firefox/10.0/details/',
+          'detailsURL': 'https://www.mozilla.com/en-US/firefox/10.0/details/',
           'patches': []
         }
       ],

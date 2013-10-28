@@ -28,7 +28,7 @@ describe('The UpdateStorage module', function() {
     version: 'fake-4.0.0',
     extensionVersion: 'fake-4.0.0',
     buildID: 'FAKEBUILDID',
-    detailsUrl: 'https://fake-url.com/'
+    detailsURL: 'https://fake-url.com/'
   });
   var id;
 

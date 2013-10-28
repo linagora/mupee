@@ -25,7 +25,7 @@ exports.withAllFields = function() {
         'appVersion': null,
         'platformVersion': null,
         'buildID': '20110614230723',
-        'detailsUrl': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
+        'detailsURL': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
         'patches': [
           {
             'type': 'complete',
@@ -52,7 +52,7 @@ exports.withAllFields = function() {
         'appVersion': null,
         'platformVersion': null,
         'buildID': '20110614230724',
-        'detailsUrl': 'https://www.mozilla.com/en-US/firefox/10.0/details/',
+        'detailsURL': 'https://www.mozilla.com/en-US/firefox/10.0/details/',
         'patches': [],
         'activated': 'true'
       }
@@ -84,7 +84,7 @@ exports.updates = {
       'appVersion': null,
       'platformVersion': null,
       'buildID': '20110614230723',
-      'detailsUrl': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
+      'detailsURL': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
       'patches': [],
       'activated': true
     });
@@ -98,7 +98,7 @@ exports.updates = {
       'appVersion': null,
       'platformVersion': null,
       'buildID': '20110614230723',
-      'detailsUrl': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
+      'detailsURL': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
       'patches': [
       ],
       'activated': true
@@ -146,7 +146,7 @@ exports.firefox3 = new SourceVersion({
     appVersion: null,
     platformVersion: null,
     buildID: '20110614230723',
-    detailsUrl: 'https://www.mozilla.com/en-US/firefox/3.6/details/',
+    detailsURL: 'https://www.mozilla.com/en-US/firefox/3.6/details/',
     patches: [{
       type: 'complete',
       url: 'http://download.mozilla.org/?product=firefox-3.6.18-complete&os=win&lang=en-US',
@@ -168,7 +168,7 @@ exports.firefox3 = new SourceVersion({
     appVersion: null,
     platformVersion: null,
     buildID: '20120420145725',
-    detailsUrl: 'https://www.mozilla.org/en-US/firefox/unsupported/details/',
+    detailsURL: 'https://www.mozilla.org/en-US/firefox/unsupported/details/',
     patches: [{
       type: 'complete',
       url: 'http://download.mozilla.org/?product=firefox-12.0-complete&os=win&lang=en-US',
@@ -223,7 +223,7 @@ exports.thunderbird3 = new SourceVersion({
     appVersion: null,
     platformVersion: null,
     buildID: '20120428123100',
-    detailsUrl: 'https://www.mozilla.org/fr/thunderbird/12.0/details/index.html',
+    detailsURL: 'https://www.mozilla.org/fr/thunderbird/12.0/details/index.html',
     patches: [{
       type: 'complete',
       url: 'http://download.mozilla.org/?product=thunderbird-12.0.1-complete&os=linux&lang=fr&force=1',
@@ -247,7 +247,7 @@ exports.thunderbird3 = new SourceVersion({
     appVersion: '24.0.1',
     platformVersion: '24.0.1',
     buildID: '20131010053258',
-    detailsUrl: 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform=linux-i686&version=24.0.1',
+    detailsURL: 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform=linux-i686&version=24.0.1',
     patches: [{
       type: 'complete',
       url: 'http://download.mozilla.org/?product=thunderbird-24.0.1-complete&os=linux&lang=fr&force=1',
