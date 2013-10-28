@@ -33,7 +33,7 @@ describe('The mozilla Updates Server Sraper module', function() {
   var version = new SourceVersion({
     product: 'Thunderbird',
     version: '10.0.12',
-    buildId: '20130105062021',
+    buildID: '20130105062021',
     buildTarget: 'Linux_x86-gcc3',
     locale: 'fr',
     channel: 'esr',

@@ -1,9 +1,41 @@
 'use strict';
 
 var jstoxml = require('./jstoxml'),
-    config = require('./config');
+    config = require('./config'),
+    Errors = require('./application-errors');
+
+function validateUpdate(object) {
+  if (!('type' in object)) {
+    throw new Errors.PropertyMissingError('Update', 'type');
+  }
+  if (!('buildID' in object)) {
+    throw new Errors.PropertyMissingError('Update', 'buildID');
+  }
+  if ('version' in object && 'extensionVersion' in object) {
+    return ;
+  }
+  if ('displayVersion' in object && 'appVersion' in object &&
+      'platformVersion' in object) {
+    return ;
+  }
+  throw new Errors.UnknownSourceVersionUpdateError(object.buildId);
+}
+
+function validatePatch(object) {
+  var params = ['type', 'URL', 'hashFunction', 'hashValue', 'size'];
+  for ( var id in params ) {
+    if (!(params[id] in object)) {
+      throw new Errors.PropertyMissingError('Patch', params[id]);
+    }
+  }
+}
+
+function undefinedToNull(param) {
+  return (typeof param === 'undefined') ? null : param;
+}
 
 var Patch = function(object) {
+  validatePatch(object);
   this.type = object.type;
   this.URL = object.URL;
   this.localPath = object.localPath || null;
@@ -13,12 +45,13 @@ var Patch = function(object) {
 };
 
 var Update = function(object) {
+  validateUpdate(object);
   this.type = object.type;
-  this.version = object.version;
-  this.extensionVersion = object.extensionVersion;
-  this.displayVersion = object.displayVersion;
-  this.appVersion = object.appVersion;
-  this.platformVersion = object.platformVersion;
+  this.version = undefinedToNull(object.version);
+  this.extensionVersion = undefinedToNull(object.extensionVersion);
+  this.displayVersion = undefinedToNull(object.displayVersion);
+  this.appVersion = undefinedToNull(object.appVersion);
+  this.platformVersion = undefinedToNull(object.platformVersion);
   this.buildID = object.buildID;
   this.detailsURL = object.detailsURL;
   this.patches = [];

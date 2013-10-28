@@ -83,6 +83,13 @@ var UnknownParameterError = function (id) {
 util.inherits(UnknownParameterError, AbstractError);
 UnknownParameterError.prototype.name = 'Unknown parameter';
 
+var UnknownSourceVersionUpdateError = function (id) {
+  var msg = "The SourceVersion update buildID " + id + " is unknown";
+    this.id = id;
+  UnknownSourceVersionUpdateError.super_.call(this, msg, this.constructor);
+}
+util.inherits(UnknownSourceVersionUpdateError, AbstractError);
+UnknownSourceVersionUpdateError.prototype.name = 'Unknown SourceVersion Update';
 
 module.exports = {
   UnknownActionError: UnknownActionError,
@@ -92,5 +99,6 @@ module.exports = {
   PropertyMissingError: PropertyMissingError,
   MandatoryParameterError: MandatoryParameterError,
   BadParameterTypeError: BadParameterTypeError,
-  UnknownParameterError: UnknownParameterError
+  UnknownParameterError: UnknownParameterError,
+  UnknownSourceVersionUpdateError: UnknownSourceVersionUpdateError
 }
