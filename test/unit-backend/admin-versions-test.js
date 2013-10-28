@@ -8,7 +8,7 @@ var db = require('../../backend/mongo-provider'),
 
 require('chai').should();
 
-describe('The update-server module', function() {
+describe('The Admin versions route module', function() {
   var baseUri;
   var id;
   var id2;

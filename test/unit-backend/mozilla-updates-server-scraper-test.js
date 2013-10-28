@@ -47,7 +47,7 @@ describe('The mozilla Updates Server Sraper module', function() {
   var withUpdate = {
     product: 'Thunderbird',
     version: '10.0.12',
-    buildId: '20130105062021',
+    buildID: '20130105062021',
     buildTarget: 'Linux_x86-gcc3',
     locale: 'fr',
     channel: 'esr',
@@ -64,7 +64,7 @@ describe('The mozilla Updates Server Sraper module', function() {
         'displayVersion': '17.0.9esr',
         'appVersion': '17.0.9',
         'platformVersion': '17.0.9',
-        'buildId': '20130911173805',
+        'buildID': '20130911173805',
         'detailsUrl': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform',
         'patches': [
           {
@@ -83,7 +83,7 @@ describe('The mozilla Updates Server Sraper module', function() {
   var withUpdate2 = {
     product: 'Thunderbird',
     version: '10.0.12',
-    buildId: '20130105062021',
+    buildID: '20130105062021',
     buildTarget: 'Linux_x86-gcc3',
     locale: 'fr',
     channel: 'esr',
@@ -100,7 +100,7 @@ describe('The mozilla Updates Server Sraper module', function() {
         'displayVersion': '17.0.10esr',
         'appVersion': '17.0.10',
         'platformVersion': '17.0.10',
-        'buildId': '20131011173805',
+        'buildID': '20131011173805',
         'detailsUrl': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform',
         'patches': [
           {

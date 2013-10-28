@@ -21,7 +21,7 @@ exports.updateClient = function(request, response) {
   var clientVersion = new SourceVersion({
     product: request.params.product,
     version: request.params.version,
-    buildId: request.params.build_id,
+    buildID: request.params.build_id,
     buildTarget: request.params.build_target,
     locale: request.params.locale,
     channel: request.params.channel,

@@ -8,7 +8,7 @@ var SourceVersion = function(object) {
   this.timestamp = object.timestamp || Date.now();
   this.product = object.product;
   this.version = object.version;
-  this.buildId = object.buildId;
+  this.buildID = object.buildID;
   this.buildTarget = object.buildTarget;
   this.locale = object.locale;
   this.channel = object.channel;
@@ -39,7 +39,7 @@ SourceVersion.prototype.updatesAsXML = function() {
 
 SourceVersion.prototype.buildUrl = function(mozUpdateUrl) {
   var path = mozUpdateUrl + '/' + this.product + '/' + this.version + '/' +
-      this.buildId + '/' + this.buildTarget + '/' + this.locale + '/' +
+      this.buildID + '/' + this.buildTarget + '/' + this.locale + '/' +
       this.channel + '/' + this.osVersion + '/default/default/update.xml';
 
   if (Object.keys(this.parameters).length) {
@@ -60,7 +60,7 @@ SourceVersion.prototype.findUpdate = function(update) {
            localUpdate.displayVersion === update.displayVersion &&
            localUpdate.appVersion === update.appVersion &&
            localUpdate.platformVersion === update.platformVersion &&
-           localUpdate.buildId === update.buildId &&
+           localUpdate.buildID === update.buildID &&
            localUpdate.detailsUrl === update.detailsUrl;
   });
   return updates.length === 1 ? updates[0] : null;

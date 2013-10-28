@@ -26,7 +26,7 @@ describe('The SourceVersion module', function() {
     var version = new SourceVersion({
       'product': 'Firefox',
       'version': '23.0.2',
-      'buildId': '20090729225027',
+      'buildID': '20090729225027',
       'buildTarget': 'WINNT_x86-msvc',
       'locale': 'en-US',
       'channel': 'release',
@@ -37,14 +37,14 @@ describe('The SourceVersion module', function() {
           'type': 'minor',
           'version': '23.0.3',
           'extensionVersion': '23.0.3',
-          'buildId': '20100824101458',
+          'buildID': '20100824101458',
           'detailsUrl': 'http://www.mozilla.com/en-US/firefox/23.0.3/releasenotes/'
         },
         {
           'type': 'major',
           'version': '24.0.1',
           'extensionVersion': '24.0.1',
-          'buildId': '20110824101458',
+          'buildID': '20110824101458',
           'detailsUrl': 'http://www.mozilla.com/en-US/firefox/24.0.1/releasenotes/'
         }
       ]

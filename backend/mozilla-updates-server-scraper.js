@@ -24,7 +24,7 @@ function getDownloadTasks(localVersion, musVersion) {
         var destination = Path.join(
             localVersion.product,
             update.version || update.appVersion,
-            update.buildId,
+            update.buildID,
             localVersion.buildTarget,
             localVersion.locale,
             'binary');

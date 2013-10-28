@@ -24,7 +24,7 @@ describe('The Update module', function() {
       type: 'minor',
       version: '3.5.3',
       extensionVersion: '3.5.3',
-      buildId: '20090824101458',
+      buildID: '20090824101458',
       detailsUrl: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/',
       patches: [
         {
@@ -57,7 +57,7 @@ describe('The Update module', function() {
       type: 'minor',
       version: '3.5.3',
       extensionVersion: '3.5.3',
-      buildId: '20090824101458',
+      buildID: '20090824101458',
       detailsUrl: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/'
     });
 
@@ -75,7 +75,7 @@ describe('The Update module', function() {
       appVersion: 'a3.5.3',
       displayVersion: 'd3.5.3',
       platformVersion: 'p3.5.3',
-      buildId: '20090824101458',
+      buildID: '20090824101458',
       detailsUrl: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/'
     });
 
@@ -89,7 +89,7 @@ describe('The Update module', function() {
         type: 'minor',
         version: '3.5.3',
         extensionVersion: '3.5.3',
-        buildId: '20090824101458',
+        buildID: '20090824101458',
         detailsUrl: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/',
         patches: [
           {

@@ -9,7 +9,7 @@ exports.withAllFields = function() {
     'timestamp': 123456789,
     'product': 'Firefox',
     'version': '3.5.2',
-    'buildId': '20090729225027',
+    'buildID': '20090729225027',
     'buildTarget': 'WINNT_x86-msvc',
     'locale': 'en-US',
     'channel': 'release',
@@ -24,7 +24,7 @@ exports.withAllFields = function() {
         'displayVersion': null,
         'appVersion': null,
         'platformVersion': null,
-        'buildId': '20110614230723',
+        'buildID': '20110614230723',
         'detailsUrl': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
         'patches': [
           {
@@ -51,7 +51,7 @@ exports.withAllFields = function() {
         'displayVersion': null,
         'appVersion': null,
         'platformVersion': null,
-        'buildId': '20110614230724',
+        'buildID': '20110614230724',
         'detailsUrl': 'https://www.mozilla.com/en-US/firefox/10.0/details/',
         'patches': [],
         'activated': 'true'
@@ -65,7 +65,7 @@ exports.withEmptyUpdates = function() {
     timestamp: 123456789,
     product: 'Thunderbird',
     version: '17.0.0',
-    buildId: '20090729225028',
+    buildID: '20090729225028',
     buildTarget: 'WINNT_x86-msvc',
     locale: 'en-US',
     channel: 'release',
@@ -83,7 +83,7 @@ exports.updates = {
       'displayVersion': null,
       'appVersion': null,
       'platformVersion': null,
-      'buildId': '20110614230723',
+      'buildID': '20110614230723',
       'detailsUrl': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
       'patches': [],
       'activated': true
@@ -97,7 +97,7 @@ exports.updates = {
       'displayVersion': null,
       'appVersion': null,
       'platformVersion': null,
-      'buildId': '20110614230723',
+      'buildID': '20110614230723',
       'detailsUrl': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
       'patches': [
       ],
@@ -131,7 +131,7 @@ exports.firefox3 = new SourceVersion({
   timestamp: 123456789,
   product: 'Firefox',
   version: '3.5.2',
-  buildId: '20090729225027',
+  buildID: '20090729225027',
   buildTarget: 'WINNT_x86-msvc',
   locale: 'en-US',
   channel: 'release',
@@ -145,7 +145,7 @@ exports.firefox3 = new SourceVersion({
     displayVersion: null,
     appVersion: null,
     platformVersion: null,
-    buildId: '20110614230723',
+    buildID: '20110614230723',
     detailsUrl: 'https://www.mozilla.com/en-US/firefox/3.6/details/',
     patches: [{
       type: 'complete',
@@ -167,7 +167,7 @@ exports.firefox3 = new SourceVersion({
     displayVersion: null,
     appVersion: null,
     platformVersion: null,
-    buildId: '20120420145725',
+    buildID: '20120420145725',
     detailsUrl: 'https://www.mozilla.org/en-US/firefox/unsupported/details/',
     patches: [{
       type: 'complete',
@@ -189,7 +189,7 @@ exports.firefox3 = new SourceVersion({
     displayVersion: '24.0',
     appVersion: '24.0',
     platformVersion: '24.0',
-    buildId: '20130910160258',
+    buildID: '20130910160258',
     detailsURL: 'https://www.mozilla.com/en-US/firefox/24.0/releasenotes/',
     actions: 'silent',
     patches: [{
@@ -206,7 +206,7 @@ exports.thunderbird3 = new SourceVersion({
   timestamp: 1382365280974,
   product: 'Thunderbird',
   version: '3.1.20',
-  buildId: '20120306133628',
+  buildID: '20120306133628',
   buildTarget: 'Linux_x86-gcc3',
   locale: 'fr',
   channel: 'release',
@@ -222,7 +222,7 @@ exports.thunderbird3 = new SourceVersion({
     displayVersion: null,
     appVersion: null,
     platformVersion: null,
-    buildId: '20120428123100',
+    buildID: '20120428123100',
     detailsUrl: 'https://www.mozilla.org/fr/thunderbird/12.0/details/index.html',
     patches: [{
       type: 'complete',
@@ -246,7 +246,7 @@ exports.thunderbird3 = new SourceVersion({
     displayVersion: '24.0.1',
     appVersion: '24.0.1',
     platformVersion: '24.0.1',
-    buildId: '20131010053258',
+    buildID: '20131010053258',
     detailsUrl: 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform=linux-i686&version=24.0.1',
     patches: [{
       type: 'complete',

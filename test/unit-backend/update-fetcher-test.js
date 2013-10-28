@@ -29,7 +29,7 @@ describe('The UpdateFetcher module', function() {
     var sourceVersion = new SourceVersion({
       product: 'Firefox',
       version: '3.5.2',
-      buildId: '20090729225027',
+      buildID: '20090729225027',
       buildTarget: 'WINNT_x86-msvc',
       locale: 'en-US',
       channel: 'release',
@@ -41,7 +41,7 @@ describe('The UpdateFetcher module', function() {
       'timestamp': sourceVersion.timestamp,
       'product': 'Firefox',
       'version': '3.5.2',
-      'buildId': '20090729225027',
+      'buildID': '20090729225027',
       'buildTarget': 'WINNT_x86-msvc',
       'locale': 'en-US',
       'channel': 'release',
@@ -53,7 +53,7 @@ describe('The UpdateFetcher module', function() {
           'type': 'minor',
           'version': '3.6.18',
           'extensionVersion': '3.6.18',
-          'buildId': '20110614230723',
+          'buildID': '20110614230723',
           'detailsUrl': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
           'patches': [
             {
@@ -91,7 +91,7 @@ describe('The UpdateFetcher module', function() {
     var sourceVersion = new SourceVersion({
       product: 'Firefox',
       version: '1.1.1',
-      buildId: '20090729225027',
+      buildID: '20090729225027',
       buildTarget: 'WINNT_x86-msvc',
       locale: 'en-US',
       channel: 'release',
@@ -111,7 +111,7 @@ describe('The UpdateFetcher module', function() {
     var sourceVersion = new SourceVersion({
       product: 'Thunderbird',
       version: '12.0.1',
-      buildId: '20120428123112',
+      buildID: '20120428123112',
       buildTarget: 'WINNT_x86-msvc',
       locale: 'fr',
       channel: 'release',
@@ -123,7 +123,7 @@ describe('The UpdateFetcher module', function() {
       'timestamp': sourceVersion.timestamp,
       'product': 'Thunderbird',
       'version': '12.0.1',
-      'buildId': '20120428123112',
+      'buildID': '20120428123112',
       'buildTarget': 'WINNT_x86-msvc',
       'locale': 'fr',
       'channel': 'release',
@@ -136,7 +136,7 @@ describe('The UpdateFetcher module', function() {
           'displayVersion': '24.0',
           'appVersion': '24.0',
           'platformVersion': '24.0',
-          'buildId': '20130911175743',
+          'buildID': '20130911175743',
           'detailsUrl': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform=win32&version=24.0',
           'patches': [
             {

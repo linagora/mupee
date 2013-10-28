@@ -16,7 +16,7 @@ describe('The UpdateStorage module', function() {
   var versionQuery = new SourceVersion({
     product: 'Firefox',
     version: '3.5.2',
-    buildId: '20090729225027',
+    buildID: '20090729225027',
     buildTarget: 'WINNT_x86-msvc',
     locale: 'en-US',
     channel: 'release',
@@ -27,7 +27,7 @@ describe('The UpdateStorage module', function() {
     type: 'major',
     version: 'fake-4.0.0',
     extensionVersion: 'fake-4.0.0',
-    buildId: 'FAKEBUILDID',
+    buildID: 'FAKEBUILDID',
     detailsUrl: 'https://fake-url.com/'
   });
   var id;
