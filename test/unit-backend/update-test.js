@@ -70,19 +70,19 @@ describe('The Update module', function() {
 
   it('should throw an exception when mandatory Update properties are missing', function() {
     function test() {
-      var update = new Update({
+      new Update({
         type: 'minor',
         appVersion: 'a3.5.3',
         buildID: '20090824101458',
         detailsURL: 'http://www.mozilla.com/en-US/firefox/3.5.3/releasenotes/'
       });
-    };
+    }
     expect(test).to.throw(Error);
   });
-  
+
   it('should throw an exception when mandatory Patch properties are missing', function() {
     function test() {
-      var update = new Update({
+      new Update({
         type: 'minor',
         version: '3.5.3',
         extensionVersion: '3.5.3',
@@ -97,13 +97,11 @@ describe('The Update module', function() {
           }
         ]
       });
-    };
+    }
     expect(test).to.throw(Error);
   });
 
   it('should replace undefined properties to null properties', function() {
-    var expectedXml = fixtures.xml.validAlternativeDataStructure();
-
     var update = new Update({
       type: 'minor',
       extensionVersion: undefined,
@@ -118,7 +116,7 @@ describe('The Update module', function() {
     expect(update.extensionVersion).to.be.null;
   });
 
-  
+
   describe('The clearPatches() method', function() {
     it('should empty the patches list ', function() {
 

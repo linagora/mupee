@@ -1,3 +1,5 @@
+'use strict';
+
 exports.xml = {};
 
 exports.xml.validTwoPatches = function() {
