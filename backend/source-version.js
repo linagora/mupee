@@ -73,7 +73,7 @@ SourceVersion.prototype.findPatch = function(update, patch) {
   }
   var patches = localUpdate.patches.filter(function(localPatch) {
     return localPatch.type === patch.type &&
-           localPatch.url === patch.url &&
+           localPatch.URL === patch.URL &&
            localPatch.localPath === patch.localPath &&
            localPatch.hashFunction === patch.hashFunction &&
            localPatch.hashValue === patch.hashValue &&

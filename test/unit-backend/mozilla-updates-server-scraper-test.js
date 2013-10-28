@@ -69,7 +69,7 @@ describe('The mozilla Updates Server Sraper module', function() {
         'patches': [
           {
             'type': 'complete',
-            'url': 'http://download.mozilla.org/?product=thunderbird-17.0.9esr-complete',
+            'URL': 'http://download.mozilla.org/?product=thunderbird-17.0.9esr-complete',
             'localPath': 'Thunderbird/17.0.9/20130911173805/Linux_x86-gcc3/fr/binary',
             'hashFunction': 'SHA512',
             'hashValue': '232f4210745e0aee2a7df49de601ce69368088d1383ad3c5746c6b5faeaad',
@@ -105,7 +105,7 @@ describe('The mozilla Updates Server Sraper module', function() {
         'patches': [
           {
             'type': 'complete',
-            'url': 'http://download.mozilla.org/?product=thunderbird-17.0.10esr-complete',
+            'URL': 'http://download.mozilla.org/?product=thunderbird-17.0.10esr-complete',
             'localPath': 'Thunderbird/17.0.10/20131011173805/Linux_x86-gcc3/fr/binary',
             'hashFunction': 'SHA512',
             'hashValue': '232f4210745e0aee2a',
@@ -239,8 +239,8 @@ describe('The mozilla Updates Server Sraper module', function() {
           expect(saved).not.to.be.null;
           expect(saved.updates[0].displayVersion).to.equal('17.0.9esr');
           expect(saved.updates[1].displayVersion).to.equal('17.0.10esr');
-          expect(saved.updates[0].patches[0].url).to.equal('http://download.mozilla.org/?product=thunderbird-17.0.9esr-complete');
-          expect(saved.updates[1].patches[0].url).to.equal('http://download.mozilla.org/?product=thunderbird-17.0.10esr-complete');
+          expect(saved.updates[0].patches[0].URL).to.equal('http://download.mozilla.org/?product=thunderbird-17.0.9esr-complete');
+          expect(saved.updates[1].patches[0].URL).to.equal('http://download.mozilla.org/?product=thunderbird-17.0.10esr-complete');
           done();
         });
       });

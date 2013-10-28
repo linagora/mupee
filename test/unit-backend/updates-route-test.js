@@ -38,7 +38,7 @@ describe('The Updates route', function() {
         },
         query: {},
         ip: 'u.n.i.t',
-        url: '/update/3/Firefox/3.5.2/20090729225027/WINNT_x86-msvc/en-US/release/Windows_NT%206.0/default/default/update.xml'
+        URL: '/update/3/Firefox/3.5.2/20090729225027/WINNT_x86-msvc/en-US/release/Windows_NT%206.0/default/default/update.xml'
       }, {
         send: function(data) {
           data.should.equal(emptyReply);
@@ -62,7 +62,7 @@ describe('The Updates route', function() {
         },
         query: {force: '1'},
         ip: 'u.n.i.t',
-        url: '/update/3/Thunderbird/12.0.1/20120428123112/WINNT_x86-msvc/fr/release/Windows_NT%205.1.3.0%20(x86)/default/default/update.xml?force=1'
+        URL: '/update/3/Thunderbird/12.0.1/20120428123112/WINNT_x86-msvc/fr/release/Windows_NT%205.1.3.0%20(x86)/default/default/update.xml?force=1'
       }, {
         send: function(data) {
           data.should.equal(emptyReply);
@@ -128,7 +128,7 @@ describe('The Updates route', function() {
         },
         query: {},
         ip: 'u.n.i.t',
-        url: '/update/3/Thunderbird/12.0.1/20120428123112/WINNT_x86-msvc/fr/release/Windows_NT%205.1.3.0%20(x86)/default/default/update.xml?force=1'
+        URL: '/update/3/Thunderbird/12.0.1/20120428123112/WINNT_x86-msvc/fr/release/Windows_NT%205.1.3.0%20(x86)/default/default/update.xml?force=1'
       }, {
         send: function() {}
       });
@@ -163,7 +163,7 @@ describe('The Updates route', function() {
         },
         query: {},
         ip: 'u.n.i.t',
-        url: '/update/3/Thunderbird/12.0.1/20120428123112/WINNT_x86-msvc/fr/release/Windows_NT%205.1.3.0%20(x86)/default/default/update.xml?force=1'
+        URL: '/update/3/Thunderbird/12.0.1/20120428123112/WINNT_x86-msvc/fr/release/Windows_NT%205.1.3.0%20(x86)/default/default/update.xml?force=1'
       }, {
         send: function() {}
       });

@@ -58,14 +58,14 @@ describe('The UpdateFetcher module', function() {
           'patches': [
             {
               'type': 'complete',
-              'url': 'http://download.mozilla.org/?product=firefox-3.6.18-complete&os=win&lang=en-US',
+              'URL': 'http://download.mozilla.org/?product=firefox-3.6.18-complete&os=win&lang=en-US',
               'hashFunction': 'SHA512',
               'hashValue': '345835da0d15607d115cef2a42185f0cdc0d800bde0a0039aac786c370732e2b3855cd0b70a6de390ad49d52f7adfd8df56cd9c69f2b44211ba0bb792d47e59b',
               'size': '11587247'
             },
             {
               'type': 'partial',
-              'url': 'http://download.mozilla.org/?product=firefox-3.6.18-complete&os=win&lang=en-US',
+              'URL': 'http://download.mozilla.org/?product=firefox-3.6.18-complete&os=win&lang=en-US',
               'hashFunction': 'SHA512',
               'hashValue': '345835da0d15607d115cef2a42185f0cdc0d800bde0a0039aac786c370732e2b3855cd0b70a6de390ad49d52f7adfd8df56cd9c69f2b44211ba0bb792d47e59b',
               'size': '11587247'
@@ -141,7 +141,7 @@ describe('The UpdateFetcher module', function() {
           'patches': [
             {
               'type': 'complete',
-              'url': 'http://download.mozilla.org/?product=thunderbird-24.0-complete&os=win&lang=fr&force=1',
+              'URL': 'http://download.mozilla.org/?product=thunderbird-24.0-complete&os=win&lang=fr&force=1',
               'hashFunction': 'SHA512',
               'hashValue': 'e70cb44daaeca678ebbc41c347ed87973c8e10253e4b72d9373beb2201fc61ac692d937e6b05f3f78062e150d326089cb1b6efb4e246d01758b8a1cb99587d7c',
               'size': '27118476'

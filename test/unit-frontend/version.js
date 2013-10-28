@@ -34,14 +34,14 @@ describe('mupeeVersion', function() {
             'patches': [
               {
                 'type': 'complete',
-                'url': 'http://download.mozilla.org/?product=firefox-3.6.18-complete&os=win&lang=en-US',
+                'URL': 'http://download.mozilla.org/?product=firefox-3.6.18-complete&os=win&lang=en-US',
                 'localPath': null,
                 'hashFunction': 'SHA512',
                 'hashValue': '345835da0d15607d115cef2a42185f0cdc0d800bde0a0039aac786c370732e2b3855cd0b70a6de390ad49d52f7adfd8df56cd9c69f2b44211ba0bb792d47e59b',
                 'size': '11587247'
               }, {
                 'type': 'partial',
-                'url': 'http://download.mozilla.org/?product=firefox-3.6.18-complete&os=win&lang=en-US',
+                'URL': 'http://download.mozilla.org/?product=firefox-3.6.18-complete&os=win&lang=en-US',
                 'localPath': null,
                 'hashFunction': 'SHA512',
                 'hashValue': '345835da0d15607d115cef2a42185f0cdc0d800bde0a0039aac786c370732e2b3855cd0b70a6de390ad49d52f7adfd8df56cd9c69f2b44211ba0bb792d47e59b',

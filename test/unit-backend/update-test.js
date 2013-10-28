@@ -29,7 +29,7 @@ describe('The Update module', function() {
       patches: [
         {
           type: 'complete',
-          url: 'http://download.mozilla.org/?product=firefox-3.5.3-complete&os=win&lang=en-US',
+          URL: 'http://download.mozilla.org/?product=firefox-3.5.3-complete&os=win&lang=en-US',
           hashFunction: 'SHA512',
           hashValue: 'f8abbaea98bd453b651c24025dbb8cea5908e532ca64ad7150e88778ccb77c0325341c0fecbec3' +
           '7f31f31cdf7e13955c28140725282d2ce7c4a37c89a25319a1',
@@ -37,7 +37,7 @@ describe('The Update module', function() {
         },
         {
           type: 'partial',
-          url: 'http://download.mozilla.org/?product=firefox-3.5.3-partial-3.5.2&os=win&lang=en-US',
+          URL: 'http://download.mozilla.org/?product=firefox-3.5.3-partial-3.5.2&os=win&lang=en-US',
           hashFunction: 'SHA512',
           hashValue: '20b133f1bd2025360bda8ef0c53132a5806dbd0606e0' +
           'fe7c6d1291d1392532cc960262f87b0c7d4fbe8f9bc9fba64ed28ecd89b664c17f51f98acdd76b26ea6a',
@@ -94,7 +94,7 @@ describe('The Update module', function() {
         patches: [
           {
             type: 'complete',
-            url: 'http://download.mozilla.org/?product=firefox-3.5.3-complete&os=win&lang=en-US',
+            URL: 'http://download.mozilla.org/?product=firefox-3.5.3-complete&os=win&lang=en-US',
             hashFunction: 'SHA512',
             hashValue: 'f8abbaea98bd453b651c24025dbb8cea5908e532ca64ad7150e88778ccb77c0325341c0fecbec3' +
             '7f31f31cdf7e13955c28140725282d2ce7c4a37c89a25319a1',
@@ -102,7 +102,7 @@ describe('The Update module', function() {
           },
           {
             type: 'partial',
-            url: 'http://download.mozilla.org/?product=firefox-3.5.3-partial-3.5.2&os=win&lang=en-US',
+            URL: 'http://download.mozilla.org/?product=firefox-3.5.3-partial-3.5.2&os=win&lang=en-US',
             hashFunction: 'SHA512',
             hashValue: '20b133f1bd2025360bda8ef0c53132a5806dbd0606e0' +
             'fe7c6d1291d1392532cc960262f87b0c7d4fbe8f9bc9fba64ed28ecd89b664c17f51f98acdd76b26ea6a',

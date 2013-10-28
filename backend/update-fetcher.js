@@ -33,7 +33,6 @@ exports.fetch = function(version, callback) {
 
       var addPatchToUpdate = function(parsedPatch) {
         var patch = new Patch(parsedPatch['@']);
-        patch.url = parsedPatch['@'].URL;
         update.addPatch(patch);
       };
 

@@ -5,7 +5,7 @@ var jstoxml = require('./jstoxml'),
 
 var Patch = function(object) {
   this.type = object.type;
-  this.url = object.url;
+  this.URL = object.URL;
   this.localPath = object.localPath || null;
   this.hashFunction = object.hashFunction;
   this.hashValue = object.hashValue;
@@ -44,7 +44,7 @@ Update.prototype.asXML = function() {
       _name: 'patch',
       _attrs: {
         type: patch.type,
-        URL: patch.localPath ? config.server.url + ':' + config.server.port + '/download/' + patch.localPath : patch.url,
+        URL: patch.localPath ? config.server.url + ':' + config.server.port + '/download/' + patch.localPath : patch.URL,
         hashFunction: patch.hashFunction,
         hashValue: patch.hashValue,
         size: patch.size

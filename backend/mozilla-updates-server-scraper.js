@@ -30,13 +30,13 @@ function getDownloadTasks(localVersion, musVersion) {
             'binary');
 
         tasks.push({
-          url: patch.url,
+          url: patch.URL,
           destination: Path.join(config.download.dir, destination),
           localPath: destination,
           patch: patch,
           update: localUpdate
         });
-        logger.info('New Mozilla patch to download: ', {url: patch.url, destination: destination});
+        logger.info('New Mozilla patch to download: ', {url: patch.URL, destination: destination});
       }
     });
   });
