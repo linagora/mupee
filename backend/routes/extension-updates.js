@@ -14,7 +14,8 @@ var ExtensionSourceVersion = require('../extension-source-version').ExtensionSou
     ExtensionUpdateStorage = require('../extension-update-storage'),
     Extension = require('../extension').Extension,
     checksum = require('checksum'),
-    mvc = require('mozilla-version-comparator');
+    mvc = require('mozilla-version-comparator'),
+    backgroundTasks = require('../background-tasks');
 
 function badRequest(res, err, filename) {
   logger.error(filename ? filename + ': ' + err : err);
@@ -80,6 +81,10 @@ exports.versionCheck = function(req, res) {
             }
           }
         }
+      }
+
+      if (!dbSourceVersion._id) {
+        backgroundTasks.addExtensionScraperTask(dbSourceVersion);
       }
 
       res.send(clientSourceVersion.updatesAsRDF());

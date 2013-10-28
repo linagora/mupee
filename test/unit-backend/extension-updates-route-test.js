@@ -604,6 +604,60 @@ describe('The ExtensionUpdates route', function() {
       });
     });
 
+    it('should scrap available extension updates if client connects for the first time', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) {};
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, []); };
+
+      var tasks = {
+        addExtensionScraperTask: function() {
+          done();
+        }
+      };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      mockery.registerMock('../background-tasks', tasks);
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function(data) {}
+      });
+    });
+
+    it('should not scrap available extension updates if client already exists', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, [{ _id: 'ExistingId' }]); };
+      UpdStorage.prototype.save = function(extension, callback) {};
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, []); };
+
+      var tasks = {
+        addExtensionScraperTask: function() {
+          throw 'This test should not scrap!';
+        }
+      };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      mockery.registerMock('../background-tasks', tasks);
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function() {
+          done();
+        }
+      });
+    });
+
   });
 
   afterEach(function(done) {

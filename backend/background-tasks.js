@@ -1,6 +1,7 @@
 'use strict';
 
 var scraper = require('./mozilla-updates-server-scraper'),
+    extScraper = require('./mozilla-updates-server-extension-scraper'),
     scheduler = require('./job-scheduler'),
     db = require('./mongo-provider'),
     UpdateStorage = require('./update-storage'),
@@ -12,9 +13,19 @@ var buildHash = function(clientVersion) {
   return clientVersion.buildUrl('');
 };
 
+var buildExtensionHash = function(v) {
+  return v.id + '/' + v.version + '/' + v.appID + '/' + v.appVersion + '/' + v.appOS + '/' + v.appABI + '/' + v.locale;
+};
+
 exports.addProductScraperTask = function(clientVersion) {
   scheduler.addJob(buildHash(clientVersion), function(callback) {
     scraper(clientVersion, callback);
+  });
+};
+
+exports.addExtensionScraperTask = function(extensionSourceVersion) {
+  scheduler.addJob(buildExtensionHash(extensionSourceVersion), function(callback) {
+    extScraper(extensionSourceVersion, callback);
   });
 };
 
