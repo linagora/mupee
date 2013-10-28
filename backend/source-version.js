@@ -93,4 +93,9 @@ SourceVersion.prototype.findPatch = function(update, patch) {
   return patches.length === 1 ? patches[0] : null;
 };
 
+SourceVersion.emptyUpdatesXML = function() {
+  return '<?xml version="1.0" encoding="UTF-8"?>\n' +
+        '<updates></updates>';
+};
+
 module.exports = SourceVersion;
