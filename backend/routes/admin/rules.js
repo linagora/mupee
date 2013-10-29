@@ -19,7 +19,8 @@ function getRuleFromRequest(request, response) {
     response.send(400, e.message);
     return false;
   }
-  return rule;
+
+  return new Rule(rule);
 };
 
 exports.listActions = function(request, response) {
@@ -30,7 +31,7 @@ exports.findByPredicate = function(request, response) {
   if (!request.body || !request.body.predicates || !("forEach" in request.body.predicates) ) {
     return response.send(400, "body should contain a 'predicates' array");
   }
-  var predicates = []
+  var predicates = [];
   for (var i in request.body.predicates ) {
     var predicate = request.body.predicates[i];
     try {
@@ -68,9 +69,8 @@ exports.create = function(request, response) {
 };
 
 exports.update = function(request, response) {
-  var id = request.params.id;
-  
   var rule = getRuleFromRequest(request, response);
+
   if ( !rule ) {
     return ;
   }

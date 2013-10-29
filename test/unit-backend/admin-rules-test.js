@@ -95,7 +95,7 @@ describe('The Rules Server module', function() {
       }
     }, {
       send: function(result, details) {
-        result.should.deep.equal(rule);
+        result.should.deep.equal(serverRule);
         done();
       }
     });
@@ -148,7 +148,7 @@ describe('The Rules Server module', function() {
       }
     }, {
       send: function(result) {
-        result.should.deep.equal(rule);
+        result.should.deep.equal(serverRule);
         done();
       }
     });
@@ -414,7 +414,7 @@ describe('The Rules Server module', function() {
       }
     }, {
       send: function(result) {
-        result.should.deep.equal(rule);
+        result.should.deep.equal(serverRule);
         done();
       }
     });
