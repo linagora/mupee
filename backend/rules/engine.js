@@ -17,7 +17,7 @@ function ensureRuleByPredicate(rule) {
   return function(callback) {
     storage.findByPredicate(rule.predicates, function(err, result){
       if (err || result) {
-        callback(err, result)
+        callback(err, result);
       } else {
         storage.save(rule, function(err, result) {
           callback(err, result);
@@ -31,31 +31,38 @@ function weightComparator(left, right) {
   return right.weight - left.weight;
 }
 
-function initRuleCache(callback) {
+function initRuleCache() {
   this.storage.findAll({}, function(err, result) {
     if (!err) {
       this.cache = result.map(function(rule) {
           return new Rule(rule);
         }
       ).sort(weightComparator);
+
+      this.emit('cacheLoaded', null, this.cache);
+    } else {
+      this.emit('cacheLoaded', err);
     }
-    callback(err, this.cache);
   }.bind(this));
 };
 
-var Engine = function(db, callback) {
+var Engine = function() {
   this.storage = new Storage(db);
   this.cache = [];
-  this.db = db;
+
+  events.EventEmitter.call(this);
 
   async.series(
     DefaultRules.list.map(ensureRuleByPredicate.bind(this)),
     function(err, result) {
-      if (err) callback(err, result);
-      initRuleCache.bind(this)(callback);
+      if (err) {
+        logger.warn('Fail to ensure that default rules are in storage: ', err);
+      }
+      initRuleCache.bind(this)();
     }.bind(this)
   );
 };
+util.inherits(Engine, events.EventEmitter);
 
 Engine.prototype.listActions = function() {
   return Loader.actions;
@@ -63,7 +70,7 @@ Engine.prototype.listActions = function() {
 
 Engine.prototype.listPredicates = function() {
   return Loader.predicates;
-}
+};
 
 Engine.prototype.findByPredicate = function(predicates, callback) {
   this.storage.findByPredicate(predicates, callback);
@@ -83,7 +90,7 @@ function removeFromCache(cache, ruleId) {
   }
 }
 
-Engine.prototype.add = function(rule, callback) {
+Engine.prototype.create = function(rule, callback) {
   this.storage.save(rule, function(err, result) {
     addToCache(this.cache, rule);
     callback(err, result);
@@ -119,4 +126,12 @@ Engine.prototype.evaluate = function(candidate) {
   return Loader.actions[config.rules.defaultRule].action()(candidate);
 };
 
-module.exports = Engine;
+Engine.getInstance = function getInstance() {
+  if (!Engine.instance) {
+    Engine.instance = new Engine();
+  }
+
+  return Engine.instance;
+};
+
+module.exports = Engine.getInstance();

@@ -4,9 +4,7 @@ var db = require('../../mongo-provider');
 var Engine = require('../../rules/engine');
 var Rule = require('../../rules/rule');
 var rulesValidation = require("../../rules/validation");
-var engine = new Engine(db, function() {
-
-});
+var engine = require('../../rules/engine');
 
 function getRuleFromRequest(request, response) {
   if (!request.body || !request.body.rule) {
