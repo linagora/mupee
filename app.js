@@ -7,6 +7,7 @@ var express = require('express'),
 var proxy = require('./backend/routes/updates'),
     extensionProxy = require('./backend/routes/extension-updates'),
     versions = require('./backend/routes/admin/versions'),
+    extensions = require('./backend/routes/admin/extensions'),
     rules = require('./backend/routes/admin/rules'),
     routes = require('./backend/routes'),
     config = require('./backend/config'),
@@ -61,7 +62,9 @@ app.put('/admin/rules/:id', rules.update);
 app.delete('/admin/rules/:id', rules.delete);
 app.get('/admin/rules/actions', rules.listActions);
 
-app.post('/admin/upload/extension', express.bodyParser(), extensionProxy.uploadXpi);
+app.post('/admin/upload/extension', express.bodyParser(), extensions.uploadXpi);
+
+app.get('/admin/extensions', extensions.findAll);
 
 app.get('/:name', routes.index);
 

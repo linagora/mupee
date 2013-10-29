@@ -14,10 +14,11 @@ describe('The ExtensionUpdates route', function() {
     mockery.enable({warnOnUnregistered: false, warnOnReplace: false, useCleanCache: true});
     mockery.registerMock('adm-zip', null);
     mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
   });
 
   it('should send 400 if no file is uploaded', function(done) {
-    proxy = require('../../backend/routes/extension-updates');
+    proxy = require('../../backend/routes/admin/extensions');
 
     proxy.uploadXpi({}, {
       send: function(data) {
@@ -28,7 +29,7 @@ describe('The ExtensionUpdates route', function() {
   });
 
   it('should send 400 if the upload isn\'t done with a _file_ element', function(done) {
-    proxy = require('../../backend/routes/extension-updates');
+    proxy = require('../../backend/routes/admin/extensions');
 
     proxy.uploadXpi({
       files: {
@@ -46,7 +47,7 @@ describe('The ExtensionUpdates route', function() {
     var Zip = function() { throw 'No, I\'m not a zip file!'; };
 
     mockery.registerMock('adm-zip', Zip);
-    proxy = require('../../backend/routes/extension-updates');
+    proxy = require('../../backend/routes/admin/extensions');
 
     proxy.uploadXpi({
       files: {
@@ -67,7 +68,7 @@ describe('The ExtensionUpdates route', function() {
     Zip.prototype.getEntry = function() { return null; };
 
     mockery.registerMock('adm-zip', Zip);
-    proxy = require('../../backend/routes/extension-updates');
+    proxy = require('../../backend/routes/admin/extensions');
 
     proxy.uploadXpi({
       files: {
@@ -89,7 +90,7 @@ describe('The ExtensionUpdates route', function() {
     Zip.prototype.readAsText = function() { return 'I\'m not a valid install.rdf stream!'; };
 
     mockery.registerMock('adm-zip', Zip);
-    proxy = require('../../backend/routes/extension-updates');
+    proxy = require('../../backend/routes/admin/extensions');
 
     proxy.uploadXpi({
       files: {
@@ -121,7 +122,7 @@ describe('The ExtensionUpdates route', function() {
     mockery.registerMock('fs-extra', fsExtra);
     mockery.registerMock('adm-zip', Zip);
     mockery.registerMock('../extension-storage', Storage);
-    proxy = require('../../backend/routes/extension-updates');
+    proxy = require('../../backend/routes/admin/extensions');
 
     proxy.uploadXpi({
       files: {
@@ -157,7 +158,7 @@ describe('The ExtensionUpdates route', function() {
     mockery.registerMock('fs-extra', fsExtra);
     mockery.registerMock('adm-zip', Zip);
     mockery.registerMock('../extension-storage', Storage);
-    proxy = require('../../backend/routes/extension-updates');
+    proxy = require('../../backend/routes/admin/extensions');
 
     proxy.uploadXpi({
       files: {
@@ -191,7 +192,7 @@ describe('The ExtensionUpdates route', function() {
     mockery.registerMock('fs-extra', fsExtra);
     mockery.registerMock('adm-zip', Zip);
     mockery.registerMock('../extension-storage', Storage);
-    proxy = require('../../backend/routes/extension-updates');
+    proxy = require('../../backend/routes/admin/extensions');
 
     proxy.uploadXpi({
       files: {
@@ -221,8 +222,8 @@ describe('The ExtensionUpdates route', function() {
 
     mockery.registerMock('fs-extra', fsExtra);
     mockery.registerMock('adm-zip', Zip);
-    mockery.registerMock('../extension-storage', Storage);
-    proxy = require('../../backend/routes/extension-updates');
+    mockery.registerMock('../../extension-storage', Storage);
+    proxy = require('../../backend/routes/admin/extensions');
 
     proxy.uploadXpi({
       files: {
@@ -252,8 +253,8 @@ describe('The ExtensionUpdates route', function() {
 
     mockery.registerMock('fs-extra', fsExtra);
     mockery.registerMock('adm-zip', Zip);
-    mockery.registerMock('../extension-storage', Storage);
-    proxy = require('../../backend/routes/extension-updates');
+    mockery.registerMock('../../extension-storage', Storage);
+    proxy = require('../../backend/routes/admin/extensions');
 
     proxy.uploadXpi({
       files: {
@@ -282,8 +283,8 @@ describe('The ExtensionUpdates route', function() {
 
     mockery.registerMock('fs-extra', fsExtra);
     mockery.registerMock('adm-zip', Zip);
-    mockery.registerMock('../extension-storage', Storage);
-    proxy = require('../../backend/routes/extension-updates');
+    mockery.registerMock('../../extension-storage', Storage);
+    proxy = require('../../backend/routes/admin/extensions');
 
     proxy.uploadXpi({
       files: {
@@ -317,8 +318,8 @@ describe('The ExtensionUpdates route', function() {
 
     mockery.registerMock('fs-extra', fsExtra);
     mockery.registerMock('adm-zip', Zip);
-    mockery.registerMock('../extension-storage', Storage);
-    proxy = require('../../backend/routes/extension-updates');
+    mockery.registerMock('../../extension-storage', Storage);
+    proxy = require('../../backend/routes/admin/extensions');
 
     proxy.uploadXpi({
       files: {
@@ -354,10 +355,10 @@ describe('The ExtensionUpdates route', function() {
     Storage.prototype.remove = function(id, callback) { throw 'This test should not call Storage.remove()'; };
 
     mockery.registerMock('fs-extra', fsExtra);
-    mockery.registerMock('../config', config);
+    mockery.registerMock('../../config', config);
     mockery.registerMock('adm-zip', Zip);
-    mockery.registerMock('../extension-storage', Storage);
-    proxy = require('../../backend/routes/extension-updates');
+    mockery.registerMock('../../extension-storage', Storage);
+    proxy = require('../../backend/routes/admin/extensions');
 
     fs.closeSync(fs.openSync('/tmp/mupeeTestingFile', 'w'));
 

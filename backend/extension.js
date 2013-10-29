@@ -77,7 +77,7 @@ Extension.prototype.getCompatibleTargetApplication = function(id, version) {
   for (var i in this.targetApplications) {
     var app = this.targetApplications[i];
 
-    if (app.id === id && mvc(version, app.minVersion) >= 0 && mvc(version, app.maxVersion) <= 0) {
+    if (app.id === id && (!version || mvc(version, app.minVersion) >= 0 && mvc(version, app.maxVersion) <= 0)) {
       return app;
     }
   }

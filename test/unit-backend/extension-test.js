@@ -156,4 +156,15 @@ describe('An Extension', function() {
     expect(app.id).to.equal('{3550f703-e582-4d05-9a08-453d09bdfdc6}');
   });
 
+  it('should find a target application of OBM Connector 3.2.0.11 if given Thunderbird', function() {
+    var app = fixtures.obmConnector32011().getCompatibleTargetApplication('{3550f703-e582-4d05-9a08-453d09bdfdc6}');
+
+    expect(app).to.exist;
+    expect(app.id).to.equal('{3550f703-e582-4d05-9a08-453d09bdfdc6}');
+  });
+
+  it('should not find any target application of OBM Connector 3.2.0.11 if given Firefox', function() {
+    expect(fixtures.obmConnector32011().getCompatibleTargetApplication('{ec8030f7-c20a-464f-9b0e-13a3a9e97384}')).to.not.exist;
+  });
+
 });

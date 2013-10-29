@@ -6,7 +6,7 @@ var fetcher = require('./extension-update-fetcher'),
     Downloader = require('./downloader'),
     logger = require('./logger'),
     config = require('./config'),
-    proxy = require('./routes/extension-updates');
+    extensions = require('./routes/admin/extensions');
 
 exports = module.exports = function(clientVersion, callback) {
   if (!config.download.autoCache) {
@@ -34,7 +34,7 @@ exports = module.exports = function(clientVersion, callback) {
         return callback();
       }
 
-      proxy.uploadXpi({
+      extensions.uploadXpi({
         files: {
           file: {
             name: fileName,

@@ -15,7 +15,7 @@ describe('The ExtensionUpdatesScraper module', function() {
   before(function() {
     mockery.enable({warnOnUnregistered: false, warnOnReplace: false, useCleanCache: true});
     mockery.registerMock('./logger', testLogger);
-    mockery.registerMock('./routes/extension-updates', {});
+    mockery.registerMock('./routes/admin/extensions', {});
   });
 
   it('should do nothing if config.download.autoCache is false', function(done) {
@@ -90,7 +90,7 @@ describe('The ExtensionUpdatesScraper module', function() {
 
     mockery.registerMock('./extension-update-fetcher', fetcher);
     mockery.registerMock('./downloader', Downloader);
-    mockery.registerMock('./routes/extension-updates', proxy);
+    mockery.registerMock('./routes/admin/extensions', proxy);
 
     var scrap = require('../../backend/mozilla-updates-server-extension-scraper');
 
@@ -126,7 +126,7 @@ describe('The ExtensionUpdatesScraper module', function() {
     });
     mockery.registerMock('./extension-update-fetcher', fetcher);
     mockery.registerMock('./downloader', Downloader);
-    mockery.registerMock('./routes/extension-updates', proxy);
+    mockery.registerMock('./routes/admin/extensions', proxy);
 
     var scrap = require('../../backend/mozilla-updates-server-extension-scraper');
 
