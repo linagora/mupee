@@ -42,7 +42,7 @@ describe('The mupeeUpgradeAction Angular module', function() {
     });
 
     it('should return a product predicate and a branch predicate if product and version are given', function() {
-      var predicates = pAVPservice('Firefox', {version: 12});
+      var predicates = pAVPservice('Firefox', 12);
       expect(predicates).to.exist;
       expect(predicates).to.be.an.array;
       expect(predicates).to.have.length(2);
