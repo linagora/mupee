@@ -1,8 +1,8 @@
 'use strict';
 
-var SourceVersion = require('../../backend/mozilla-source-version'),
-    Update = require('../../backend/mozilla-update').MozillaUpdate,
-    Patch = require('../../backend/mozilla-update').MozillaPatch;
+var SourceVersion = require('../../../backend/mozilla-source-version'),
+    Update = require('../../../backend/mozilla-update').MozillaUpdate,
+    Patch = require('../../../backend/mozilla-update').MozillaPatch;
 
 exports.withAllFields = function() {
   return new SourceVersion({

@@ -5,7 +5,7 @@ var chai = require('chai'),
     expect = chai.expect;
 
 var UpdateFetcher = require('../../backend/update-fetcher'),
-    SourceVersion = require('../../backend/source-version');
+    MozillaSourceVersion = require('../../backend/mozilla-source-version');
 
 describe('The UpdateFetcher module', function() {
 
@@ -26,7 +26,7 @@ describe('The UpdateFetcher module', function() {
             '</update>' +
         '</updates>');
 
-    var sourceVersion = new SourceVersion({
+    var sourceVersion = new MozillaSourceVersion({
       product: 'Firefox',
       version: '3.5.2',
       buildID: '20090729225027',
@@ -37,7 +37,7 @@ describe('The UpdateFetcher module', function() {
       parameters: {}
     });
 
-    var expectedFetchedVersion = new SourceVersion({
+    var expectedFetchedVersion = new MozillaSourceVersion({
       'timestamp': sourceVersion.timestamp,
       'product': 'Firefox',
       'version': '3.5.2',
@@ -88,7 +88,7 @@ describe('The UpdateFetcher module', function() {
       .get('/update/3/Firefox/1.1.1/20090729225027/WINNT_x86-msvc/en-US/release/Windows_NT%206.0/default/default/update.xml')
       .reply(200, '<?xml version="1.0"?><updates></updates>');
 
-    var sourceVersion = new SourceVersion({
+    var sourceVersion = new MozillaSourceVersion({
       product: 'Firefox',
       version: '1.1.1',
       buildID: '20090729225027',
@@ -108,7 +108,7 @@ describe('The UpdateFetcher module', function() {
 
   it('should support forced updates', function(done) {
 
-    var sourceVersion = new SourceVersion({
+    var sourceVersion = new MozillaSourceVersion({
       product: 'Thunderbird',
       version: '12.0.1',
       buildID: '20120428123112',
@@ -119,7 +119,7 @@ describe('The UpdateFetcher module', function() {
       parameters: {force: '1'}
     });
 
-    var expectedFetchedVersion = new SourceVersion({
+    var expectedFetchedVersion = new MozillaSourceVersion({
       'timestamp': sourceVersion.timestamp,
       'product': 'Thunderbird',
       'version': '12.0.1',

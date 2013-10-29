@@ -2,11 +2,14 @@
 
 var request = require('request'),
     parser = require('libxml-to-js'),
-    Update = require('./update.js').Update,
-    Patch = require('./update.js').Patch,
-    SourceVersion = require('./source-version');
+    Update = require('./update').Update,
+    Patch = require('./update').Patch,
+    SourceVersion = require('./source-version'),
+    MozillaUpdate = require('./mozilla-update').MozillaUpdate,
+    MozillaPatch = require('./mozilla-update').MozillaPatch,
+    MozillaSourceVersion = require('./mozilla-source-version');
 
-var mozUpdateUrl = require('./config.js').fetch.remoteHost;
+var mozUpdateUrl = require('./config').fetch.remoteHost;
 
 exports.fetch = function(version, callback) {
   var urlPath = version.buildUrl(mozUpdateUrl);
@@ -20,32 +23,30 @@ exports.fetch = function(version, callback) {
     var musVersion;
     
     try {
-      musVersion = new SourceVersion(version);
+      musVersion = new MozillaSourceVersion(version);
     } catch(error) {
       return callback(error, version);
     }
     
     parser(body, function(error, result) {
-
       if (!result.update) {
         return callback(null, musVersion);
       }
 
-      var update = new Update(result.update['@']);
+      var update = new MozillaUpdate(result.update['@']);
 
       var patchToAdd = result.update.patch;
-
       if (!(patchToAdd instanceof Array)) {
         patchToAdd = [patchToAdd];
       }
 
       var addPatchToUpdate = function(parsedPatch) {
-        var patch = new Patch(parsedPatch['@']);
+        var patch = new MozillaPatch(parsedPatch['@']);
         update.addPatch(patch);
       };
-
+      
       try {
-        patchToAdd.map(addPatchToUpdate);
+        patchToAdd.forEach(addPatchToUpdate);
         musVersion.addUpdate(update);
       } catch(error) {
         return callback(error, version);
