@@ -20,7 +20,7 @@ div(data-ng-show="!loadProgress && !networkError")
           div.large-1.columns
       br
 
-    div.columns.center.alert-box.radius(data-ng-show="noVersions") No {{product}} clients has connected to your Mupee yet
+    div.columns.center.alert-box.radius(data-ng-show="versions.length == 0") No {{product}} clients has connected to your Mupee yet
 
     article.twelve.columns(data-ng-repeat="branchDetail in versions" data-ng-init="opened = false")
 
