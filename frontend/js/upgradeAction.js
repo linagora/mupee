@@ -193,7 +193,7 @@
     return function productAndVersionPredicates(product, version) {
       var predicates = [buildPredicate('productEquals', {product: product})];
       if (version) {
-        predicates.push(buildPredicate('branchEquals', {branch: parseInt(version, 10)}));
+        predicates.push(buildPredicate('branchEquals', {branch: parseInt(version.version, 10)}));
       }
       return predicates;
     };
