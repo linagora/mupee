@@ -24,7 +24,7 @@ var SourceVersion = function(object) {
   this.locale = object.locale;
   this.channel = object.channel;
   this.osVersion = object.osVersion;
-  this.branch = object.version ? object.version.substring(0, object.version.indexOf('.')) : null;
+  this.branch = object.version ? parseInt(object.version.substring(0, object.version.indexOf('.'))) : null;
   this.parameters = object.parameters;
   this.updates = [];
   if (object.updates) {

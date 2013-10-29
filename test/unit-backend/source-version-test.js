@@ -9,7 +9,7 @@ describe('The SourceVersion module', function() {
 
   it('should compute its current major branch', function() {
     var version = fixtures.withAllFields();
-    expect(version.branch).to.equal('3');
+    expect(version.branch === 3).to.be.true;
   });
 
   it('should export its updates as a valid XML file when there is no updates', function() {
@@ -74,7 +74,7 @@ describe('The SourceVersion module', function() {
     expect(result.version).to.equal('3.6.18');
   });
 
-  it('shouldn"t find an update if that doesn"t match the argument', function() {
+  it('shouldn\'t find an update if that doesn\'t match the argument', function() {
     var version = fixtures.withAllFields();
     var updateThatDontMatch = fixtures.updates.thatDontMatch();
     var result = version.findUpdate(updateThatDontMatch);
@@ -90,7 +90,7 @@ describe('The SourceVersion module', function() {
     expect(result.hashValue).to.equal('345835da0d15607d115cef2a42185f0cdc0d800bde0a0039aac786c370732e2b3855cd0b70a6de390ad49d52f7adfd8df56cd9c69f2b44211ba0bb792d47e59b');
   });
 
-  it('shouldn"t find a patch if that doesn"t matches the argument', function() {
+  it('shouldn\'t find a patch if that doesn\'t matches the argument', function() {
     var version = fixtures.withAllFields();
     var updateThatMatch = fixtures.updates.thatMatches();
     var patchThatDontMatch = fixtures.patches.thatDontMatch();
