@@ -25,35 +25,52 @@ body > footer {
   color: #999;
 }
 
-.row .columns {
-    font-size: 13px;
-}
-
 header {
-  cursor: pointer;
-  border: solid 1px #cccccc;
-  background: #e7e7e7;
-  font-size: 13px;
+  border: solid 1px #CCC;
+  background: #fafafa;
+  color: #555;
+  font-size: 1em;
   font-weight: bold;
-  padding: 20px;
+  padding: 0.5em;
+  padding-bottom: 0;
+  border-radius: 0.4em 0.4em 0 0;
+  margin-bottom: 0.7em;
 }
 
 header:hover {
-  background: #d7d7d7;
+  color: #333;
+}
+
+.borderbottom: {
+  border-bottom: solid 1px #CCC;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.right {
+  text-align: right;
 }
 
 section {
   overflow:hidden;
   max-height:0;
   opacity:0;
-  border: solid 1px #cccccc;
+  border-left: solid 1px #CCC;
+  border-right: solid 1px #CCC;
   -webkit-transition: all 0.5s ease-out;
   -moz-transition: all 0.5s ease-out;
   transition: all 0.5s ease-out;
+  border-radius: 0 0 0.4em 0.4em;
+}
+
+section:last-child {
+  border-bottom: solid 1px #CCC;
 }
 
 section.open {
-  max-height:500px;
+  max-height:800px;
   opacity:1;
 }
 
@@ -62,13 +79,128 @@ section div {
 }
 
 .bigIcon {
-  transform: rotate(10deg);
-  -webkit-transform: rotate(10deg);
+  transform: rotate(5deg);
+  -webkit-transform: rotate(5deg);
   transition: transform 0.3s ease-in;
   -webkit-transition: -webkit-transform 0.3s ease-in;
 }
 
 .bigIcon:hover {
-  transform: rotate(20deg);
-  -webkit-transform: rotate(20deg);
+  transform: rotate(10deg);
+  -webkit-transform: rotate(10deg);
+}
+
+footer {
+  font-size: 0.9em;
+}
+
+.top-bar {
+  background-color: #333;
+}
+
+.row article header div:first-child {
+  font-size: 2.2em;
+  text-align: left;
+  padding-left: 0;
+}
+
+.down, .up {
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.grey {
+  color:#777;
+}
+
+.labels {
+  border-bottom: solid 1px #DDD;
+}
+
+.ruleWidget fieldset .row .columns{
+  font-size: 1em;
+}
+
+span.label.secondary.radius{
+  font-size: 1em;
+  white-space: normal;
+  max-width: 40em;
+}
+
+.productRule{
+  text-align: center;
+}
+
+input.button.radius {
+  margin-left:0.3em;
+}
+
+.edit-icon {
+  width: 32px;
+  margin-top: -4px;
+  padding: 0;
+}
+
+.button {
+  padding-top: 0.4em;
+  padding-bottom: 0.2em;
+}
+
+@media screen and (max-width: 980px) {
+  .row .columns {
+    font-size: 1.5em;
+  }
+
+  strong {
+    font-size: 0.8em;
+  }
+
+  .borderbottom {
+    font-size: 0.8em;
+  }
+
+  .labels {
+    font-size: 0.8em;
+  }
+
+  .ruleWidget fieldset .row .columns {
+    font-size: 0.8em;
+  }
+
+  .ruleWidget select {
+    font-size: 1.2em;
+    white-space: normal;
+  }
+
+  .ruleWidget input {
+    font-size: 1.3em;
+  }
+  
+  span.label.secondary.radius {
+    font-size: 1em;
+    white-space: normal;
+    max-width: 15em;
+  }
+
+  .productRule span span {
+    font-size: 1.5em;
+  }
+
+  .productRule select {
+    font-size: 1.5em;
+  }
+
+  button.button.radius {
+    font-size: 0.95em;
+  }
+  .edit-icon {
+    width: 64px;
+    margin-top: -5px;
+  }
+}
+
+@media screen and (min-width: 981px) {
+  .row .columns {
+    font-size: 1em;
+  }
 }

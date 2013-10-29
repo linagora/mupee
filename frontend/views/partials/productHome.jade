@@ -1,38 +1,60 @@
-h1 {{product}} updates
+h1.center 
+  {{product}} updates policies
 
-div Default policy for your {{product}} updates:
-  span(data-upgrade-action data-product="product")
+div.row.productRule
+  h4.center Default policy for {{product}} updates:
+  div(data-upgrade-action data-product="product")
 
-p Here is a list per version of your {{product}} policies:
+br
 
 div.center(data-ng-show="loadProgress") Loading...
-div.center(data-ng-show="networkError") Oh my god ! We encountered an error :-(
+div.center.alert-box.alert(data-ng-show="networkError") Oh my god ! We encountered an error :-(
 
 div(data-ng-show="!loadProgress && !networkError")
+  div.row.collapse
+    div.row
+          div.large-1.columns
+            span(class="grey") Versions
+          div.large-10.columns.center
+            span(class="grey") Policies
+          div.large-1.columns
+      br
 
-  div.row
-    article.twelve.columns(data-ng-repeat="version in versions")
-      header.row(data-ng-click="toggle(version)")
-          div.large-2.columns Version {{version.majorVersion}}
-          div.large-9.columns Policy :
-                                span(data-upgrade-action data-product="product" data-version="version")
-          div.center.large-1.columns +
-      section.row(data-ng-class="{'open': version == directive.opened}")
-        div.row
-          div.large-2.columns
-            p locale: {{version.locale}}
-          div.large-2.columns
-            p channel: {{version.channel}}
-          div.large-8.columns
-            p os: {{version.os}}
-        div.row
-          div.large-2.columns
-            p Updates
-          div.large-10.columns
-            p(data-ng-show="!version.updates.length") None
-            div(data-ng-repeat="update in version.updates")
-              p type: {{update.type}}
-              p version: {{update.version}}
-              p url: {{update.detailsUrl}}
+    div.columns.center.alert-box.radius(data-ng-show="noVersions") No {{product}} clients has connected to your Mupee yet
 
-  div.center(data-ng-show="!versions.length") No {{product}} clients has connected to your Mupee yet
+    article.twelve.columns(data-ng-repeat="branchDetail in versions" data-ng-init="opened = false")
+
+      header.row
+          div.large-1.columns {{branchDetail.branch}}
+          div.large-10.columns.center 
+              span(data-upgrade-action data-product="product" data-version="branchDetail.branch")
+
+          div.center.large-1.columns.pointer(data-ng-click="opened = !opened")
+            span(class="down" data-ng-show="opened == false") ▼
+            span(class="up" data-ng-show="opened == true") ▲
+
+      section.row(data-ng-class="{'open': opened == true}")
+        div.row.labels
+          div.large-2.columns
+            span(class="grey") Version
+          div.large-3.columns
+            span(class="grey") Date
+          div.large-2.columns
+            span(class="grey") Locale
+          div.large-2.columns
+            span(class="grey") Channel
+          div.large-3.columns
+            span(class="grey") OS
+
+        div.row(data-ng-repeat="version in branchDetail.members" data-ng-init="opened = false")
+          div.large-2.columns
+            strong {{version.version}}
+          div.large-3.columns
+              strong {{version.timestamp}}
+          div.large-2.columns
+              strong {{version.locale}}
+          div.large-2.columns
+              strong {{version.channel}}
+          div.large-3.columns
+              strong {{version.os}}
+

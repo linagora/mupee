@@ -14,29 +14,28 @@ angular.module('mupeeProduct', ['mupeeRouteSegment', 'mupeeVersion', 'mupeeUpgra
           $scope.networkError = true;
           return $scope.networkError;
         }
+
+        var versionBranches = {};
+
         angular.forEach(versions, function(sourceVersion) {
-          var major = sourceVersion.version.split('.').shift();
+          var date = new Date(sourceVersion.timestamp).toLocaleString();
+          var formatedOs = sourceVersion.osVersion.replace('_', ' ');
           var versionDetails = {
-            majorVersion: major,
+            version: sourceVersion.version,
+            timestamp: date,
             locale: sourceVersion.locale,
             channel: sourceVersion.channel,
-            os: sourceVersion.osVersion,
-            updates: sourceVersion.updates
+            os: formatedOs
           };
-          if ($scope.versions.indexOf(versionDetails) < 0) {
-            $scope.versions.push(versionDetails);
+          if (!versionBranches[sourceVersion.branch]) {
+            versionBranches[sourceVersion.branch] = {
+              branch: parseInt(sourceVersion.branch, 10),
+              members: []
+            };
+            $scope.versions.push(versionBranches[sourceVersion.branch]);
           }
+          versionBranches[sourceVersion.branch].members.push(versionDetails);
         });
-        $scope.versions.sort(function(a, b) {return a.majorVersion > b.majorVersion; });
-
-        $scope.directive = {opened: null};
-        $scope.toggle = function(key) {
-          if (key === $scope.directive.opened) {
-            $scope.directive.opened = null;
-          } else {
-            $scope.directive.opened = key;
-          }
-        };
       });
     }])
   .factory('mupeeProduct', ['mupeeRouteSegment', function(mupeeRouteSegment) {
