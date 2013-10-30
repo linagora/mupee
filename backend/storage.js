@@ -19,7 +19,11 @@ Storage.prototype.save = function(doc, callback) {
 };
 
 Storage.prototype.findAll = function(query, callback) {
-  this.db.collection(this.collection).find(query, {}).toArray(callback);
+  var cursor = this.db.collection(this.collection).find(query, {});
+  if ( callback ) {
+    return cursor.toArray(callback);
+  }
+  return cursor;
 };
 
 Storage.prototype.findById = function(id, callback) {
