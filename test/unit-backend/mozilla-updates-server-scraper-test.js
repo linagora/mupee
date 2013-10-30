@@ -5,6 +5,7 @@ var chai = require('chai'),
     mockery = require('mockery'),
     db = require('../../backend/mongo-provider'),
     SourceVersion = require('../../backend/source-version'),
+    MozillaSourceVersion = require('../../backend/mozilla-source-version'),
     events = require('events'),
     util = require('util'),
     testLogger = require('./test-logger'),
@@ -136,10 +137,11 @@ describe('The mozilla Updates Server Sraper module', function() {
     it('should find that version in the database and query the mozilla servers', function(done) {
       var count = 0;
       var versionWithUpdate = new SourceVersion(withUpdate);
+      var musVersionWithUpdate = new MozillaSourceVersion(withUpdate);
       UpdateFetcher.fetch = function(version, callback) {
         process.nextTick(function() {
           count++;
-          callback(null, versionWithUpdate);
+          callback(null, musVersionWithUpdate);
         });
       };
 
@@ -163,7 +165,7 @@ describe('The mozilla Updates Server Sraper module', function() {
         var count = 0;
         var downloadStarted = 0;
         var dbVersion = new SourceVersion(withUpdate);
-        var musVersion = new SourceVersion(withUpdate);
+        var musVersion = new MozillaSourceVersion(withUpdate);
         UpdateFetcher.fetch = function(version, callback) {
           process.nextTick(function() {
             count++;
@@ -195,7 +197,7 @@ describe('The mozilla Updates Server Sraper module', function() {
         var count = 0;
         var downloadStarted = 0;
         var dbVersion = new SourceVersion(withUpdate);
-        var musVersion = new SourceVersion(withUpdate2);
+        var musVersion = new MozillaSourceVersion(withUpdate2);
         var saved = null;
         UpdateFetcher.fetch = function(version, callback) {
           process.nextTick(function() {

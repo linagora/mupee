@@ -9,18 +9,20 @@ var UpdateFetcher = require('./update-fetcher'),
     config = require('./config'),
     async = require('async'),
     SourceVersion = require('./source-version'),
+    MozillaSourceVersion = require('./mozilla-source-version'),
     Update = require('./update.js').Update;
 
 var storage = new MetadataStorage(db);
 
 function getDownloadTasks(localVersion, musVersion) {
   var tasks = [];
-
+  var localMozillaVersion = new MozillaSourceVersion(localVersion);
+  
   musVersion.updates.forEach(function(update) {
     var localUpdate = new Update(update);
     localUpdate.clearPatches();
     update.patches.forEach(function(patch) {
-      if (!localVersion.findPatch(update, patch)) {
+      if (!localMozillaVersion.findPatch(update, patch)) {
         var destination = Path.join(
             localVersion.product,
             update.version || update.appVersion,
@@ -67,10 +69,13 @@ function downloadBinaries(localVersion, musVersion, callback) {
     if (err) {
       return logger.error('while fetching from remote server :', err);
     }
+    
+    var localMozillaVersion = new SourceVersion(localVersion);
+    
     task.patch.localPath = task.localPath;
-    var localUpdate = localVersion.findUpdate(task.update);
+    var localUpdate = localMozillaVersion.findUpdate(task.update);
     if (localUpdate) {
-      var localPatch = localVersion.findPatch(task.update, task.patch);
+      var localPatch = localMozillaVersion.findPatch(task.update, task.patch);
       if (localPatch) {
         return;
       }
