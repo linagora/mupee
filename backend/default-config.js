@@ -17,7 +17,8 @@ module.exports = {
   },
   fetch: {
     remoteHost: 'https://aus3.mozilla.org/update/3',
-    autoCache: true
+    autoCache: true,
+    refreshInterval: 24
   },
   server: {
     port: 1234,
