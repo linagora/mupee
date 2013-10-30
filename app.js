@@ -11,7 +11,8 @@ var proxy = require('./backend/routes/updates'),
     config = require('./backend/config'),
     logger = require('./backend/logger'),
     passport = require('passport'),
-    BasicStrategy = require('passport-http').BasicStrategy;
+    BasicStrategy = require('passport-http').BasicStrategy,
+    periodicTasks = require('./backend/periodic-tasks');
 
 var app = exports.modules = express();
 
@@ -61,4 +62,5 @@ app.get('/:name', routes.index);
 
 http.createServer(app).listen(app.get('port'), function () {
   logger.info('mozilla-updater server listening on port %d', app.get('port'));
+  periodicTasks.start();
 });
