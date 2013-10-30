@@ -29,9 +29,10 @@ describe('The mupeeAPI angular module', function() {
       expect(APIService).to.be.an.object;
     });
 
-    it('should have action and rule properties', function() {
+    it('should have action, rule and extensions properties', function() {
       expect(APIService).to.have.property('action');
       expect(APIService).to.have.property('rule');
+      expect(APIService).to.have.property('extensions');
     });
 
 
@@ -232,6 +233,73 @@ describe('The mupeeAPI angular module', function() {
           httpBackend.flush();
 
         });
+      });
+
+    });
+
+    describe('The extensions property', function() {
+
+      it('should be an object', function() {
+        expect(APIService.extensions).to.be.an.object;
+      });
+
+      it('should have a list property', function() {
+        expect(APIService.extensions).to.have.property('list');
+      });
+
+      it('should issue a GET request to /admin/extensions? if there\'s no filter', function(done) {
+        var promise = APIService.extensions.list();
+
+        httpBackend.expectGET('/admin/extensions?').respond(200, []);
+        expect(promise).to.be.an.object;
+        expect(promise).to.have.property('then');
+        expect(promise.then).to.be.a.function;
+
+        promise.then(function(response) { done(); },function() { done(); });
+
+        httpBackend.flush();
+      });
+
+      it('should issue a GET request to /admin/extensions?product=x if product is used as a filter', function(done) {
+        var promise = APIService.extensions.list('Thunderbird');
+
+        httpBackend.expectGET('/admin/extensions?product=Thunderbird').respond(200, []);
+        expect(promise).to.be.an.object;
+        expect(promise).to.have.property('then');
+        expect(promise.then).to.be.a.function;
+
+        promise.then(function(response) { done(); },function() { done(); });
+
+        httpBackend.flush();
+      });
+
+      it('should issue a GET request to /admin/extensions?product=x&version=y if product and version are used as filters', function(done) {
+        var promise = APIService.extensions.list('Thunderbird', 24);
+
+        httpBackend.expectGET('/admin/extensions?branch=24&product=Thunderbird').respond(200, []);
+        expect(promise).to.be.an.object;
+        expect(promise).to.have.property('then');
+        expect(promise.then).to.be.a.function;
+
+        promise.then(function(response) { done(); },function() { done(); });
+
+        httpBackend.flush();
+      });
+
+      it('should return the server\'s response', function(done) {
+        var promise = APIService.extensions.list();
+
+        httpBackend.expectGET('/admin/extensions?').respond(200, [{ greet: 'hi' }]);
+        expect(promise).to.be.an.object;
+        expect(promise).to.have.property('then');
+        expect(promise.then).to.be.a.function;
+
+        promise.then(function(response) {
+          expect(response).to.deep.equal([{ greet: 'hi' }]);
+          done();
+        },function() { done(); });
+
+        httpBackend.flush();
       });
 
     });

@@ -60,7 +60,21 @@ angular.module('mupeeAPI', [])
     return putRule(rule);
   }
 
+  function getExtensionsList(product, version) {
+    var deferred = $q.defer();
 
+    $http
+      .get('/admin/extensions', {
+        params: {
+          product: product,
+          branch: version
+        }
+      })
+      .success(function(data) { deferred.resolve(data); })
+      .error(function(data, status) { deferred.reject(status, data); });
+
+    return deferred.promise;
+  }
 
   return {
     action: {
@@ -69,6 +83,9 @@ angular.module('mupeeAPI', [])
     rule: {
       record: recordRule,
       findByPredicate: findRuleByPredicates
+    },
+    extensions: {
+      list: getExtensionsList
     }
   };
 }])
