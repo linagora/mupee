@@ -98,4 +98,8 @@ SourceVersion.emptyUpdatesXML = function() {
         '<updates></updates>';
 };
 
+SourceVersion.prototype.shortDescription = function() {
+  return this.product+' '+this.version+' ('+this.channel+','+this.locale+')';
+};
+
 module.exports = SourceVersion;

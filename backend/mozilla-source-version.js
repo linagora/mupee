@@ -96,4 +96,8 @@ MozillaSourceVersion.emptyUpdatesXML = function() {
         '<updates></updates>';
 };
 
+MozillaSourceVersion.prototype.shortDescription = function() {
+  return this.product+' '+this.version+' ('+this.channel+','+this.locale+')';
+};
+
 module.exports = MozillaSourceVersion;
