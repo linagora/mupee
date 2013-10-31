@@ -215,7 +215,7 @@ describe('The Rules Server module', function() {
 
   it('should return 200 when a rule is deleted', function(done) {
     mockery.registerMock('../../rules/engine', {
-      delete: function(id, callback) { callback(null, true); }
+      remove: function(id, callback) { callback(null, true); }
     });
     var rules = require('../../backend/routes/admin/rules');
 
@@ -236,7 +236,7 @@ describe('The Rules Server module', function() {
 
   it('should return 404 when a rule does not exist in a delete request', function(done) {
     mockery.registerMock('../../rules/engine', {
-      delete: function(id, callback) { callback(null, false); }
+      remove: function(id, callback) { callback(null, false); }
     });
     var rules = require('../../backend/routes/admin/rules');
 
@@ -257,7 +257,7 @@ describe('The Rules Server module', function() {
 
   it('should return 500 when there is an error in a delete request', function(done) {
     mockery.registerMock('../../rules/engine', {
-      delete: function(id, callback) { callback('oh my god!'); }
+      remove: function(id, callback) { callback('oh my god!'); }
     });
     var rules = require('../../backend/routes/admin/rules');
 

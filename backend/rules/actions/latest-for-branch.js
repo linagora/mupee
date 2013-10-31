@@ -6,8 +6,8 @@ var filterLatestForBranch = require('./filter-latest-for-branch');
 
 var latestForBranch = new Action({
   id: 'latestForBranch',
-  summary: 'upgrade to latest release of a given branch',
-  description: 'this policy send updates only for the latest available release of a given branch (major version)',
+  summary: 'upgrade up to latest release of a given branch',
+  description: 'this policy send updates up to the latest available release of a given branch (major version)',
   action: function(parameters) {
     return function(candidate) {
       return filterLatestForBranch(parameters.branch, candidate);

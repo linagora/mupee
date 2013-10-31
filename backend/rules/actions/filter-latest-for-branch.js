@@ -8,7 +8,7 @@ module.exports = function(branch, candidate) {
   candidate.updates.forEach(function(update) {
   var ver = update.version ? update.version : update.displayVersion;
 
-  if (ver.split('.').shift() == branch) {
+  if (ver.split('.').shift() <= branch) {
     filtered.push(update);
   }
   });
