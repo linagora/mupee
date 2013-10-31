@@ -22,9 +22,9 @@ div(data-ng-show="!loadProgress && !networkError")
 
     div.columns.center.alert-box.radius(data-ng-show="versions.length == 0") No {{product}} clients has connected to your Mupee yet
 
-    article.twelve.columns(data-ng-repeat="branchDetail in versions" data-ng-init="opened = false")
+    article.twelve.columns.version-row(data-ng-repeat="branchDetail in versions" data-ng-init="opened = false")
 
-      header.row
+      header.row.major-branch
           div.large-1.columns {{branchDetail.branch}}
           div.large-10.columns.center 
               span(data-upgrade-action data-product="product" data-version="branchDetail.branch")
@@ -33,8 +33,8 @@ div(data-ng-show="!loadProgress && !networkError")
             span(class="down" data-ng-show="opened == false") ▼
             span(class="up" data-ng-show="opened == true") ▲
 
-      section.row(data-ng-class="{'open': opened == true}")
-        div.row.labels
+      section.row.versionDetails(data-ng-class="{'open': opened == true}")
+        div.row.labels.versionDetailsLabels
           div.large-2.columns
             span(class="grey") Version
           div.large-3.columns
@@ -46,7 +46,7 @@ div(data-ng-show="!loadProgress && !networkError")
           div.large-3.columns
             span(class="grey") OS
 
-        div.row(data-ng-repeat="version in branchDetail.members" data-ng-init="opened = false")
+        div.row.minor-versions(data-ng-repeat="version in branchDetail.members" data-ng-init="opened = false")
           div.large-2.columns
             strong {{version.version}}
           div.large-3.columns

@@ -1,31 +1,30 @@
 span
   span(data-ng-show='mode == modes.DISPLAY') 
-    button.button.radius(data-ng-click="startEdition()") {{activeActionSummary}} 
+    button.button.radius.edit-rule-button(data-ng-click="startEdition()") {{activeActionSummary}} 
       img.edit-icon(src="../../images/gear.png")
   span(data-ng-show='mode == modes.LOAD') Loading...
   span(data-ng-show='mode == modes.RECORD') Recording changes...
-  span(data-ng-show='mode == modes.EDIT')
 
-    article.ruleWidget
-        form(name='actionForm' data-ng-submit='submitForm()')
-          fieldset
-            legend Edit policy
+  article.ruleWidget(data-ng-show='mode == modes.EDIT')
+    form(name='actionForm' data-ng-submit='submitForm()')
+      fieldset.ruleFieldset
+        legend Edit policy
 
-            div.row.collapse
-              div.large-3.columns
-                span(for='actionDropDown') Choose the policy : 
-              div.large-9.columns
-                select.medium.hidden-field(id='actionDropDown' name="action" data-ng-model="edition.activeActionId" data-ng-options="a.id as a.summary for (k, a) in upgradeActionList" data-ng-change="updateSelectedForm()")
-                  
-            div.row.collapse(data-ng-repeat="parameter in edition.parameters" data-ng-form name='parameterNestedForm')
-              div.large-3.columns
-                span.grey {{parameter.summary}}: 
-              div.large-9.columns
-                input(type="{{parameter.type}}" data-ng-model='parameter.value' 
-                  data-ng-required='{{parameter.mandatory}}' placeholder='{{parameter.summary}}')
-            
-            div.row.collapse
-              div.large-5.columns
-              div.large-7.columns.right
-                  input.button.small.secondary.radius(type='button' value="Cancel" data-ng-click='mode = modes.DISPLAY') 
-                  input.button.small.radius(type='submit' value='Apply' data-ng-disabled='')
+        div.row.collapse
+          div.large-3.columns
+            span(for='actionDropDown') Choose the policy : 
+          div.large-9.columns
+            select.medium.hidden-field(id='actionDropDown' name="action" data-ng-model="edition.activeActionId" data-ng-options="a.id as a.summary for (k, a) in upgradeActionList" data-ng-change="updateSelectedForm()")
+              
+        div.row.collapse(data-ng-repeat="parameter in edition.parameters" data-ng-form name='parameterNestedForm')
+          div.large-3.columns
+            span.grey {{parameter.summary}}: 
+          div.large-9.columns
+            input(type="{{parameter.type}}" data-ng-model='parameter.value' 
+              data-ng-required='{{parameter.mandatory}}' placeholder='{{parameter.summary}}')
+        
+        div.row.collapse
+          div.large-5.columns
+          div.large-7.columns.right
+              input.button.small.secondary.radius(type='button' value="Cancel" data-ng-click='mode = modes.DISPLAY') 
+              input.button.small.radius(type='submit' value='Apply' data-ng-disabled='')
