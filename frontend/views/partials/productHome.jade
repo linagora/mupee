@@ -5,6 +5,10 @@ div.row.productRule
   h4.center Default policy for {{product}} updates:
   div(data-upgrade-action data-product="product")
 
+div.row.productRule
+  h4.center Default policies for {{product}} extensions updates:
+  div(data-extensions-list data-product="{{product}}")
+
 br
 
 div.center(data-ng-show="loadProgress") Loading...

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mupeeProduct', ['mupeeRouteSegment', 'mupeeVersion', 'mupeeUpgradeAction'])
+angular.module('mupeeProduct', ['mupeeRouteSegment', 'mupeeVersion', 'mupeeUpgradeAction', 'mupeeExtensionsList'])
   .controller('productHome', ['mupeeProduct', 'versionAPI', '$scope',
     function(mupeeProduct, versionAPI, $scope) {
       $scope.product = mupeeProduct.getCurrent();

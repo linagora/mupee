@@ -1,0 +1,34 @@
+span
+  span(data-ng-show='mode == modes.DISPLAY')
+    div.columns.center.alert-box.radius(data-ng-show="extensions.length == 0") No {{product}} {{version}} extensions are currently registered
+
+    article.extensionsList.twelve.columns.version-row(data-ng-init="opened = false" data-ng-show="extensions.length > 0")
+      header.row.major-branch
+        div.large-1.columns Extensions
+
+        div.center.large-1.columns.pointer(data-ng-click="opened = !opened")
+          span(class="down" data-ng-show="opened == false") ▼
+          span(class="up" data-ng-show="opened == true") ▲
+
+      section.row.versionDetails(data-ng-class="{'open': opened == true}")
+        div.row.labels.versionDetailsLabels
+          div.large-2.columns
+            span() Name
+          div.large-2.columns
+            span() Version
+          div.large-2.columns
+            span() Platform(s)
+          div.large-6.columns
+            span() Description
+
+        div.row(data-ng-repeat="extension in extensions")
+          div.large-2.columns
+            span.grey() {{extension.name}}
+          div.large-2.columns
+            span.grey() {{extension.version}}
+          div.large-2.columns
+            span.grey() {{extension.targetPlatforms | joinWithDefault:'All'}}
+          div.large-6.columns
+            span.grey() {{extension.description}}
+
+  span(data-ng-show='mode == modes.LOAD') Loading...

@@ -11,7 +11,8 @@ module.exports = function(config) {
       'test/lib/angular/angular-mocks-mocha.js',
       'test/lib/chai.js',
       'frontend/js/*.js',
-      'test/unit-frontend/**/*.js'
+      'test/unit-frontend/**/*.js',
+      'frontend/views/directives/*.jade'
     ],
     exclude: [
       'frontend/js/product.src.js'
@@ -24,8 +25,16 @@ module.exports = function(config) {
     browsers: ['PhantomJS', 'SlimerJS', 'Chrome', 'Firefox'],
     reporters: ['coverage', 'spec'],
     preprocessors: {
-      'frontend/js/*.js': ['coverage']
+      'frontend/js/*.js': ['coverage'],
+      '**/*.jade': 'ng-html2js'
     },
+
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'frontend/views/',
+      stripSuffix: '.jade',
+      jade: true
+    },
+
     plugins: [
       'karma-junit-reporter',
       'karma-chrome-launcher',
@@ -35,7 +44,8 @@ module.exports = function(config) {
       'karma-mocha',
       'karma-coverage',
       'karma-spec-reporter',
-      'karma-slimerjs-launcher'
+      'karma-slimerjs-launcher',
+      'karma-ng-html2js-preprocessor'
     ],
 
     junitReporter: {
