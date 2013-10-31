@@ -35,7 +35,7 @@ How to configure it
 
 Rename ./conf/config.json.sample to ./conf/config.json.
 
-Here's the details :
+Here's the details:
 
         {
           "download" : {
@@ -81,33 +81,33 @@ Here's the details :
           }
         }
 
-By default, logging are done into ./log/mozilla-udpater.log.
+By default, logging is done into ./log/mozilla-udpater.log.
 
-What now ?
--------------------
+What now?
+---------
 
 Mupee comes with a user friendly frontend which allow an administrator to manage Thunderbird and Firefox updates policies
 by creating rules.
 
-Open a browser to your mupee server (depending on the previous configuration) then choose one of the mozilla product to handle.
-The frontend is composed by :
+Open a browser to your mupee server (depending on the previous configuration) then choose one of the Mozilla products to handle.
+The frontend is composed of:
 
-- The default policy which apply to every clients.
-- The list of clients which have requested for an update.
+- The default policy which applies to every clients.
+- The list of clients who have requested an update.
 - For each client, a specific policy that can be modified.
 
-For now, 4 rules are available :
+For now, 4 rules are available:
 
-- Allow all upgrades : it will accept every updates. Mupee works as a simple proxy between the mozilla repository and the client.
-- Deny all upgrades : it will reject every updates. Mupee works as a deny all firewall.
-- Upgrade to latest release of a given branch : It will return the latest update up to the specific given branch.
-- Upgrade to latest release of the current branch : it will return the latest update corresponding to the current major version of the client.
+- Allow all upgrades: Mupee will accept every update. Mupee works as a simple proxy between the mozilla repository and the client.
+- Deny all upgrades: Mupee will reject every update. Mupee works as a deny all firewall.
+- Upgrade to latest release of a given branch: Mupee will return the latest update of to the specific given branch.
+- Upgrade to latest release of the current branch: Mupee will return the latest update corresponding to the current major version of the client.
 
-Mupee also comes with an extendable rules engine. We will deliver more informations about creating new rules very soon ...
+Mupee also comes with an extendable rules engine. We will deliver more informations about creating new rules very soon...
 
 Contributing
 ------------
 
-We love contributions, don't hesitate to send Pull requests !
+We love contributions, don't hesitate to send Pull requests!
 The bug tracker is @ https://github.com/linagora/mupee/issues.
 
