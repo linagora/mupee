@@ -15,7 +15,7 @@ var latestForBranch = new Action({
   },
   parametersDefinitions: [{
     id: 'branch',
-    summary: 'branch (major version number)',
+    summary: 'branch',
     description: 'a Mozilla product branch (major version number)',
     type: 'number',
     mandatory:  true,
