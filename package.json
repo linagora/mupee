@@ -1,6 +1,6 @@
 {
   "name": "mupee",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "author": "Linagora",
   "description": "Mupee is a proxy between the Mozilla.org update servers and your corporate Mozilla software.",
   "engines": {
