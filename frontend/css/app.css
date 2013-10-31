@@ -216,3 +216,9 @@ input.button.radius {
     font-size: 1em;
   }
 }
+
+.top-bar-icon-product {
+  height: 38px;
+  margin-top: -3px;
+  margin-right: 1em;
+}

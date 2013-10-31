@@ -29,12 +29,14 @@ html(ng-app="myApp")
     section.top-bar-section
       ul.right
         li
-          a(href='#/Firefox') Firefox
-            img(src='/images/firefox_logo_big.png' style="height: 40px; margin-left:1em;") 
+          a(href='#/Firefox')
+            img.top-bar-icon-product(src='/images/firefox_logo_big.png')
+            | Firefox
               
         li
-          a(href='#/Thunderbird') Thunderbird
-            img(src='/images/thunderbird_logo_big.png' style="height: 40px; margin-left:1em;") 
+          a(href='#/Thunderbird')
+            img.top-bar-icon-product(src='/images/thunderbird_logo_big.png')
+            | Thunderbird
               
 
   block body
