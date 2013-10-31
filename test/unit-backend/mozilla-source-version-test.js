@@ -3,13 +3,13 @@
 var expect = require('chai').expect;
 
 var SourceVersion = require('../../backend/mozilla-source-version'),
-    fixtures = require('./source-version-fixtures');
+    fixtures = require('./fixtures/mozilla-source-version-fixtures');
 
 describe('The Mozilla SourceVersion module', function() {
 
   it('should compute its current major branch', function() {
     var version = fixtures.withAllFields();
-    expect(version.branch).to.equal('3');
+    expect(version.branch === 3).to.be.true;
   });
 
   it('should export its updates as a valid XML file when there is no updates', function() {

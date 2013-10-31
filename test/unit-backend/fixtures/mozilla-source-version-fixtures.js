@@ -1,11 +1,11 @@
 'use strict';
 
-var SourceVersion = require('../../../backend/mozilla-source-version'),
-    Update = require('../../../backend/mozilla-update').MozillaUpdate,
-    Patch = require('../../../backend/mozilla-update').MozillaPatch;
+var MozillaSourceVersion = require('../../../backend/mozilla-source-version'),
+    MozillaUpdate = require('../../../backend/mozilla-update').MozillaUpdate,
+    MozillaPatch = require('../../../backend/mozilla-update').MozillaPatch;
 
 exports.withAllFields = function() {
-  return new SourceVersion({
+  return new MozillaSourceVersion({
     'timestamp': 123456789,
     'product': 'Firefox',
     'version': '3.5.2',
@@ -61,7 +61,7 @@ exports.withAllFields = function() {
 };
 
 exports.withEmptyUpdates = function() {
-  return new SourceVersion({
+  return new MozillaSourceVersion({
     timestamp: 123456789,
     product: 'Thunderbird',
     version: '17.0.0',
@@ -76,7 +76,7 @@ exports.withEmptyUpdates = function() {
 
 exports.updates = {
   thatMatches: function() {
-    return new Update({
+    return new MozillaUpdate({
       'type': 'minor',
       'version': '3.6.18',
       'extensionVersion': '3.6.18',
@@ -90,7 +90,7 @@ exports.updates = {
     });
   },
   thatDontMatch: function() {
-    return new Update({
+    return new MozillaUpdate({
       'type': 'minor',
       'version': '3.6.2',
       'extensionVersion': '3.6.2',
@@ -108,7 +108,7 @@ exports.updates = {
 
 exports.patches = {
   thatMatches: function() {
-    return new Patch({
+    return new MozillaPatch({
       'type': 'complete',
       'URL': 'http://download.mozilla.org/?product=firefox-3.6.18-complete&os=win&lang=en-US',
       'hashFunction': 'SHA512',
@@ -117,7 +117,7 @@ exports.patches = {
     });
   },
   thatDontMatch: function() {
-    return new Patch({
+    return new MozillaPatch({
       'type': 'complete',
       'URL': 'http://download.mozilla.org/?product=firefox-17.5-complete&os=win&lang=en-US',
       'hashFunction': 'SHA512',
@@ -127,7 +127,7 @@ exports.patches = {
   }
 };
 
-exports.firefox3 = new SourceVersion({
+exports.firefox3 = new MozillaSourceVersion({
   timestamp: 123456789,
   product: 'Firefox',
   version: '3.5.2',
@@ -202,7 +202,7 @@ exports.firefox3 = new SourceVersion({
   }]
 });
 
-exports.thunderbird3 = new SourceVersion({
+exports.thunderbird3 = new MozillaSourceVersion({
   timestamp: 1382365280974,
   product: 'Thunderbird',
   version: '3.1.20',
