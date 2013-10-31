@@ -88,7 +88,7 @@ exports.update = function(request, response) {
 exports.delete = function(request, response) {
   var id = request.params.id;
 
-  engine.delete(id, function(err, result) {
+  engine.remove(id, function(err, result) {
     if (err) {
       return response.send(500, err);
     }
