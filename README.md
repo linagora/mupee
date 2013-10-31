@@ -83,6 +83,28 @@ Here's the details :
 
 By default, logging are done into ./log/mozilla-udpater.log.
 
+What now ?
+-------------------
+
+Mupee comes with a user friendly frontend which allow an administrator to manage Thunderbird and Firefox updates policies
+by creating rules.
+
+Open a browser to your mupee server (depending on the previous configuration) then choose one of the mozilla product to handle.
+The frontend is composed by :
+
+- The default policy which apply to every clients.
+- The list of clients which have requested for an update.
+- For each client, a specific policy that can be modified.
+
+For now, 4 rules are available :
+
+- Allow all upgrades : it will accept every updates. Mupee works as a simple proxy between the mozilla repository and the client.
+- Deny all upgrades : it will reject every updates. Mupee works as a deny all firewall.
+- Upgrade to latest release of a given branch : It will return the latest update up to the specific given branch.
+- Upgrade to latest release of the current branch : it will return the latest update corresponding to the current major version of the client.
+
+Mupee also comes with an extendable rules engine. We will deliver more informations about creating new rules very soon ...
+
 Contributing
 ------------
 
