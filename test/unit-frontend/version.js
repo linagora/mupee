@@ -14,7 +14,7 @@ describe('mupeeVersion', function() {
       {
         'product': 'Firefox',
         'version': '3.5.2',
-        'buildId': '20090729225027',
+        'buildID': '20090729225027',
         'buildTarget': 'WINNT_x86-msvc',
         'locale': 'en-US',
         'channel': 'release',
@@ -29,7 +29,7 @@ describe('mupeeVersion', function() {
             'displayVersion': null,
             'appVersion': null,
             'platformVersion': null,
-            'buildId': '20110614230723',
+            'buildID': '20110614230723',
             'detailsURL': 'https://www.mozilla.com/en-US/firefox/3.6/details/',
             'patches': [
               {
@@ -55,7 +55,7 @@ describe('mupeeVersion', function() {
             'displayVersion': null,
             'appVersion': null,
             'platformVersion': null,
-            'buildId': '20110614230724',
+            'buildID': '20110614230724',
             'detailsURL': 'https://www.mozilla.com/en-US/firefox/10.0/details/',
             'patches': []
           }

@@ -18,7 +18,7 @@ function validateUpdate(object) {
       'platformVersion' in object) {
     return ;
   }
-  throw new Errors.UnknownSourceVersionUpdateError(object.buildId);
+  throw new Errors.UnknownSourceVersionUpdateError(object.buildID);
 }
 
 function validatePatch(object) {

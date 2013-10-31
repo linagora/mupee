@@ -222,7 +222,7 @@ exports.thunderbird3 = new SourceVersion({
     displayVersion: null,
     appVersion: null,
     platformVersion: null,
-    buildId: '20120428123100',
+    buildID: '20120428123100',
     detailsUrl: 'https://www.mozilla.org/fr/thunderbird/12.0/details/index.html'
   },{
     type: 'major',
@@ -255,7 +255,7 @@ exports.thunderbird3 = new SourceVersion({
     displayVersion: null,
     appVersion: null,
     platformVersion: null,
-    buildId: '20120428123100',
+    buildID: '20120428123100',
     detailsUrl: 'https://www.mozilla.org/fr/thunderbird/12.0/details/index.html'
   },{
     type: 'major',
@@ -264,7 +264,7 @@ exports.thunderbird3 = new SourceVersion({
     displayVersion: null,
     appVersion: null,
     platformVersion: null,
-    buildId: '20120428123100',
+    buildID: '20120428123100',
     detailsUrl: 'https://www.mozilla.org/fr/thunderbird/12.0/details/index.html'
   },{
     type: 'major',
@@ -273,7 +273,7 @@ exports.thunderbird3 = new SourceVersion({
     displayVersion: '3.3.0',
     appVersion: '3.3.0',
     platformVersion: '3.3.0',
-    buildId: '20120428123100',
+    buildID: '20120428123100',
     detailsUrl: 'https://www.mozilla.org/fr/thunderbird/12.0/details/index.html'
   },{
     type: 'minor',
