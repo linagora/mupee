@@ -13,6 +13,9 @@ module.exports = function(config) {
       'frontend/js/*.js',
       'test/unit-frontend/**/*.js'
     ],
+    exclude: [
+      'frontend/js/product.src.js'
+    ],
 
     frameworks: ['mocha'],
     colors: true,

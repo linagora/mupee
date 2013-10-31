@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "sh ./scripts/test-backend.sh && sh ./scripts/test-frontend.sh"
+    "test": "sh ./scripts/test-backend.sh && sh ./scripts/test-frontend.sh",
+    "postinstall": "sh ./scripts/browserify.sh"
   },
   "repository": {
     "type": "git",
@@ -25,11 +26,11 @@
     "winston": "0.7.x",
     "nconf": "0.6.x",
     "mkdirp": "0.3.x",
-    "async": "*",
     "passport": "*",
     "passport-http": "*",
     "async": "~0.2.9",
-    "clone": "~0.1.11"
+    "clone": "~0.1.11",
+    "mozilla-version-comparator": "*"
   },
   "devDependencies": {
     "mocha": "*",
@@ -50,7 +51,8 @@
     "grunt-contrib-uglify": "*",
     "grunt-contrib-watch": "*",
     "grunt-contrib-concat": "*",
-    "karma-slimerjs-launcher": "~0.1.2"
+    "karma-slimerjs-launcher": "~0.1.2",
+    "browserify": "~2.35.0"
   },
   "keywords": [
     "mozilla",

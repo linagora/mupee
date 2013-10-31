@@ -80,7 +80,7 @@ describe('mupeeProduct', function() {
     }
   };
 
-  beforeEach(module('mupeeProduct'));
+  beforeEach(angular.mock.module('mupeeProduct'));
 
   describe('when displaying Firefox versions', function() {
     var scope;

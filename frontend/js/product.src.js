@@ -15,6 +15,11 @@ angular.module('mupeeProduct', ['mupeeRouteSegment', 'mupeeVersion', 'mupeeUpgra
           return $scope.networkError;
         }
 
+        var mvc = require('mozilla-version-comparator');
+        versions.sort(function(a, b) {
+          return mvc(a.version, b.version);
+        });
+
         var versionBranches = {};
 
         angular.forEach(versions, function(sourceVersion) {
