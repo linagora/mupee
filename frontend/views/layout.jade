@@ -26,6 +26,7 @@ html(ng-app="myApp")
     script(src='js/api.js')
     script(src='js/filters.js')
     script(src='js/app.js')
+    script(src='js/mupeeNavigation.js')
     script(src='js/product.js')
     script(src='js/version.js')
     script(src='js/routeSegment.js')
@@ -36,22 +37,26 @@ html(ng-app="myApp")
 
   body(ng-cloak)
 
-  nav.top-bar
+  nav.top-bar(ng-controller="isHomepage")
     ul.title-area
       li.name
         h1 
           a(href="#/home") Mupee
+            span.little  : The Mozilla Updater Proxy
+      li.toggle-topbar(data-ng-show="!homepage")
+        a
+          img.more-menu(src="/images/more-menu.png")
+          | Menu
     section.top-bar-section
       ul.right
-        li
+        li(data-ng-show="!homepage")
           a(href='#/Firefox')
             img.top-bar-icon-product(src='/images/firefox_logo_big.png')
             | Firefox
               
-        li
+        li(data-ng-show="!homepage")
           a(href='#/Thunderbird')
             img.top-bar-icon-product(src='/images/thunderbird_logo_big.png')
             | Thunderbird
-              
 
   block body
