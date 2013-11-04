@@ -32,19 +32,18 @@ function weightComparator(left, right) {
   return right.weight - left.weight;
 }
 
-function initRuleCache() {
-  /*jshint validthis:true */
-  this.storage.findAll({}, function(err, result) {
+function initRuleCache(engine) {
+  engine.storage.findAll({}, function(err, result) {
     if (!err) {
-      this.cache = result.map(function(rule) {
+      engine.cache = result.map(function(rule) {
         return new Rule(rule);
       }).sort(weightComparator);
 
-      this.emit('cacheLoaded', null, this.cache);
+      engine.emit('cacheLoaded', null, engine.cache);
     } else {
-      this.emit('cacheLoaded', err);
+      engine.emit('cacheLoaded', err);
     }
-  }.bind(this));
+  });
 }
 
 var Engine = function() {
@@ -57,9 +56,9 @@ var Engine = function() {
     DefaultRules.list.map(ensureRuleByPredicate.bind(this)),
     function(err, result) {
       if (err) {
-        logger.warn('Fail to ensure that default rules are in storage: ', err);
+        logger.warn('Failed to ensure that default rules are in storage: ', err);
       }
-      initRuleCache.bind(this)();
+      initRuleCache(this);
     }.bind(this)
   );
 };
