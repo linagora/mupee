@@ -55,6 +55,8 @@
     "grunt-contrib-uglify": "0.2.5",
     "grunt-contrib-watch": "0.5.3",
     "grunt-contrib-concat": "0.3.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-shell": "~0.5.0",
     "karma-slimerjs-launcher": "0.1.2"
   },
   "keywords": [

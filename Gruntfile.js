@@ -33,6 +33,14 @@ module.exports = function(grunt) {
     watch: {
       files: ['<%= jshint.files %>'],
       tasks: ['jshint']
+    },
+    clean: {
+      hooks: ['.git/hooks/pre-commit']
+    },
+    shell: {
+      hooks: {
+        command: 'cp scripts/git-hook-pre-commit.sh .git/hooks/pre-commit'
+      }
     }
   });
 
@@ -40,6 +48,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-shell');
+
+  grunt.registerTask('git-hooks', ['clean:hooks', 'shell:hooks']);
 
   grunt.registerTask('test-backend', 'run tests', function() {
     var done = this.async();
