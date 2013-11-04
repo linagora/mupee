@@ -44,10 +44,10 @@ RulesStorage.prototype.findByPredicate = function(predicates, callback) {
 RulesStorage.prototype.save = function(rule, callback) {
   RulesStorage.super_.prototype.save.apply(this, [rule, function(err, result) {
     if (err) {
-      callback(err, result)
+      callback(err, result);
     } else {
       callback(err, new Rule(result));
-    };
+    }
   }]);
   return this;
 };

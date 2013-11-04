@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var versionsCompare = require('mozilla-version-comparator');
 
@@ -22,4 +22,4 @@ module.exports = function(branch, candidate) {
     candidate.addUpdate(filtered[0]);
   }
   return candidate;
-}
+};

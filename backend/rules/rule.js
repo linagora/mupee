@@ -1,8 +1,8 @@
 'use strict';
 
 var Loader = require('./loader');
-var Errors = require("../application-errors");
-var validateRuleObject = require("./validation").validateRuleObject;
+var Errors = require('../application-errors');
+var validateRuleObject = require('./validation').validateRuleObject;
 
 var Rule = function(object) {
   validateRuleObject(object);
@@ -15,7 +15,7 @@ var Rule = function(object) {
     this.weight += loadedPredicates.weight;
   }.bind(this));
   this.action = object.action;
-  this.action.apply = Loader.actions[this.action.id].for(this.action.parameters);
+  this.action.apply = Loader.actions[this.action.id].for (this.action.parameters);
 };
 
 Rule.prototype.matches = function(candidate) {
@@ -24,6 +24,6 @@ Rule.prototype.matches = function(candidate) {
     match = match && p.matches(candidate);
   });
   return match;
-}
+};
 
 module.exports = Rule;

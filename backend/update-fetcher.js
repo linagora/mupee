@@ -19,15 +19,15 @@ exports.fetch = function(version, callback) {
     if (error) {
       return callback(error, version);
     }
-    
+
     var musVersion;
-    
+
     try {
       musVersion = new MozillaSourceVersion(version);
-    } catch(error) {
+    } catch (error) {
       return callback(error, version);
     }
-    
+
     parser(body, function(error, result) {
       if (!result.update) {
         return callback(null, musVersion);
@@ -44,11 +44,11 @@ exports.fetch = function(version, callback) {
         var patch = new MozillaPatch(parsedPatch['@']);
         update.addPatch(patch);
       };
-      
+
       try {
         patchToAdd.forEach(addPatchToUpdate);
         musVersion.addUpdate(update);
-      } catch(error) {
+      } catch (error) {
         return callback(error, version);
       }
 

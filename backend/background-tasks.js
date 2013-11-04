@@ -20,21 +20,21 @@ exports.addProductScraperTask = function(clientVersion) {
 
 exports.refreshProductUpdates = function() {
   function queueScrapTask(err, sv) {
-    if ( err ) {
-      return logger.error('Unable to fetch source versions from datastore',err);
+    if (err) {
+      return logger.error('Unable to fetch source versions from datastore', err);
     }
-    
-    if ( sv == null) { return ; }
-    
+
+    if (sv == null) { return; }
+
     try {
       var sourceVersion = new SourceVersion(sv);
     } catch (e) {
       logger.error(e);
       return logger.error('SourceVersion validation failed');
     }
-    
+
     exports.addProductScraperTask(sourceVersion);
-    logger.debug('SourceVersion added for scraping: ',sourceVersion.shortDescription());
+    logger.debug('SourceVersion added for scraping: ', sourceVersion.shortDescription());
   };
 
   storage.findAll({}).batchSize(10).each(queueScrapTask);

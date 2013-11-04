@@ -76,7 +76,7 @@ module.exports = function(grunt) {
   grunt.registerTask('gjslint', 'run the closure linter', function() {
     var done = this.async();
     require('child_process')
-      .exec('python scripts/gjslint.py --disable 0110 --nojsdoc -e frontend/lib,test/lib,backend/jstoxml.js -r frontend/js -r test -x frontend/js/product.js',
+      .exec('python scripts/gjslint.py --disable 0110 --nojsdoc -e frontend/lib,test/lib,backend/jstoxml.js -r frontend/js -r test  -r backend -x frontend/js/product.js',
         function (err, stdout) {
           grunt.log.write(stdout);
           done(err);

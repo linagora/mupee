@@ -18,7 +18,7 @@ var latestForBranch = new Action({
     summary: 'branch',
     description: 'a Mozilla product branch (major version number)',
     type: 'number',
-    mandatory:  true,
+    mandatory: true
   }]
 });
 

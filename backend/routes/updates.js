@@ -27,7 +27,7 @@ exports.updateClient = function(request, response) {
       osVersion: request.params.os_version,
       parameters: request.query
     });
-  } catch(error) {
+  } catch (error) {
     logger.warning('Unable to convert updateClient request to a SourceVersion:', error);
     response.send(SourceVersion.emptyUpdatesXML());
     return;

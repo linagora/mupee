@@ -8,17 +8,17 @@ var intervalId = null;
 
 exports = module.exports = {
   start: function() {
-    if ( intervalId ) {
+    if (intervalId) {
       clearInterval(intervalId);
       intervalId = null;
     }
-    
-    var interval = parseInt(config.fetch.refreshInterval,10);
-    if ( isNaN(interval) ) {
+
+    var interval = parseInt(config.fetch.refreshInterval, 10);
+    if (isNaN(interval)) {
       interval = defaultRefreshIntervalHours;
     }
     interval = interval * 60 * 60 * 1000;
-    
+
     var intervalId = setInterval(function() {
       backgroundTasks.refreshProductUpdates();
     }, interval);

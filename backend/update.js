@@ -12,18 +12,18 @@ function validateUpdate(object) {
     throw new Errors.PropertyMissingError('Update', 'buildID');
   }
   if ('version' in object && 'extensionVersion' in object) {
-    return ;
+    return;
   }
   if ('displayVersion' in object && 'appVersion' in object &&
       'platformVersion' in object) {
-    return ;
+    return;
   }
   throw new Errors.UnknownSourceVersionUpdateError(object.buildID);
 }
 
 function validatePatch(object) {
   var params = ['type', 'URL', 'hashFunction', 'hashValue', 'size'];
-  for ( var id in params ) {
+  for (var id in params) {
     if (!(params[id] in object)) {
       throw new Errors.PropertyMissingError('Patch', params[id]);
     }

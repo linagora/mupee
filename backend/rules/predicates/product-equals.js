@@ -10,7 +10,7 @@ var productEquals = new Predicate({
   predicate: function(candidate, parameters) {
     return (candidate.product === parameters.product);
   },
-  parametersDefinitions : [{
+  parametersDefinitions: [{
     id: 'product',
     summary: 'product name',
     description: 'a Mozilla product name',

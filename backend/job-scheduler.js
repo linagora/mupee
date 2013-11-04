@@ -45,7 +45,7 @@ function launchJob(jobHash) {
 }
 
 function addJob(jobHash, job) {
-  if (!jobHash || queuedJobs[jobHash] || runningJobs[jobHash]) {
+  if (!jobHash || queuedJobs[jobHash] ||  runningJobs[jobHash]) {
     return false;
   }
   queuedJobs[jobHash] = job;

@@ -9,7 +9,7 @@ exports.partials = function(req, res) {
   res.render('partials/' + name);
 };
 
-exports.directives = function (req, res) {
+exports.directives = function(req, res) {
   var name = req.params.name;
   res.render('directives/' + name);
 };

@@ -74,7 +74,7 @@ Downloader.prototype.downloadAll = function(tasks) {
     }
   };
   downloader.on('finish', cb).on('error', cb);
-  
+
   tasks.forEach(function(task) {
     downloader.download(task.url, task.destination, task);
   });

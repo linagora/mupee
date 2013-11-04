@@ -17,7 +17,7 @@ var storage = new MetadataStorage(db);
 function getDownloadTasks(localVersion, musVersion) {
   var tasks = [];
   var localMozillaVersion = new MozillaSourceVersion(localVersion);
-  
+
   musVersion.updates.forEach(function(update) {
     var localUpdate = new Update(update);
     localUpdate.clearPatches();
@@ -69,9 +69,9 @@ function downloadBinaries(localVersion, musVersion, callback) {
     if (err) {
       return logger.error('while fetching from remote server :', err);
     }
-    
+
     var localMozillaVersion = new SourceVersion(localVersion);
-    
+
     task.patch.localPath = task.localPath;
     var localUpdate = localMozillaVersion.findUpdate(task.update);
     if (localUpdate) {
@@ -90,7 +90,7 @@ function downloadBinaries(localVersion, musVersion, callback) {
 }
 
 function scrap(clientVersion, callback) {
-  
+
   async.parallel([
     function(cb) {
       UpdateFetcher.fetch(clientVersion, function(error, musVersion) {
@@ -110,7 +110,7 @@ function scrap(clientVersion, callback) {
           var localSourceVersion = new SourceVersion(localVersion);
           localSourceVersion._id = localVersion._id;
           return cb(error, localSourceVersion);
-        } catch(error) {
+        } catch (error) {
           return cb(error);
         }
       });

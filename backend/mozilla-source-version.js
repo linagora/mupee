@@ -3,17 +3,17 @@
 var querystring = require('querystring'),
     jstoxml = require('./jstoxml'),
     MozillaUpdate = require('./mozilla-update').MozillaUpdate,
-    Errors = require("./application-errors");;
+    Errors = require('./application-errors');
 
 function validateMozillaSourceVersion(object) {
   var params = ['product', 'version', 'buildID', 'buildTarget', 'locale', 'channel', 'osVersion'];
-  for ( var id in params ) {
+  for (var id in params) {
     if (!(params[id] in object)) {
       throw new Errors.PropertyMissingError('MozillaSourceVersion', params[id]);
     }
   }
-};
-    
+}
+
 var MozillaSourceVersion = function(object) {
   validateMozillaSourceVersion(object);
   this.product = object.product;
@@ -23,7 +23,7 @@ var MozillaSourceVersion = function(object) {
   this.locale = object.locale;
   this.channel = object.channel;
   this.osVersion = object.osVersion;
-  this.branch = object.version ? parseInt(object.version.substring(0, object.version.indexOf('.')),10) : null;
+  this.branch = object.version ? parseInt(object.version.substring(0, object.version.indexOf('.')), 10) : null;
   this.parameters = object.parameters;
   this.updates = [];
   if (object.updates) {
@@ -97,7 +97,7 @@ MozillaSourceVersion.emptyUpdatesXML = function() {
 };
 
 MozillaSourceVersion.prototype.shortDescription = function() {
-  return this.product+' '+this.version+' ('+this.channel+','+this.locale+')';
+  return this.product + ' ' + this.version + ' (' + this.channel + ',' + this.locale + ')';
 };
 
 module.exports = MozillaSourceVersion;

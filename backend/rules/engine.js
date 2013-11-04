@@ -15,7 +15,7 @@ function ensureRuleByPredicate(rule) {
   var storage = this.storage;
 
   return function(callback) {
-    storage.findByPredicate(rule.predicates, function(err, result){
+    storage.findByPredicate(rule.predicates, function(err, result) {
       if (err || result) {
         callback(err, result);
       } else {
@@ -25,7 +25,7 @@ function ensureRuleByPredicate(rule) {
       }
     });
   };
-};
+}
 
 function weightComparator(left, right) {
   return right.weight - left.weight;
@@ -44,7 +44,7 @@ function initRuleCache() {
       this.emit('cacheLoaded', err);
     }
   }.bind(this));
-};
+}
 
 var Engine = function() {
   this.storage = new Storage(db);

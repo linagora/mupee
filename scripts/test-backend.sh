@@ -1,3 +1,3 @@
 #!/bin/bash
 
-mocha --reporter spec test/unit-backend/**/*.js test/unit-backend/
+mocha --colors --reporter spec test/unit-backend/**/*.js test/unit-backend/

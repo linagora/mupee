@@ -3,17 +3,17 @@
 var querystring = require('querystring'),
     jstoxml = require('./jstoxml'),
     Update = require('./update').Update,
-    Errors = require("./application-errors");;
+    Errors = require('./application-errors');
 
 function validateSourceVersion(object) {
   var params = ['product', 'version', 'buildID', 'buildTarget', 'locale', 'channel', 'osVersion'];
-  for ( var id in params ) {
+  for (var id in params) {
     if (!(params[id] in object)) {
       throw new Errors.PropertyMissingError('SourceVersion', params[id]);
     }
   }
-};
-    
+}
+
 var SourceVersion = function(object) {
   validateSourceVersion(object);
   this.timestamp = object.timestamp || Date.now();
@@ -99,7 +99,7 @@ SourceVersion.emptyUpdatesXML = function() {
 };
 
 SourceVersion.prototype.shortDescription = function() {
-  return this.product+' '+this.version+' ('+this.channel+','+this.locale+')';
+  return this.product + ' ' + this.version + ' (' + this.channel + ',' + this.locale + ')';
 };
 
 module.exports = SourceVersion;

@@ -1,7 +1,7 @@
 'use strict';
 
 var BSON = require('mongodb').BSONPure;
-var clone = require("clone");
+var clone = require('clone');
 
 var Storage = function(db, collection) {
   this.db = db;
@@ -20,7 +20,7 @@ Storage.prototype.save = function(doc, callback) {
 
 Storage.prototype.findAll = function(query, callback) {
   var cursor = this.db.collection(this.collection).find(query, {});
-  if ( callback ) {
+  if (callback) {
     return cursor.toArray(callback);
   }
   return cursor;
