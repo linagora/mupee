@@ -83,8 +83,8 @@ function addToCache(cache, rule) {
 }
 
 function removeFromCache(cache, ruleId) {
-  for (var i = 0, len = cache.length; i < len; i++) {
-    if (cache[i]._id === ruleId) {
+  for (var i = 0, len = cache.length; i < len; ++i) {
+    if (cache[i]._id.toString() === ruleId.toString()) {
       cache.splice(i, 1);
       return;
     }
