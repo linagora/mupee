@@ -19,7 +19,7 @@ exports = module.exports = {
     }
     interval = interval * 60 * 60 * 1000;
 
-    var intervalId = setInterval(function() {
+    intervalId = setInterval(function() {
       backgroundTasks.refreshProductUpdates();
     }, interval);
   }

@@ -11,7 +11,7 @@ var latestForBranch = new Action({
   action: function(parameters) {
     return function(candidate) {
       return filterLatestForBranch(parameters.branch, candidate);
-    }
+    };
   },
   parametersDefinitions: [{
     id: 'branch',

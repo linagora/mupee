@@ -1,7 +1,5 @@
 'use strict';
 
-var db = require('../../mongo-provider');
-var Engine = require('../../rules/engine');
 var Rule = require('../../rules/rule');
 var rulesValidation = require('../../rules/validation');
 var engine = require('../../rules/engine');
@@ -29,7 +27,7 @@ exports.listActions = function(request, response) {
 
 exports.findByPredicate = function(request, response) {
   if (!request.body || !request.body.predicates || !('forEach' in request.body.predicates)) {
-    return response.send(400, "body should contain a 'predicates' array");
+    return response.send(400, 'body should contain a \'predicates\' array');
   }
   var predicates = [];
   for (var i in request.body.predicates) {

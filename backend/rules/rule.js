@@ -1,7 +1,6 @@
 'use strict';
 
 var Loader = require('./loader');
-var Errors = require('../application-errors');
 var validateRuleObject = require('./validation').validateRuleObject;
 
 var Rule = function(object) {

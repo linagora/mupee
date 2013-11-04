@@ -24,10 +24,10 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      files: ['Gruntfile.js', 'backend/js/**/*.js', 'frontend/js/**/*.js', 'test/**/*.js'],
+      files: ['Gruntfile.js', 'backend/**/*.js', 'frontend/js/**/*.js', 'test/**/*.js'],
       options: {
         jshintrc: '.jshintrc',
-        ignores: ['frontend/lib/**/*.js', 'test/lib/**/*.js', 'backend/js/jstoxml.js', 'frontend/js/product.js']
+        ignores: ['frontend/lib/**/*.js', 'test/lib/**/*.js', 'backend/jstoxml.js', 'frontend/js/product.js']
       }
     },
     watch: {

@@ -1,6 +1,6 @@
 'use strict';
 
-var queuedJobs = {}, runningJobs = {};
+var queuedJobs = {}, runningJobs = {}, consumeQueue;
 var maxParallelJobs = require('./config').scheduler.maxParallelTasks;
 
 
@@ -24,16 +24,6 @@ function getFirstHash(queue) {
   return null;
 }
 
-function consumeQueue() {
-  if (runningJobsCount() >= maxParallelJobs) {
-    return;
-  }
-  if (!queuedJobsCount()) {
-    return;
-  }
-  launchJob(getFirstHash(queuedJobs));
-}
-
 function launchJob(jobHash) {
   var job = queuedJobs[jobHash];
   delete queuedJobs[jobHash];
@@ -43,6 +33,16 @@ function launchJob(jobHash) {
     process.nextTick(consumeQueue);
   });
 }
+
+consumeQueue = function() {
+  if (runningJobsCount() >= maxParallelJobs) {
+    return;
+  }
+  if (!queuedJobsCount()) {
+    return;
+  }
+  launchJob(getFirstHash(queuedJobs));
+};
 
 function addJob(jobHash, job) {
   if (!jobHash || queuedJobs[jobHash] ||  runningJobs[jobHash]) {

@@ -57,7 +57,7 @@ RulesStorage.prototype.findAll = function(query, callback) {
     if (err) {
       callback(err, results);
     } else {
-      callback(err, results.map(function(rule) {return new Rule(rule)}));
+      callback(err, results.map(function(rule) {return new Rule(rule);}));
     }
   }]);
 };

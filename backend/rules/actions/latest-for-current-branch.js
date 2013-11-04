@@ -12,7 +12,7 @@ var latestForCurrentBranch = new Action({
   action: function(parameters) {
     return function(candidate) {
       return filterLatestForBranch(candidate.branch, candidate);
-    }
+    };
   }
 });
 

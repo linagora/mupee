@@ -12,6 +12,7 @@ var DefaultRules = require('./default-rules'),
     logger = require('../logger');
 
 function ensureRuleByPredicate(rule) {
+  /*jshint validthis:true */
   var storage = this.storage;
 
   return function(callback) {
@@ -32,12 +33,12 @@ function weightComparator(left, right) {
 }
 
 function initRuleCache() {
+  /*jshint validthis:true */
   this.storage.findAll({}, function(err, result) {
     if (!err) {
       this.cache = result.map(function(rule) {
-          return new Rule(rule);
-        }
-      ).sort(weightComparator);
+        return new Rule(rule);
+      }).sort(weightComparator);
 
       this.emit('cacheLoaded', null, this.cache);
     } else {
@@ -83,7 +84,7 @@ function addToCache(cache, rule) {
 
 function removeFromCache(cache, ruleId) {
   for (var i = 0, len = cache.length; i < len; i++) {
-    if (cache[i]._id == ruleId) {
+    if (cache[i]._id === ruleId) {
       cache.splice(i, 1);
       return;
     }

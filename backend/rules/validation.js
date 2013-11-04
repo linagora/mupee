@@ -1,31 +1,48 @@
-var Loader = require('./loader');
-var Errors = require('../application-errors');
-var logger = require('../logger');
+'use strict';
 
-function validateRuleObject(object) {
-  if (!object) {
-    throw new Errors.BadContructorArgumentError('rule');
+var Loader = require('./loader'),
+    Errors = require('../application-errors'),
+    logger = require('../logger');
+
+function validateParameter(parameterDefinition, value) {
+  if (value === null) {
+    throw new Errors.BadParameterTypeError(parameterDefinition.id, parameterDefinition.type);
   }
-  if (!object.predicates || !('forEach' in object.predicates)) {
-    throw new Errors.BadPropertyTypeError('rule', 'predicates', 'array');
+  var type = typeof value;
+  if (type !== parameterDefinition.type) {
+    throw new Errors.BadParameterTypeError(parameterDefinition.id, parameterDefinition.type);
   }
-  for (var i in object.predicates) {
-    validatePredicateObject(object.predicates[i]);
-  }
-  if (!object.action) {
-    throw new Errors.PropertyMissingError('rule', 'action');
-  }
-  validateActionObject(object.action);
   return true;
 }
 
-function validateRuleObjectAndLogException(object) {
-  try {
-    return validateRuleObject(object);
-  } catch (e) {
-    logger.debug('validation failed', e.stack);
-    throw e;
+function validateComponentObject(component, definition) {
+  var parameterDefinition;
+  for (var i in definition.parametersDefinitions) {
+    parameterDefinition = definition.parametersDefinitions[i];
+    var componentParameterValue;
+    var componentParameterExists = (parameterDefinition.id in component.parameters);
+
+    if (componentParameterExists) {
+      componentParameterValue = component.parameters[parameterDefinition.id];
+    }
+
+    if (!componentParameterExists && parameterDefinition.mandatory) {
+      throw new Errors.MandatoryParameterError(parameterDefinition.id);
+    }
+    validateParameter(parameterDefinition, componentParameterValue);
   }
+  var keys = Object.keys(component.parameters);
+  var callback = function(param) {
+    return param.id === keys[j];
+  };
+  for (var j in keys) {
+    parameterDefinition = definition.parametersDefinitions.filter(callback);
+    if (parameterDefinition.length !== 1) {
+      throw new Errors.UnknownParameterError(keys[i]);
+    }
+  }
+
+  return true;
 }
 
 function validatePredicateObject(predicate) {
@@ -56,43 +73,30 @@ function validateActionObject(action) {
   return validateComponentObject(action, definition);
 }
 
-function validateComponentObject(component, definition) {
-  for (var i in definition.parametersDefinitions) {
-    var parameterDefinition = definition.parametersDefinitions[i];
-    var componentParameterValue;
-    var componentParameterExists = (parameterDefinition.id in component.parameters);
-
-    if (componentParameterExists) {
-      componentParameterValue = component.parameters[parameterDefinition.id];
-    }
-
-    if (!componentParameterExists && parameterDefinition.mandatory) {
-      throw new Errors.MandatoryParameterError(parameterDefinition.id);
-    }
-    validateParameter(parameterDefinition, componentParameterValue);
+function validateRuleObject(object) {
+  if (!object) {
+    throw new Errors.BadContructorArgumentError('rule');
   }
-  var keys = Object.keys(component.parameters);
-  for (var i in keys) {
-    var parameterDefinition = definition.parametersDefinitions.filter(function(param) {
-      return param.id == keys[i];
-    });
-    if (parameterDefinition.length != 1) {
-      throw new Errors.UnknownParameterError(keys[i]);
-    }
+  if (!object.predicates || !('forEach' in object.predicates)) {
+    throw new Errors.BadPropertyTypeError('rule', 'predicates', 'array');
   }
-
+  for (var i in object.predicates) {
+    validatePredicateObject(object.predicates[i]);
+  }
+  if (!object.action) {
+    throw new Errors.PropertyMissingError('rule', 'action');
+  }
+  validateActionObject(object.action);
   return true;
 }
 
-function validateParameter(parameterDefinition, value) {
-  if (value === null) {
-    throw new Errors.BadParameterTypeError(parameterDefinition.id, parameterDefinition.type);
+function validateRuleObjectAndLogException(object) {
+  try {
+    return validateRuleObject(object);
+  } catch (e) {
+    logger.debug('validation failed', e.stack);
+    throw e;
   }
-  var type = typeof value;
-  if (type != parameterDefinition.type) {
-    throw new Errors.BadParameterTypeError(parameterDefinition.id, parameterDefinition.type);
-  }
-  return true;
 }
 
 exports = module.exports = {

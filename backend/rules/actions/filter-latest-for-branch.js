@@ -6,17 +6,17 @@ module.exports = function(branch, candidate) {
   var filtered = [];
 
   candidate.updates.forEach(function(update) {
-  var ver = update.version ? update.version : update.displayVersion;
+    var ver = update.version ? update.version : update.displayVersion;
 
-  if (ver.split('.').shift() <= branch) {
-    filtered.push(update);
-  }
+    if (ver.split('.').shift() <= branch) {
+      filtered.push(update);
+    }
   });
   candidate.clearUpdates();
   if (filtered.length) {
     filtered.sort(function(left, right) {
       var lver = left.version ? left.version : left.appVersion,
-      rver = right.version ? right.version : right.appVersion;
+          rver = right.version ? right.version : right.appVersion;
       return - versionsCompare(lver, rver);
     });
     candidate.addUpdate(filtered[0]);

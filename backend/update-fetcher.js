@@ -2,9 +2,6 @@
 
 var request = require('request'),
     parser = require('libxml-to-js'),
-    Update = require('./update').Update,
-    Patch = require('./update').Patch,
-    SourceVersion = require('./source-version'),
     MozillaUpdate = require('./mozilla-update').MozillaUpdate,
     MozillaPatch = require('./mozilla-update').MozillaPatch,
     MozillaSourceVersion = require('./mozilla-source-version');
