@@ -8,7 +8,6 @@ angular.module('mupeeUploader', ['blueimp.fileupload', 'mupeeUploadProgress'])
     }])
     .controller('MupeeFileUpload', ['$scope', '$http', '$filter', '$window', function($scope, $http) {
       var postUrl = '/admin/upload/extension';
-      var getUrl = '/admin/extensions';
       $scope.uploadedFiles = [];
 
       $scope.options = {
@@ -26,18 +25,4 @@ angular.module('mupeeUploader', ['blueimp.fileupload', 'mupeeUploadProgress'])
           $scope.queue[fileIndex].$cancel = null;
         }
       };
-
-      $scope.loadingFiles = true;
-      $http.get(getUrl)
-        .then(
-          function(response) {
-            $scope.loadingFiles = false;
-            response.data.forEach(function(xpi) {
-              xpi.fileName = xpi.localFile.path.split('/').pop();
-            });
-            $scope.queue = response.data || [];
-          },
-          function() {
-            $scope.loadingFiles = false;
-          });
     }]);
