@@ -34,7 +34,7 @@ function launchJob(jobHash) {
   });
 }
 
-consumeQueue = function() {
+consumeQueue = function consumeQueue() {
   if (runningJobsCount() >= maxParallelJobs) {
     return;
   }
