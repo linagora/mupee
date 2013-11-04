@@ -20,7 +20,7 @@ var app = exports.modules = express();
 
 app.use(express.logger({
   stream: {
-    write: function (str) {
+    write: function(str) {
       logger.debug(str);
     }
   }
@@ -63,12 +63,11 @@ app.delete('/admin/rules/:id', rules.delete);
 app.get('/admin/rules/actions', rules.listActions);
 
 app.post('/admin/upload/extension', express.bodyParser(), extensions.uploadXpi);
-
 app.get('/admin/extensions', extensions.findAll);
 
 app.get('/:name', routes.index);
 
-http.createServer(app).listen(app.get('port'), function () {
+http.createServer(app).listen(app.get('port'), function() {
   logger.info('mozilla-updater server listening on port %d', app.get('port'));
   periodicTasks.start();
 });

@@ -46,7 +46,7 @@ div.large-1.columns.pointer {
   text-align: right;
 }
 
-.borderbottom: {
+.borderbottom {
   border-bottom: solid 1px #CCC;
 }
 
@@ -69,7 +69,7 @@ div.large-1.columns.pointer {
   border-radius: 0 0 0.4em 0.4em;
 }
 
-.versionDetails div.row.labels {
+.versionDetails div.row.labels {
   padding-top: 0.2em;
 }
 
@@ -154,8 +154,32 @@ input.button.radius {
   padding-bottom: 0.2em;
 }
 
-.topicon {
+.topicon {
   width: 45px;
+}
+
+.progress-animated {
+    filter: none;
+    width: 0%;
+}
+
+#fileupload .fileupload-buttonbar {
+    margin-bottom: 1.5em;
+}
+
+#fileupload .row.files {
+    border-top: solid 1px #dddddd;
+    padding-top: 0.55em;
+    padding-bottom: 0.55em;
+}
+
+#fileupload .even {
+    background: #f7f7f7;
+}
+
+#fileupload table {
+    background: none;
+    border: none;
 }
 
 @media screen and (max-width: 980px) {

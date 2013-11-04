@@ -1,0 +1,49 @@
+h1 Upload extensions
+hr
+
+form#fileupload(action="/admin/upload/extension" method="POST" enctype='multipart/form-data' data-ng-controller='MupeeFileUpload' data-file-upload='options' data-ng-class="{'fileupload-processing': processing() || loadingFiles}" data-upload-progress)
+  div.row.fileupload-buttonbar(data-file-upload-progress='progress()')
+    div.large-7.columns
+      ul.button-group.radius.even-3
+        li.button.success.fileinput-button(data-ng-class='{disabled: disabled}')
+          span Add files
+          input(type='file' name='file' multiple data-ng-disabled='disabled')
+        li.button.start(type='button' data-ng-click='submit()' data-ng-class='{disabled: active() || isAllFilesUploaded()}')
+          span Start upload
+        li.button.alert.radius.cancel(type='button' data-ng-click='cancel()')
+          span Cancel upload
+      div.fileupload-loading
+    div.large-5.columns.center
+      div.progress(data-ng-show='active()')
+        span.meter.progress-animated(data-ng-style="{width: num + '%'}")
+      span.success.label(data-ng-show='!active() && isAllFilesUploaded()' data-ng-hide='!isAllFilesUploaded() || queue.length === 0') Every extensions have been uploaded
+  div.row.files(data-ng-repeat='file in queue' data-ng-class="{'processing': file.$processing()}" data-ng-class='{even: $even}')
+    div.large-6.columns
+      div
+        table
+          tr
+            th file
+            td {{file.fileName || file.name}}
+          tr(data-ng-show='!!uploadedFiles[$index] || !!file.version')
+            th name
+            td {{uploadedFiles[$index].name || file.name}}
+          tr(data-ng-show='!!uploadedFiles[$index] || !!file.id')
+            th id
+            td {{uploadedFiles[$index].id || file.id}}
+          tr(data-ng-show='!!uploadedFiles[$index] || !!file.version')
+            th version
+            td {{uploadedFiles[$index].version || file.version}}
+      div.center(data-ng-show='file.error')
+        p.alert.label {{file.error}} {{file.errorMessage}}
+    div.center.large-2.columns
+      p.size {{file.size | formatFileSize}}
+    div.large-4.columns.center
+      ul.button-group.radius.even-2
+        li.button.btn.radius.start(type='button' data-ng-click='file.$submit()' data-ng-hide="!file.$submit || file.$state() == 'pending' || file.$state() == 'rejected' || isCurrentFileUploaded(file)")
+          span Start
+        li.button.btn.alert.radius.cancel(type='button' data-ng-click='file.$cancel()' data-ng-hide='!file.$cancel || isCurrentFileUploaded(file)')
+          span Cancel
+      div(data-file-upload-progress='file.$progress()')
+        div.progress(data-ng-show="file.$state() === 'pending'")
+          span.meter.progress-animated(data-ng-style="{width: num + '%'}")
+        span.success.label(data-ng-show='!file.error && num === 100') Successully uploaded

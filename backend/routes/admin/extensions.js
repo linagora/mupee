@@ -83,6 +83,7 @@ exports.uploadXpi = function(req, res) {
           path: Path.join('Extensions', extension.id, extension.version, file.name),
           hash: 'sha1:' + sum
         };
+        extension.size = file.size;
 
         var newPath = Path.join(config.download.dir, extension.localFile.path);
 
