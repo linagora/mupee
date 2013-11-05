@@ -3,7 +3,8 @@
 var querystring = require('querystring'),
     jstoxml = require('./jstoxml'),
     Update = require('./update').Update,
-    Errors = require('./application-errors');
+    Errors = require('./application-errors'),
+    versionSplitter = require('./version-splitter');
 
 function validateSourceVersion(object) {
   var params = ['product', 'version', 'buildID', 'buildTarget', 'locale', 'channel', 'osVersion'];
@@ -24,7 +25,7 @@ var SourceVersion = function(object) {
   this.locale = object.locale;
   this.channel = object.channel;
   this.osVersion = object.osVersion;
-  this.branch = object.version ? parseInt(object.version.substring(0, object.version.indexOf('.'))) : null;
+  this.branch = versionSplitter.getBranch(object.version);
   this.parameters = object.parameters;
   this.updates = [];
   if (object.updates) {
