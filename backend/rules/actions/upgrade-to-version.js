@@ -1,20 +1,7 @@
 'use strict';
 
 var Action = require('../action.js'),
-    mvc = require('mozilla-version-comparator');
-
-function filterChosenVersion(version, candidate) {
-  var filteredUpdates = candidate.updates;
-  candidate.clearUpdates();
-  filteredUpdates.forEach(function(update) {
-    var ver = update.version ? update.version : update.displayVersion;
-    if (mvc(ver, version) === 0) {
-      candidate.addUpdate(update);
-    }
-  });
-
-  return candidate;
-}
+    filterChosenVersion = require('./action-utils').filterChosenVersion;
 
 var upgradeToVersion = new Action({
   id: 'upgradeToVersion',

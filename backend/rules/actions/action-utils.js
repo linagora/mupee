@@ -2,7 +2,7 @@
 
 var versionsCompare = require('mozilla-version-comparator');
 
-module.exports = function(branch, candidate) {
+exports.filterLatestForBranch = function(branch, candidate) {
   var filtered = [];
 
   candidate.updates.forEach(function(update) {
@@ -23,3 +23,11 @@ module.exports = function(branch, candidate) {
   }
   return candidate;
 };
+
+exports.filterChosenVersion = function(version, candidate) {
+  candidate.updates = candidate.updates.filter(function(update) {
+    return (versionsCompare(update.version, version) === 0);
+  });
+  return candidate;
+};
+

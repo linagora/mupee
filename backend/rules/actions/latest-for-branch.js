@@ -1,8 +1,7 @@
 'use strict';
 
-var Action = require('../action.js');
-
-var filterLatestForBranch = require('./filter-latest-for-branch');
+var Action = require('../action.js'),
+    filterLatestForBranch = require('./action-utils').filterLatestForBranch;
 
 var latestForBranch = new Action({
   id: 'latestForBranch',
