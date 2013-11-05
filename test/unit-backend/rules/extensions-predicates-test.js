@@ -40,6 +40,23 @@ describe('The Predicate', function() {
       expect(result).to.be.false;
     });
   });
+  
+  describe('extIdEquals', function() {
+    var someID = '{c6dbb670-c4ce-4222-a910-a9865da9721c}';
+    it('does not match if candidate id is different from parameter', function() {
+      var matchesExtId = Loader.predicates.extIdEquals.for({ id: someID });
+      var result = matchesExtId({ id: 'foo' });
+      expect(result).to.be.a('boolean');
+      expect(result).to.be.false;
+    });
+
+    it('matches if the candidate id is the same as the parameter ', function() {
+      var matchesExtId = Loader.predicates.extIdEquals.for({ id: someID });
+      var result = matchesExtId({ id: someID });
+      expect(result).to.be.a('boolean');
+      expect(result).to.be.true;
+    });
+  });
 
   after(function() {
     mockery.deregisterAll();
