@@ -23,18 +23,33 @@ describe('The Action', function() {
   });
 
   describe('deny', function() {
-    it('always return an empty update list', function() {
+    it('always return an empty update list with SourceVersion', function() {
       var deny = Loader.actions.deny.for({});
       var candidate = new SourceVersion(fixtures.thunderbird3);
+      var result = deny(candidate);
+      expect(result.updates).to.have.length(0);
+    });
+
+    it('always return an empty update list with ExtensionSourceVersion', function() {
+      var deny = Loader.actions.deny.for({});
+      var candidate = fixturesForExtensions.ltn123TB17WithLotOfUpdates();
       var result = deny(candidate);
       expect(result.updates).to.have.length(0);
     });
   });
 
   describe('allow', function() {
-    it('always return an unmodified update list', function() {
+    it('always return an unmodified update list with SourceVersion', function() {
       var allow = Loader.actions.allow.for({});
       var candidate = new SourceVersion(fixtures.thunderbird3);
+      var updateNbr = candidate.updates.length;
+      var result = allow(candidate);
+      expect(result.updates.length).to.equal(updateNbr);
+    });
+
+    it('always return an unmodified update list with ExtensionSourceVersion', function() {
+      var allow = Loader.actions.allow.for({});
+      var candidate = fixturesForExtensions.ltn123TB17WithLotOfUpdates();
       var updateNbr = candidate.updates.length;
       var result = allow(candidate);
       expect(result.updates.length).to.equal(updateNbr);
