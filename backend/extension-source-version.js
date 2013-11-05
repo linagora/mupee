@@ -73,6 +73,10 @@ var ExtensionSourceVersion = function(object) {
   }
 };
 
+ExtensionSourceVersion.prototype.clearUpdates = function() {
+  this.updates = [];
+};
+
 ExtensionSourceVersion.prototype.addUpdate = function(update) {
   this.updates.push(update);
 };
