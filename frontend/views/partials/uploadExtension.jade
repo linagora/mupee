@@ -17,7 +17,7 @@ form#fileupload(action="/admin/upload/extension" method="POST" enctype='multipar
       div.progress(data-ng-show='active()')
         span.meter.progress-animated(data-ng-style="{width: num + '%'}")
       span.success.label(data-ng-show='!active() && isAllFilesUploaded()' data-ng-hide='!isAllFilesUploaded() || queue.length === 0') Every extensions have been uploaded
-  div.row.animate.files(data-ng-repeat='file in queue' data-ng-class="{'processing': file.$processing()}" data-ng-class='{even: $even}')
+  div.row.files(data-ng-repeat='file in queue' data-ng-class="{'processing': file.$processing()}" data-ng-class='{even: $even}')
     div.large-6.columns
       div
         table
