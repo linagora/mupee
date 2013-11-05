@@ -4,23 +4,27 @@ var should = require('chai').should(),
     nock = require('nock'),
     mockery = require('mockery'),
     testLogger = require('./test-logger'),
-    SourceVersion = require('../../backend/source-version'),
-    MetadataStorage = require('../../backend/update-storage');
+    SourceVersion,
+    MetadataStorage;
 
 describe('The Updates route', function() {
   var proxy;
   var emptyReply = '<?xml version="1.0" encoding="UTF-8"?>\n<updates></updates>';
   var db;
-  var scrap = function(clientVersion, callback) {
-    callback(null, clientVersion);
+  var backgroundTasks = {
+    addProductScraperTask: function() {}
   };
 
   before(function() {
-    mockery.enable({warnOnUnregistered: false});
-    mockery.registerMock('../mozilla-updates-server-scraper', scrap);
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('../background-tasks', backgroundTasks);
+    mockery.registerMock('./logger', testLogger);
     mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    SourceVersion = require('../../backend/source-version');
+    MetadataStorage = require('../../backend/update-storage');
     nock.disableNetConnect();
-    proxy = require('../../backend/routes/updates'),
+    proxy = require('../../backend/routes/updates');
     db = require('../../backend/mongo-provider');
   });
 
@@ -86,9 +90,10 @@ describe('The Updates route', function() {
   });
 
   describe('should persist the timestamp', function() {
-    var realSave = MetadataStorage.prototype.save;
-    var realFindByVersion = MetadataStorage.prototype.findByVersion;
+    var realSave, realFindByVersion;
     it('when a client gets a cache-hit', function(done) {
+      realSave = MetadataStorage.prototype.save;
+      realFindByVersion = MetadataStorage.prototype.findByVersion;
       var cachedDate = Date.now() - 1;
       var cachedVersion = new SourceVersion({
         timestamp: cachedDate,
@@ -179,6 +184,7 @@ describe('The Updates route', function() {
   after(function(done) {
     mockery.deregisterAll();
     mockery.disable();
+    mockery.resetCache();
     nock.enableNetConnect();
     done();
   });

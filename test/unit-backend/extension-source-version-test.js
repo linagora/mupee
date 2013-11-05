@@ -4,10 +4,21 @@ var expect = require('chai').expect;
 
 var fs = require('fs'),
     Path = require('path'),
-    ExtensionUpdate = require('../../backend/extension-source-version').ExtensionUpdate,
-    fixtures = require('./extension-source-version-fixtures');
+    mockery = require('mockery'),
+    testLogger = require('./test-logger'),
+    ExtensionUpdate,
+    fixtures;
 
 describe('The ExtensionSourceVersion module', function() {
+
+  before(function() {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    ExtensionUpdate = require('../../backend/extension-source-version').ExtensionUpdate,
+    fixtures = require('./extension-source-version-fixtures');
+  });
 
   it('should fail when creating an ExtensionUpdate with no object', function(done) {
     try {
@@ -98,4 +109,9 @@ describe('The ExtensionSourceVersion module', function() {
     expect(version.updatesAsRDF()).to.equal(expectedRDF);
   });
 
+  after(function() {
+    mockery.deregisterAll();
+    mockery.resetCache();
+    mockery.disable();
+  });
 });

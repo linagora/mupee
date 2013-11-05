@@ -1,11 +1,23 @@
 'use strict';
 
-var expect = require('chai').expect;
+var expect = require('chai').expect,
+    mockery = require('mockery'),
+    testLogger = require('../test-logger');
 
 var fixtures = require('./fixtures');
 
 describe('The Rule module', function() {
-  var rule = fixtures.thunderbird10ToLatest17;
+  var rule;
+
+  before(function() {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    fixtures = require('./fixtures');
+    rule = fixtures.thunderbird10ToLatest17;
+  });
+
   describe('matches method should evaluate a predicate and return', function() {
     it('true if it matches', function() {
       var result = rule.matches({product: 'Thunderbird', branch: 10});
@@ -53,6 +65,12 @@ describe('The Rule module', function() {
 
   it('weight property should report the weight of this rule (higher weight means higher priority)', function() {
     expect(rule.weight).to.equal(12);
+  });
+
+  after(function() {
+    mockery.deregisterAll();
+    mockery.disable();
+    mockery.resetCache();
   });
 });
 

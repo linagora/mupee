@@ -1,12 +1,15 @@
 'use strict';
 
 var db = require('../../backend/mongo-provider'),
-    fixtures = require('./source-version-fixtures'),
-    UpdateStorage = require('../../backend/update-storage'),
-    SourceVersion = require('../../backend/source-version'),
-    versions = require('../../backend/routes/admin/versions');
+    fixtures,
+    UpdateStorage,
+    SourceVersion,
+    versions,
+    mockery = require('mockery'),
+    testLogger = require('./test-logger');
 
 require('chai').should();
+var expect = require('chai').expect;
 
 describe('The Admin versions route module', function() {
   var baseUri;
@@ -16,10 +19,18 @@ describe('The Admin versions route module', function() {
 
   before(function() {
     baseUri = 'http://localhost:1234/admin/versions';
-    storage = new UpdateStorage(db);
   });
 
   beforeEach(function(done) {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    UpdateStorage = require('../../backend/update-storage');
+    SourceVersion = require('../../backend/source-version');
+    versions = require('../../backend/routes/admin/versions');
+    fixtures = require('./source-version-fixtures');
+    storage = new UpdateStorage(db);
     storage.save(fixtures.withAllFields(), function(error, result) {
       if (error) { throw error; }
       id = result._id;
@@ -39,7 +50,7 @@ describe('The Admin versions route module', function() {
       send: function(body) {
         delete body._id;
         var actualData = new SourceVersion(body);
-        actualData.should.deep.equal(expectedData);
+        expect(actualData).to.deep.equal(expectedData);
         done();
       }
     };
@@ -92,6 +103,9 @@ describe('The Admin versions route module', function() {
 
   afterEach(function(done) {
     db.collection('source-versions').drop(done);
+    mockery.deregisterAll();
+    mockery.resetCache();
+    mockery.disable();
   });
 });
 

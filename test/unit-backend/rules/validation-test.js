@@ -2,29 +2,34 @@
 
 var mockery = require('mockery'),
     testLogger = require('../test-logger'),
-    rulesFixtures = require('../fixtures/rules.js'),
+    rulesFixtures,
     validation,
     errors,
-    expect = require('chai').expect;
+    expect = require('chai').expect,
+    mockery = require('mockery'),
+    testLogger = require('../test-logger');
 
 
 describe('The rule validation module', function() {
-
-  var loader = {
-    actions: {
-      deny: rulesFixtures.actions.deny(),
-      latestForBranch: rulesFixtures.actions.latestForBranch(),
-      latestForIpForBranch: rulesFixtures.actions.latestForIpForBranch()
-    },
-    predicates: {
-      productEquals: rulesFixtures.predicates.productEquals(),
-      activation: rulesFixtures.predicates.activation()
-    }
-  };
+  var loader;
 
   before(function() {
-    mockery.enable({warnOnUnregistered: false, useCleanCache: true});
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
     mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    rulesFixtures = require('../fixtures/rules.js');
+    loader = {
+      actions: {
+        deny: rulesFixtures.actions.deny(),
+        latestForBranch: rulesFixtures.actions.latestForBranch(),
+        latestForIpForBranch: rulesFixtures.actions.latestForIpForBranch()
+      },
+      predicates: {
+        productEquals: rulesFixtures.predicates.productEquals(),
+        activation: rulesFixtures.predicates.activation()
+      }
+    };
     mockery.registerMock('./loader', loader);
     validation = require('../../../backend/rules/validation');
     errors = require('../../../backend/application-errors');
@@ -163,15 +168,14 @@ describe('The rule validation module', function() {
 
   describe('testing parameters', function() {
 
-    loader.actions.parameterTest = rulesFixtures.actions.deny();
-    loader.actions.parameterTest.id = 'parameterTest';
     var numberDef = {id: 'numberDef', type: 'number', mandatory: true, summary: 'numberDef', description: '', defaultValue: 0};
     var stringDef = {id: 'stringDef', type: 'string', mandatory: true, summary: 'stringDef', description: '', defaultValue: ''};
     var booleanDef = {id: 'booleanDef', type: 'boolean', mandatory: true, summary: 'booleanDef', description: '', defaultValue: false};
 
     describe('when the parameter is correct', function() {
-
       it('should not throw an error', function() {
+        loader.actions.parameterTest = rulesFixtures.actions.deny();
+        loader.actions.parameterTest.id = 'parameterTest';
 
         loader.actions.parameterTest.parametersDefinitions = [numberDef];
         var action = {id: 'parameterTest', parameters: {numberDef: 34}};
@@ -183,8 +187,9 @@ describe('The rule validation module', function() {
     });
 
     describe('when the parameter is null', function() {
-
       it('should throw a BadParameterTypeError', function() {
+        loader.actions.parameterTest = rulesFixtures.actions.deny();
+        loader.actions.parameterTest.id = 'parameterTest';
 
         loader.actions.parameterTest.parametersDefinitions = [numberDef];
         var action = {id: 'parameterTest', parameters: {numberDef: null}};
@@ -198,6 +203,8 @@ describe('The rule validation module', function() {
     describe('when parameter is a number and we need a number', function() {
 
       it('should not throw an error', function() {
+        loader.actions.parameterTest = rulesFixtures.actions.deny();
+        loader.actions.parameterTest.id = 'parameterTest';
 
         loader.actions.parameterTest.parametersDefinitions = [numberDef];
         var action = {id: 'parameterTest', parameters: {numberDef: 6543}};
@@ -217,6 +224,8 @@ describe('The rule validation module', function() {
     describe('when parameter is not a number and we need a number', function() {
 
       it('should throw a BadParameterTypeError', function() {
+        loader.actions.parameterTest = rulesFixtures.actions.deny();
+        loader.actions.parameterTest.id = 'parameterTest';
 
         loader.actions.parameterTest.parametersDefinitions = [numberDef];
         var action = {id: 'parameterTest', parameters: {numberDef: 'Hello'}};
@@ -231,6 +240,8 @@ describe('The rule validation module', function() {
     describe('when parameter is a string and we need a string', function() {
 
       it('should not throw an error', function() {
+        loader.actions.parameterTest = rulesFixtures.actions.deny();
+        loader.actions.parameterTest.id = 'parameterTest';
 
         loader.actions.parameterTest.parametersDefinitions = [stringDef];
         var action = {id: 'parameterTest', parameters: {stringDef: 'test'}};
@@ -244,6 +255,8 @@ describe('The rule validation module', function() {
     describe('when parameter is not a string and we need a string', function() {
 
       it('should throw a BadParameterTypeError', function() {
+        loader.actions.parameterTest = rulesFixtures.actions.deny();
+        loader.actions.parameterTest.id = 'parameterTest';
 
         loader.actions.parameterTest.parametersDefinitions = [stringDef];
         var action = {id: 'parameterTest', parameters: {stringDef: 234}};
@@ -258,6 +271,8 @@ describe('The rule validation module', function() {
     describe('when parameter is a boolean and we need a boolean', function() {
 
       it('should not throw an error', function() {
+        loader.actions.parameterTest = rulesFixtures.actions.deny();
+        loader.actions.parameterTest.id = 'parameterTest';
 
         loader.actions.parameterTest.parametersDefinitions = [booleanDef];
         var action = {id: 'parameterTest', parameters: {booleanDef: false}};
@@ -273,6 +288,8 @@ describe('The rule validation module', function() {
     describe('when parameter is not a boolean and we need a boolean', function() {
 
       it('should throw a BadParameterTypeError', function() {
+        loader.actions.parameterTest = rulesFixtures.actions.deny();
+        loader.actions.parameterTest.id = 'parameterTest';
 
         loader.actions.parameterTest.parametersDefinitions = [booleanDef];
         var action = {id: 'parameterTest', parameters: {booleanDef: 234}};
@@ -586,6 +603,8 @@ describe('The rule validation module', function() {
 
 
   after(function() {
+    mockery.deregisterAll();
     mockery.disable();
+    mockery.resetCache();
   });
 });

@@ -1,10 +1,19 @@
 'use strict';
 
-var expect = require('chai').expect;
-
-var mapper = require('../../backend/product-mapper');
+var expect = require('chai').expect,
+    mockery = require('mockery'),
+    testLogger = require('./test-logger'),
+    mapper;
 
 describe('The ProductMapper module', function() {
+
+  before(function() {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    mapper = require('../../backend/product-mapper');
+  });
 
   it('should find Firefox as a product name', function() {
     expect(mapper.idFromName('Firefox')).to.exist;
@@ -36,6 +45,12 @@ describe('The ProductMapper module', function() {
 
   it('should not find {00000000-0000-0000-0000-000000000000} as a product id', function() {
     expect(mapper.nameFromId('{00000000-0000-0000-0000-000000000000}')).to.not.exist;
+  });
+
+  after(function() {
+    mockery.deregisterAll();
+    mockery.resetCache();
+    mockery.disable();
   });
 
 });

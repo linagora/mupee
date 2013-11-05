@@ -1,38 +1,57 @@
 'use strict';
 
 var chai = require('chai'),
-    expect = chai.expect;
+    expect = chai.expect,
+    mockery = require('mockery'),
+    testLogger = require('./test-logger');
 chai.should();
 
+
+
 var db = require('../../backend/mongo-provider'),
+    UpdateStorage,
+    SourceVersion,
+    Update,
+    fixtures;
+
+describe('The UpdateStorage module', function() {
+  var manager,
+      version,
+      versionQuery,
+      newUpdate,
+      id;
+
+  beforeEach(function(done) {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+
     UpdateStorage = require('../../backend/update-storage'),
     SourceVersion = require('../../backend/source-version'),
     Update = require('../../backend/update').Update,
     fixtures = require('./source-version-fixtures');
 
-describe('The UpdateStorage module', function() {
-  var manager = new UpdateStorage(db);
-  var version = fixtures.withAllFields();
-  var versionQuery = new SourceVersion({
-    product: 'Firefox',
-    version: '3.5.2',
-    buildID: '20090729225027',
-    buildTarget: 'WINNT_x86-msvc',
-    locale: 'en-US',
-    channel: 'release',
-    osVersion: 'Windows_NT%206.0',
-    parameters: {}
-  });
-  var newUpdate = new Update({
-    type: 'major',
-    version: 'fake-4.0.0',
-    extensionVersion: 'fake-4.0.0',
-    buildID: 'FAKEBUILDID',
-    detailsURL: 'https://fake-url.com/'
-  });
-  var id;
+    manager = new UpdateStorage(db);
+    version = fixtures.withAllFields();
+    versionQuery = new SourceVersion({
+      product: 'Firefox',
+      version: '3.5.2',
+      buildID: '20090729225027',
+      buildTarget: 'WINNT_x86-msvc',
+      locale: 'en-US',
+      channel: 'release',
+      osVersion: 'Windows_NT%206.0',
+      parameters: {}
+    });
+    newUpdate = new Update({
+      type: 'major',
+      version: 'fake-4.0.0',
+      extensionVersion: 'fake-4.0.0',
+      buildID: 'FAKEBUILDID',
+      detailsURL: 'https://fake-url.com/'
+    });
 
-  beforeEach(function(done) {
     manager.save(version, function(err, result) {
       id = result._id;
       done();
@@ -76,6 +95,9 @@ describe('The UpdateStorage module', function() {
 
   afterEach(function(done) {
     db.collection('source-versions').drop(done);
+    mockery.deregisterAll();
+    mockery.resetCache();
+    mockery.disable();
   });
 
   after(function() {

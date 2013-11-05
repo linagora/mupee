@@ -1,11 +1,22 @@
 'use strict';
 
 var expect = require('chai').expect;
+var mockery = require('mockery'),
+    testLogger = require('./test-logger');
 
-var SourceVersion = require('../../backend/source-version'),
-    fixtures = require('./source-version-fixtures');
+var SourceVersion,
+    fixtures;
 
 describe('The SourceVersion module', function() {
+
+  before(function() {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    SourceVersion = require('../../backend/source-version');
+    fixtures = require('./source-version-fixtures');
+  });
 
   it('should compute its current major branch', function() {
     var version = fixtures.withAllFields();
@@ -97,4 +108,11 @@ describe('The SourceVersion module', function() {
     var result = version.findPatch(updateThatMatch, patchThatDontMatch);
     expect(result).to.be.null;
   });
+
+  after(function() {
+    mockery.deregisterAll();
+    mockery.resetCache();
+    mockery.disable();
+  });
+
 });

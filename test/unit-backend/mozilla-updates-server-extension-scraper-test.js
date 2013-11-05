@@ -6,7 +6,7 @@ var chai = require('chai'),
 var mockery = require('mockery'),
     testLogger = require('./test-logger'),
     fs = require('fs-extra'),
-    updatesFixtures = require('./extension-source-version-fixtures'),
+    updatesFixtures,
     util = require('util'),
     events = require('events');
 
@@ -15,7 +15,10 @@ describe('The ExtensionUpdatesScraper module', function() {
   before(function() {
     mockery.enable({warnOnUnregistered: false, warnOnReplace: false, useCleanCache: true});
     mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
     mockery.registerMock('./routes/admin/extensions', {});
+    updatesFixtures = require('./extension-source-version-fixtures');
   });
 
   it('should do nothing if config.download.autoCache is false', function(done) {

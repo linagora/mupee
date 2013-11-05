@@ -5,20 +5,27 @@ var chai = require('chai'),
     mockery = require('mockery'),
     testLogger = require('./test-logger'),
     backgroundTasks,
-    scheduler = require('../../backend/job-scheduler'),
+    scheduler,
     db = require('../../backend/mongo-provider'),
-    fixtures = require('./fixtures/background-tasks'),
-    UpdateStorage = require('../../backend/update-storage'),
-    storage = new UpdateStorage(db),
+    fixtures,
+    UpdateStorage,
+    storage,
     async = require('async');
 
 describe('The background tasks module', function() {
-  var schedulerRealAddJob = scheduler.addJob;
+  var schedulerRealAddJob;
 
   before(function() {
-    mockery.enable({warnOnUnregistered: false});
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
     mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
     mockery.registerMock('./mozilla-updates-server-scraper', function(foo, done) { done(); });
+    scheduler = require('../../backend/job-scheduler');
+    schedulerRealAddJob = scheduler.addJob;
+    fixtures = require('./fixtures/background-tasks');
+    UpdateStorage = require('../../backend/update-storage');
+    storage = new UpdateStorage(db);
     backgroundTasks = require('../../backend/background-tasks');
   });
 
@@ -55,12 +62,17 @@ describe('The background tasks module', function() {
 
 describe('the refreshProductUpdates method of the backgroundTasks module', function() {
   var toScrap = [];
-  var svs = fixtures.sources();
+  var svs;
   var realAddProductScraperTask = null;
 
   before(function(done) {
     mockery.enable({warnOnUnregistered: false});
     mockery.registerMock('./logger', testLogger);
+    scheduler = require('../../backend/job-scheduler');
+    fixtures = require('./fixtures/background-tasks');
+    svs = fixtures.sources();
+    UpdateStorage = require('../../backend/update-storage');
+    storage = new UpdateStorage(db);
     backgroundTasks = require('../../backend/background-tasks');
 
     var asyncTasks = svs.map(function(sourceversion) {

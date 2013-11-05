@@ -2,15 +2,23 @@
 
 var chai = require('chai'),
     nock = require('nock'),
-    expect = chai.expect;
+    expect = chai.expect,
+    mockery = require('mockery'),
+    testLogger = require('./test-logger');
 
-var UpdateFetcher = require('../../backend/update-fetcher'),
-    MozillaSourceVersion = require('../../backend/mozilla-source-version');
+var UpdateFetcher,
+    MozillaSourceVersion;
 
 describe('The UpdateFetcher module', function() {
 
   before(function() {
     nock.disableNetConnect();
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    UpdateFetcher = require('../../backend/update-fetcher');
+    MozillaSourceVersion = require('../../backend/mozilla-source-version');
   });
 
   it('should update the metadata if there is a new version available', function(done) {
@@ -174,5 +182,8 @@ describe('The UpdateFetcher module', function() {
 
   after(function() {
     nock.enableNetConnect();
+    mockery.deregisterAll();
+    mockery.resetCache();
+    mockery.disable();
   });
 });

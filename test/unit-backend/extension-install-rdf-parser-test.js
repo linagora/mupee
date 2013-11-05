@@ -4,10 +4,21 @@ var expect = require('chai').expect;
 
 var fs = require('fs'),
     Path = require('path'),
-    parseRdf = require('../../backend/extension-install-rdf-parser'),
-    fixtures = require('./extension-fixtures');
+    mockery = require('mockery'),
+    testLogger = require('./test-logger'),
+    parseRdf,
+    fixtures;
 
 describe('The ExtensionInstallRDFParser module', function() {
+
+  before(function() {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    parseRdf = require('../../backend/extension-install-rdf-parser');
+    fixtures = require('./extension-fixtures');
+  });
 
   it('should fail if the stream is null', function() {
     parseRdf(null, function(err) {
@@ -89,6 +100,12 @@ describe('The ExtensionInstallRDFParser module', function() {
     parseRdf(rdf, function(err) {
       expect(err).to.exist;
     });
+  });
+
+  after(function() {
+    mockery.deregisterAll();
+    mockery.resetCache();
+    mockery.disable();
   });
 
 });

@@ -1,14 +1,27 @@
 'use strict';
 
-var expect = require('chai').expect;
+var expect = require('chai').expect,
+    mockery = require('mockery'),
+    testLogger = require('../test-logger');
 
-var db = require('../../../backend/mongo-provider'),
-    Rule = require('../../../backend/rules/rule'),
-    defaults = require('../../../backend/rules/default-rules');
+var db,
+    Rule,
+    defaults;
 
-var fixtures = require('./fixtures');
+var fixtures;
 
 describe('The Rules Engine', function() {
+
+  before(function() {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    db = require('../../../backend/mongo-provider');
+    Rule = require('../../../backend/rules/rule');
+    defaults = require('../../../backend/rules/default-rules');
+    fixtures = require('./fixtures');
+  });
 
   it('should ensure we have default rules in the database', function(done) {
     db.collection('rules').insert({test: true}, {safe: true}, function(err) {
@@ -80,6 +93,9 @@ describe('The Rules Engine', function() {
   });
 
   after(function(done) {
+    mockery.deregisterAll();
+    mockery.disable();
+    mockery.resetCache();
     db.close(done);
   });
 });

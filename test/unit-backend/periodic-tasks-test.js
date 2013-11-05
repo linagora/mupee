@@ -13,12 +13,18 @@ describe('The Periodic Tasks module', function() {
   var config = {
     fetch: {
       refreshInterval: 3
+    },
+    scheduler: {
+      maxParallelTasks: 3
     }
   };
 
   beforeEach(function() {
-    mockery.enable({warnOnUnregistered: false});
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
     mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    require('../../backend/mongo-provider');
     mockery.registerMock('./config', config);
     periodicTasks = require('../../backend/periodic-tasks');
   });

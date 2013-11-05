@@ -4,17 +4,20 @@ var mockery = require('mockery'),
     testLogger = require('./test-logger'),
     fs = require('fs'),
     Path = require('path'),
-    fixtures = require('./extension-fixtures'),
-    updatesFixture = require('./extension-source-version-fixtures');
+    fixtures,
+    updatesFixture;
 
 describe('The ExtensionUpdates route', function() {
   var proxy;
 
-  before(function() {
+  beforeEach(function() {
     mockery.enable({warnOnUnregistered: false, warnOnReplace: false, useCleanCache: true});
-    mockery.registerMock('adm-zip', null);
+    mockery.registerMock('./logger', testLogger);
     mockery.registerMock('../logger', testLogger);
     mockery.registerMock('../../logger', testLogger);
+    mockery.registerMock('adm-zip', null);
+    fixtures = require('./extension-fixtures');
+    updatesFixture = require('./extension-source-version-fixtures');
   });
 
   it('should send 400 if no file is uploaded', function(done) {
@@ -361,7 +364,6 @@ describe('The ExtensionUpdates route', function() {
     proxy = require('../../backend/routes/admin/extensions');
 
     fs.closeSync(fs.openSync('/tmp/mupeeTestingFile', 'w'));
-
     proxy.uploadXpi({
       files: {
         file: {
@@ -662,16 +664,12 @@ describe('The ExtensionUpdates route', function() {
   });
 
   afterEach(function(done) {
+    try {
+      fs.unlinkSync('/tmp/mupeeTestingFile');
+    } catch (e) {}
     mockery.resetCache();
-    done();
-  });
-
-  after(function(done) {
-    fs.unlinkSync('/tmp/mupeeTestingFile');
-
     mockery.deregisterAll();
     mockery.disable();
     done();
   });
-
 });

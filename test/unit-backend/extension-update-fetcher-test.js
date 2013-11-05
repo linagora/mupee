@@ -2,13 +2,15 @@
 
 var chai = require('chai'),
     nock = require('nock'),
-    expect = chai.expect;
+    expect = chai.expect,
+    mockery = require('mockery'),
+    testLogger = require('./test-logger');
 
 var url = require('url'),
     Path = require('path'),
-    config = require('../../backend/config'),
-    fetcher = require('../../backend/extension-update-fetcher'),
-    fixtures = require('./extension-source-version-fixtures');
+    config,
+    fetcher,
+    fixtures;
 
 function mozUpdateUrl() {
   var parsedUrl = url.parse(config.fetch.extensionsRemoteHost);
@@ -22,7 +24,14 @@ function mozUpdateUrl() {
 describe('The ExtensionUpdateFetcher module', function() {
 
   before(function() {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
     nock.disableNetConnect();
+    config = require('../../backend/config');
+    fetcher = require('../../backend/extension-update-fetcher');
+    fixtures = require('./extension-source-version-fixtures');
   });
 
   it('should update the metadata if there is a new version available', function(done) {
@@ -35,6 +44,9 @@ describe('The ExtensionUpdateFetcher module', function() {
 
     fetcher.fetch(sourceVersion, function(error, fetchedVersion) {
       expect(error).to.be.null;
+
+      delete fetchedVersion.timestamp;
+      delete expectedFetchedVersion.timestamp;
       expect(fetchedVersion).to.deep.equal(expectedFetchedVersion);
       done();
     });
@@ -72,6 +84,9 @@ describe('The ExtensionUpdateFetcher module', function() {
 
   after(function() {
     nock.enableNetConnect();
+    mockery.deregisterAll();
+    mockery.resetCache();
+    mockery.disable();
   });
 
 });

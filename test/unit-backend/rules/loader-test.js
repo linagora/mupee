@@ -1,10 +1,21 @@
 'use strict';
 
-var expect = require('chai').expect;
+var expect = require('chai').expect,
+    mockery = require('mockery'),
+    testLogger = require('../test-logger');
 
-var Loader = require('../../../backend/rules/loader');
+var Loader;
 
 describe('The Rule Loader module', function() {
+
+  before(function() {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    Loader = require('../../../backend/rules/loader');
+  });
+
   describe('dynamically loads modules from file system and', function() {
     it('should fail on non-existing path', function() {
       try {
@@ -56,6 +67,12 @@ describe('The Rule Loader module', function() {
     for (var action in actions) {
       expect(action).to.be.an.Action;
     }
+  });
+
+  after(function() {
+    mockery.deregisterAll();
+    mockery.disable();
+    mockery.resetCache();
   });
 });
 

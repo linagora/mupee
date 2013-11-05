@@ -1,12 +1,21 @@
 'use strict';
 
-var Update = require('../../backend/mozilla-update').MozillaUpdate;
-var fixtures = require('./fixtures/mozilla-update');
+var mockery = require('mockery');
+var testLogger = require('./test-logger');
+var Update;
+var fixtures;
 var expect = require('chai').expect;
 require('chai').should();
 
 
 describe('The Mozilla Update module', function() {
+
+  before(function() {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    Update = require('../../backend/mozilla-update').MozillaUpdate;
+    fixtures = require('./fixtures/mozilla-update');
+  });
 
   it('should generate a well formed xml from Update', function() {
     var expectedXML = fixtures.xml.validTwoPatches();
@@ -149,5 +158,11 @@ describe('The Mozilla Update module', function() {
       update.clearPatches();
       update.patches.should.have.length(0);
     });
+  });
+
+  after(function() {
+    mockery.resetCache();
+    mockery.deregisterAll();
+    mockery.disable();
   });
 });

@@ -1,19 +1,30 @@
 'use strict';
 
 var chai = require('chai'),
-    expect = chai.expect;
+    expect = chai.expect,
+    mockery = require('mockery'),
+    testLogger = require('../test-logger');
 
-var db = require('../../../backend/mongo-provider'),
-    Storage = require('../../../backend/rules/storage'),
-    Rule = require('../../../backend/rules/rule');
+var db,
+    Storage,
+    Rule;
 
-var defaultRules = require('../../../backend/rules/default-rules');
+var defaultRules;
 
 describe('The Rules Storage module', function() {
 
-  var manager = new Storage(db);
+  var manager;
 
   before(function(done) {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    db = require('../../../backend/mongo-provider'),
+    Storage = require('../../../backend/rules/storage'),
+    Rule = require('../../../backend/rules/rule');
+    defaultRules = require('../../../backend/rules/default-rules');
+    manager = new Storage(db);
     db.collection('rules').drop(function() {done();});
   });
 
@@ -117,7 +128,10 @@ describe('The Rules Storage module', function() {
     db.collection('rules').drop(done);
   });
 
-  after(function() {
-    db.close();
+  after(function(done) {
+    mockery.deregisterAll();
+    mockery.disable();
+    mockery.resetCache();
+    db.close(done);
   });
 });

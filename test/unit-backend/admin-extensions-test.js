@@ -1,14 +1,27 @@
 'use strict';
 
 var db = require('../../backend/mongo-provider'),
-    fixtures = require('./extension-fixtures'),
-    ExtensionStorage = require('../../backend/extension-storage'),
-    versions = require('../../backend/routes/admin/extensions');
+    fixtures,
+    ExtensionStorage,
+    versions,
+    mockery = require('mockery'),
+    testLogger = require('./test-logger');
 
 require('chai').should();
 
 describe('The admin/extensions/findAll route', function() {
-  var storage = new ExtensionStorage(db);
+  var storage;
+
+  beforeEach(function() {
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
+    mockery.registerMock('./logger', testLogger);
+    mockery.registerMock('../logger', testLogger);
+    mockery.registerMock('../../logger', testLogger);
+    fixtures = require('./extension-fixtures');
+    ExtensionStorage = require('../../backend/extension-storage');
+    versions = require('../../backend/routes/admin/extensions');
+    storage = new ExtensionStorage(db);
+  });
 
   it('should send 400 if an unsupported query param is sent', function(done) {
     versions.findAll({
@@ -117,6 +130,9 @@ describe('The admin/extensions/findAll route', function() {
 
   afterEach(function() {
     db.collection('extensions').drop();
+    mockery.deregisterAll();
+    mockery.resetCache();
+    mockery.disable();
   });
 
 });

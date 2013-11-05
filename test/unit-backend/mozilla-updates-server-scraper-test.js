@@ -4,8 +4,8 @@ var chai = require('chai'),
     expect = chai.expect,
     mockery = require('mockery'),
     db = require('../../backend/mongo-provider'),
-    SourceVersion = require('../../backend/source-version'),
-    MozillaSourceVersion = require('../../backend/mozilla-source-version'),
+    SourceVersion,
+    MozillaSourceVersion,
     events = require('events'),
     util = require('util'),
     testLogger = require('./test-logger'),
@@ -31,99 +31,103 @@ UpdateFetcher.fetch = function() {};
 
 describe('The mozilla Updates Server Sraper module', function() {
   var id;
-  var version = new SourceVersion({
-    product: 'Thunderbird',
-    version: '10.0.12',
-    buildID: '20130105062021',
-    buildTarget: 'Linux_x86-gcc3',
-    locale: 'fr',
-    channel: 'esr',
-    osVersion: 'Linux 3.5.0-40-generic (GTK 2.24.13)',
-    branch: '10',
-    parameters: {
-      force: '1'
-    }
-  });
-
-  var withUpdate = {
-    product: 'Thunderbird',
-    version: '10.0.12',
-    buildID: '20130105062021',
-    buildTarget: 'Linux_x86-gcc3',
-    locale: 'fr',
-    channel: 'esr',
-    osVersion: 'Linux 3.5.0-40-generic (GTK 2.24.13)',
-    branch: '10',
-    parameters: {
-      force: '1'
-    },
-    updates: [
-      {
-        'type': 'minor',
-        'version': null,
-        'extensionVersion': null,
-        'displayVersion': '17.0.9esr',
-        'appVersion': '17.0.9',
-        'platformVersion': '17.0.9',
-        'buildID': '20130911173805',
-        'detailsURL': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform',
-        'patches': [
-          {
-            'type': 'complete',
-            'URL': 'http://download.mozilla.org/?product=thunderbird-17.0.9esr-complete',
-            'localPath': 'Thunderbird/17.0.9/20130911173805/Linux_x86-gcc3/fr/binary',
-            'hashFunction': 'SHA512',
-            'hashValue': '232f4210745e0aee2a7df49de601ce69368088d1383ad3c5746c6b5faeaad',
-            'size': '21580592'
-          }
-        ]
-      }
-    ]
-  };
-
-  var withUpdate2 = {
-    product: 'Thunderbird',
-    version: '10.0.12',
-    buildID: '20130105062021',
-    buildTarget: 'Linux_x86-gcc3',
-    locale: 'fr',
-    channel: 'esr',
-    osVersion: 'Linux 3.5.0-40-generic (GTK 2.24.13)',
-    branch: '10',
-    parameters: {
-      force: '1'
-    },
-    updates: [
-      {
-        'type': 'minor',
-        'version': null,
-        'extensionVersion': null,
-        'displayVersion': '17.0.10esr',
-        'appVersion': '17.0.10',
-        'platformVersion': '17.0.10',
-        'buildID': '20131011173805',
-        'detailsURL': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform',
-        'patches': [
-          {
-            'type': 'complete',
-            'URL': 'http://download.mozilla.org/?product=thunderbird-17.0.10esr-complete',
-            'localPath': 'Thunderbird/17.0.10/20131011173805/Linux_x86-gcc3/fr/binary',
-            'hashFunction': 'SHA512',
-            'hashValue': '232f4210745e0aee2a',
-            'size': '21580590'
-          }
-        ]
-      }
-    ]
-  };
+  var version, withUpdate, withUpdate2;
 
   before(function() {
-    mockery.enable({warnOnUnregistered: false});
+    mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
     mockery.registerMock('./update-storage', MetadataStorage);
     mockery.registerMock('./downloader', Downloader);
     mockery.registerMock('./update-fetcher', UpdateFetcher);
     mockery.registerMock('./logger', testLogger);
+    SourceVersion = require('../../backend/source-version');
+    MozillaSourceVersion = require('../../backend/mozilla-source-version');
     musScraper = require('../../backend/mozilla-updates-server-scraper');
+
+    version = new SourceVersion({
+      product: 'Thunderbird',
+      version: '10.0.12',
+      buildID: '20130105062021',
+      buildTarget: 'Linux_x86-gcc3',
+      locale: 'fr',
+      channel: 'esr',
+      osVersion: 'Linux 3.5.0-40-generic (GTK 2.24.13)',
+      branch: '10',
+      parameters: {
+        force: '1'
+      }
+    });
+
+    withUpdate = {
+      product: 'Thunderbird',
+      version: '10.0.12',
+      buildID: '20130105062021',
+      buildTarget: 'Linux_x86-gcc3',
+      locale: 'fr',
+      channel: 'esr',
+      osVersion: 'Linux 3.5.0-40-generic (GTK 2.24.13)',
+      branch: '10',
+      parameters: {
+        force: '1'
+      },
+      updates: [
+        {
+          'type': 'minor',
+          'version': null,
+          'extensionVersion': null,
+          'displayVersion': '17.0.9esr',
+          'appVersion': '17.0.9',
+          'platformVersion': '17.0.9',
+          'buildID': '20130911173805',
+          'detailsURL': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform',
+          'patches': [
+            {
+              'type': 'complete',
+              'URL': 'http://download.mozilla.org/?product=thunderbird-17.0.9esr-complete',
+              'localPath': 'Thunderbird/17.0.9/20130911173805/Linux_x86-gcc3/fr/binary',
+              'hashFunction': 'SHA512',
+              'hashValue': '232f4210745e0aee2a7df49de601ce69368088d1383ad3c5746c6b5faeaad',
+              'size': '21580592'
+            }
+          ]
+        }
+      ]
+    };
+
+    withUpdate2 = {
+      product: 'Thunderbird',
+      version: '10.0.12',
+      buildID: '20130105062021',
+      buildTarget: 'Linux_x86-gcc3',
+      locale: 'fr',
+      channel: 'esr',
+      osVersion: 'Linux 3.5.0-40-generic (GTK 2.24.13)',
+      branch: '10',
+      parameters: {
+        force: '1'
+      },
+      updates: [
+        {
+          'type': 'minor',
+          'version': null,
+          'extensionVersion': null,
+          'displayVersion': '17.0.10esr',
+          'appVersion': '17.0.10',
+          'platformVersion': '17.0.10',
+          'buildID': '20131011173805',
+          'detailsURL': 'http://live.mozillamessaging.com/thunderbird/releasenotes?locale=fr&platform',
+          'patches': [
+            {
+              'type': 'complete',
+              'URL': 'http://download.mozilla.org/?product=thunderbird-17.0.10esr-complete',
+              'localPath': 'Thunderbird/17.0.10/20131011173805/Linux_x86-gcc3/fr/binary',
+              'hashFunction': 'SHA512',
+              'hashValue': '232f4210745e0aee2a',
+              'size': '21580590'
+            }
+          ]
+        }
+      ]
+    };
   });
 
   beforeEach(function(done) {
