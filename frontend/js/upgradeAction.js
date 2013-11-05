@@ -58,6 +58,8 @@
             $scope.upgradeActionList[inheritedAction.id] = inheritedAction;
           }
           setDefaultsFromRule(actualRule);
+
+          $scope.$emit('onRESTComplete');
         }
       );
 
