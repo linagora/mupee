@@ -32,7 +32,7 @@ describe('The Predicate', function() {
       expect(result).to.be.a('boolean');
       expect(result).to.be.true;
     });
-    
+
     it('does not match if the parameter product is unknown', function() {
       var matchesFirefox = Loader.predicates.extProductEquals.for({ product: 'Unknown' });
       var result = matchesFirefox({ appId: productMapper.idFromName('Firefox') });
@@ -40,7 +40,7 @@ describe('The Predicate', function() {
       expect(result).to.be.false;
     });
   });
-  
+
   describe('extIdEquals', function() {
     var someID = '{c6dbb670-c4ce-4222-a910-a9865da9721c}';
     it('does not match if candidate id is different from parameter', function() {
@@ -53,6 +53,23 @@ describe('The Predicate', function() {
     it('matches if the candidate id is the same as the parameter ', function() {
       var matchesExtId = Loader.predicates.extIdEquals.for({ id: someID });
       var result = matchesExtId({ id: someID });
+      expect(result).to.be.a('boolean');
+      expect(result).to.be.true;
+    });
+  });
+
+  describe('extBranchEquals', function() {
+    var branch = 12;
+    it('does not match if candidate branch is different from parameter', function() {
+      var matchesExtBranch = Loader.predicates.extBranchEquals.for({ branch: branch });
+      var result = matchesExtBranch({ appVersion: '17.0.3esr' });
+      expect(result).to.be.a('boolean');
+      expect(result).to.be.false;
+    });
+
+    it('matches if the candidate branch is the same as the parameter', function() {
+      var matchesExtBranch = Loader.predicates.extBranchEquals.for({ branch: branch });
+      var result = matchesExtBranch({ appVersion: '12.0.3esr' });
       expect(result).to.be.a('boolean');
       expect(result).to.be.true;
     });
