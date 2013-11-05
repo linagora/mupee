@@ -26,9 +26,9 @@
 
   angular.module('mupeeUpgradeAction', ['mupeeAPI'])
   .directive('upgradeAction', ['actionListDisplay', 'API', '$q', 'inheritedAction',
-             'buildRuleJSON', 'productAndVersionPredicates',
+             'buildRuleJSON', 'productPredicates', 'extensionPredicates',
             function(actionListDisplay, API, $q, inheritedAction, buildRuleJSON,
-                     productAndVersionPredicates) {
+                productPredicates, extensionPredicates) {
 
     function controller($scope) {
       $scope.modes = {
@@ -39,10 +39,15 @@
       };
       $scope.mode = $scope.modes.LOAD;
 
+      $scope.predicates =
+        $scope.targetMode === 'product' ?
+          productPredicates($scope.targetProduct, $scope.targetVersion) :
+          extensionPredicates($scope.targetProduct, $scope.targetVersion, $scope.targetId);
+
       $q.all(
         [
-          API.action.list(),
-          API.rule.findByPredicate(productAndVersionPredicates($scope.targetProduct, $scope.targetVersion))
+          API.action.list($scope.predicates),
+          API.rule.findByPredicate($scope.predicates)
         ]
       )
       .then(
@@ -97,7 +102,8 @@
           $scope.targetProduct,
           $scope.actualRuleId,
           $scope.edition,
-          $scope.targetVersion
+          $scope.targetVersion,
+          $scope.predicates
         );
         API.rule.record(ruleJSON).then(function(data) {
           setDefaultsFromRule(data);
@@ -120,8 +126,10 @@
       restrict: 'A',
       replace: true,
       scope: {
+        'targetMode': '@',
         'targetProduct': '=product',
-        'targetVersion': '=version'
+        'targetVersion': '=version',
+        'targetId': '@'
       },
       templateUrl: 'directives/upgradeAction',
       controller: ['$scope', controller]
@@ -131,10 +139,9 @@
 
   }])
 
-  .factory('buildRuleJSON', ['inheritedAction', 'productAndVersionPredicates',
-           function(inheritedAction, productAndVersionPredicates) {
-    function buildRuleJSON(product, ruleId, action, version) {
-      var predicates = productAndVersionPredicates(product, version);
+  .factory('buildRuleJSON', ['inheritedAction',
+           function(inheritedAction) {
+    function buildRuleJSON(product, ruleId, action, version, predicates) {
       var ruleData = {
         predicates: predicates,
         action: {
@@ -191,12 +198,27 @@
     };
   })
 
-  .factory('productAndVersionPredicates', ['buildPredicate', function(buildPredicate) {
-    return function productAndVersionPredicates(product, version) {
+  .factory('productPredicates', ['buildPredicate', function(buildPredicate) {
+    return function productPredicates(product, version) {
       var predicates = [buildPredicate('productEquals', {product: product})];
       if (version) {
         predicates.push(buildPredicate('branchEquals', {branch: parseInt(version, 10)}));
       }
+      return predicates;
+    };
+  }])
+
+  .factory('extensionPredicates', ['buildPredicate', function(buildPredicate) {
+    return function extensionPredicates(product, version, id) {
+      var predicates = [buildPredicate('extProductEquals', {product: product})];
+
+      if (version) {
+        predicates.push(buildPredicate('extBranchEquals', {branch: parseInt(version, 10)}));
+      }
+      if (id) {
+        predicates.push(buildPredicate('extIdEquals', {id: id}));
+      }
+
       return predicates;
     };
   }])

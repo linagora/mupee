@@ -46,10 +46,11 @@ describe('The mupeeAPI angular module', function() {
         expect(APIService.action).to.have.property('list');
       });
 
-      it('should issue a GET request to /admin/rules/actions', function(done) {
+      it('should issue a POST request to /admin/rules/actions, passing predicates', function(done) {
+        httpBackend.expectPOST('/admin/rules/actions', { predicates: [] }).respond(200, actionList());
 
-        httpBackend.expectGET('/admin/rules/actions').respond(200, actionList());
-        var promise = APIService.action.list();
+        var promise = APIService.action.list([]);
+
         expect(promise).to.be.an.object;
         expect(promise).to.have.property('then');
         expect(promise.then).to.be.a.function;
@@ -60,7 +61,6 @@ describe('The mupeeAPI angular module', function() {
         },function() {done();});
 
         httpBackend.flush();
-
       });
 
     });

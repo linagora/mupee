@@ -17,7 +17,7 @@ describe('The upgradeAction Angular directive', function(done) {
   ));
 
   it('should emit onRESTComplete event when it is done querying the backend', function() {
-    $httpBackend.expectGET('/admin/rules/actions').respond({});
+    $httpBackend.expectPOST('/admin/rules/actions').respond({});
     $httpBackend.expectPOST('/admin/rules').respond(404);
     $rootScope.product = 'Firefox';
 
@@ -31,7 +31,7 @@ describe('The upgradeAction Angular directive', function(done) {
   });
 
   it('should load data from the server for a product', function() {
-    $httpBackend.expectGET('/admin/rules/actions').respond(mockrulesAction());
+    $httpBackend.expectPOST('/admin/rules/actions').respond(mockrulesAction());
     $httpBackend.expectPOST('/admin/rules').respond(mockFindByPredicate());
     $rootScope.product = 'Firefox';
 
@@ -63,7 +63,7 @@ describe('The upgradeAction Angular directive', function(done) {
   });
 
   it('should load data from the server for a product and a branch', function() {
-    $httpBackend.expectGET('/admin/rules/actions').respond(mockrulesAction());
+    $httpBackend.expectPOST('/admin/rules/actions').respond(mockrulesAction());
     $httpBackend.expectPOST('/admin/rules').respond(mockFindByPredicate());
     $rootScope.product = 'Firefox';
     $rootScope.version = {majorVersion: 17};
@@ -97,7 +97,7 @@ describe('The upgradeAction Angular directive', function(done) {
   it('should send correct form data to the server', function() {
     var recorded;
 
-    $httpBackend.expectGET('/admin/rules/actions').respond(mockrulesAction());
+    $httpBackend.expectPOST('/admin/rules/actions').respond(mockrulesAction());
     $httpBackend.expectPOST('/admin/rules').respond(mockFindByPredicate());
     $httpBackend.expectPOST('/admin/rules', function(data) { recorded = data; return true; }).respond(mockFindByPredicate());
     $rootScope.product = 'Firefox';
@@ -148,6 +148,47 @@ describe('The upgradeAction Angular directive', function(done) {
       expect(recorded.predicates).to.have.length(2);
       expect(recorded.action.parameters.branch).to.equal('24-beta1');
 
+      done();
+    });
+  });
+
+  it('should pass product predicates to getActionsList() if mode=product', function() {
+    $httpBackend.expectPOST('/admin/rules/actions', {
+      predicates: [{
+        id: 'productEquals',
+        parameters: { product: 'Firefox' }
+      }]
+    }).respond({});
+    $httpBackend.expectPOST('/admin/rules').respond(404);
+    $rootScope.product = 'Firefox';
+
+    var $scope = $rootScope.$new();
+
+    $compile('<div data-upgrade-action data-product="product" data-target-mode="product"></div>')($scope);
+    $scope.$digest();
+    $scope.$on('onRESTComplete', function() {
+      done();
+    });
+  });
+
+  it('should pass extension predicates to getActionsList() if mode=extension', function() {
+    $httpBackend.expectPOST('/admin/rules/actions', {
+      predicates: [{
+        id: 'extProductEquals',
+        parameters: { product: 'Firefox' }
+      }, {
+        id: 'extIdEquals',
+        parameters: { id: 'myExtensionId' }
+      }]
+    }).respond({});
+    $httpBackend.expectPOST('/admin/rules').respond(404);
+    $rootScope.product = 'Firefox';
+
+    var $scope = $rootScope.$new();
+
+    $compile('<div data-upgrade-action data-product="product" data-target-id="myExtensionId" data-target-mode="extension"></div>')($scope);
+    $scope.$digest();
+    $scope.$on('onRESTComplete', function() {
       done();
     });
   });

@@ -3,7 +3,7 @@ h1.center
 
 div.row.productRule
   h4.center Default policy for {{product}} updates:
-  div(data-upgrade-action data-product="product")
+  div(data-upgrade-action data-product="product" data-target-mode="product")
 
 div.row.productRule
   h4.center Default policies for {{product}} extensions updates:
@@ -31,7 +31,7 @@ div(data-ng-show="!loadProgress && !networkError")
       header.row.major-branch
           div.large-1.columns {{branchDetail.branch}}
           div.large-10.columns.center 
-              span(data-upgrade-action data-product="product" data-version="branchDetail.branch")
+              span(data-upgrade-action data-product="product" data-version="branchDetail.branch" data-target-mode="product")
 
           div.center.large-1.columns.pointer(data-ng-click="opened = !opened")
             span(class="down" data-ng-show="opened == false") ▼

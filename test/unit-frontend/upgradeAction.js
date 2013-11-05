@@ -8,56 +8,82 @@ var q;
 
 describe('The mupeeUpgradeAction Angular module', function() {
 
-  beforeEach(angular.mock.module('mupeeUpgradeAction'));
-
+  beforeEach(module('mupeeUpgradeAction'));
   beforeEach(
     inject(function($q) {
       q = $q;
     })
   );
 
-  var pAVPservice;
-  var aLDservice;
-  beforeEach(inject(function(productAndVersionPredicates, actionListDisplay) {
-    pAVPservice = productAndVersionPredicates;
+  var pPservice, aLDservice, ePService;
+
+  beforeEach(inject(function(productPredicates, actionListDisplay, extensionPredicates) {
+    pPservice = productPredicates;
     aLDservice = actionListDisplay;
+    ePService = extensionPredicates;
   }));
 
-  describe(', the productAndVersionPredicates service', function() {
+  describe(', the productPredicates service', function() {
 
     it('should return a product predicate if product is given and version is nullish', function() {
-      var predicates = pAVPservice('Firefox');
-      expect(predicates).to.exist;
-      expect(predicates).to.be.an.array;
-      expect(predicates).to.have.length(1);
-      expect(predicates[0]).to.be.an.object;
-      expect(predicates[0].id).to.exist;
-      expect(predicates[0].id).to.equal('productEquals');
-      expect(predicates[0].parameters).to.exit;
-      expect(predicates[0].parameters).to.be.an.object;
-      expect(predicates[0].parameters.product).to.exit;
-      expect(predicates[0].parameters.product).to.equal('Firefox');
+      var predicates = pPservice('Firefox');
 
-
+      expect(predicates).to.deep.equal([{
+        id: 'productEquals',
+        parameters: { product: 'Firefox' }
+      }]);
     });
 
     it('should return a product predicate and a branch predicate if product and version are given', function() {
-      var predicates = pAVPservice('Firefox', 12);
-      expect(predicates).to.exist;
-      expect(predicates).to.be.an.array;
-      expect(predicates).to.have.length(2);
-      expect(predicates[0].id).to.exist;
-      expect(predicates[0].id).to.equal('productEquals');
-      expect(predicates[0].parameters).to.exit;
-      expect(predicates[0].parameters).to.be.an.object;
-      expect(predicates[0].parameters.product).to.exit;
-      expect(predicates[0].parameters.product).to.equal('Firefox');
-      expect(predicates[1].id).to.exist;
-      expect(predicates[1].id).to.equal('branchEquals');
-      expect(predicates[1].parameters).to.exit;
-      expect(predicates[1].parameters).to.be.an.object;
-      expect(predicates[1].parameters.branch).to.exit;
-      expect(predicates[1].parameters.branch).to.equal(12);
+      var predicates = pPservice('Firefox', 12);
+
+      expect(predicates).to.deep.equal([{
+        id: 'productEquals',
+        parameters: { product: 'Firefox' }
+      }, {
+        id: 'branchEquals',
+        parameters: { branch: 12 }
+      }]);
+    });
+
+  });
+
+  describe(', the extensionPredicates service', function() {
+
+    it('should return a product predicate if only product is given', function() {
+      var predicates = ePService('Firefox');
+
+      expect(predicates).to.deep.equal([{
+        id: 'extProductEquals',
+        parameters: { product: 'Firefox' }
+      }]);
+    });
+
+    it('should return product and branch predicates if product and version are given', function() {
+      var predicates = ePService('Firefox', 12);
+
+      expect(predicates).to.deep.equal([{
+        id: 'extProductEquals',
+        parameters: { product: 'Firefox' }
+      }, {
+        id: 'extBranchEquals',
+        parameters: { branch: 12 }
+      }]);
+    });
+
+    it('should return a product, branch and id predicates if product, version and id are given', function() {
+      var predicates = ePService('Firefox', 12, 'myExtensionId');
+
+      expect(predicates).to.deep.equal([{
+        id: 'extProductEquals',
+        parameters: { product: 'Firefox' }
+      }, {
+        id: 'extBranchEquals',
+        parameters: { branch: 12 }
+      }, {
+        id: 'extIdEquals',
+        parameters: { id: 'myExtensionId' }
+      }]);
     });
 
   });

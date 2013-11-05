@@ -18,11 +18,15 @@ angular.module('mupeeAPI', [])
     return deferred.promise;
   }
 
-  function getActionList() {
+  function getActionList(predicates) {
     var deferred = $q.defer();
-    $http.get('/admin/rules/actions')
+
+    $http.post('/admin/rules/actions', { predicates: predicates }, {
+      headers: { 'X-http-method-override': 'GET' }
+    })
     .success(function(data) { deferred.resolve(data); })
     .error(function(data, status) { deferred.reject(status, data); });
+
     return deferred.promise;
   }
 
