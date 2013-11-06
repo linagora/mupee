@@ -31,3 +31,6 @@ exports.filterChosenVersion = function(version, candidate) {
   return candidate;
 };
 
+exports.isPredicatePresent = function(predicates, predicateId) {
+  return (predicates.filter(function(predicate) { return predicate.id === predicateId; }).length > 0);
+};
