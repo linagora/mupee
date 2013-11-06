@@ -2,12 +2,14 @@
 
 var Action = require('../action.js'),
     filterLatestForBranch = require('./action-utils').filterLatestForBranch,
-    isPredicatePresent = require('./action-utils').isPredicatePresent;
+    isPredicatePresent = require('./action-utils').isPredicatePresent,
+    CandidateTypes = require('../candidate-types');
 
 var latestForBranch = new Action({
   id: 'latestForBranch',
   summary: 'upgrade up to latest release of a given branch',
   description: 'this policy send updates up to the latest available release of a given branch (major version)',
+  allowedCandidates: [CandidateTypes.SourceVersion],
   isCompatibleWithPredicates: function(predicates) {return isPredicatePresent(predicates, 'productEquals');},
   action: function(parameters) {
     return function(candidate) {

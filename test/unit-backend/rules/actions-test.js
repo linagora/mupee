@@ -11,6 +11,8 @@ var fixtures,
 
 describe('The Action', function() {
 
+  var CandidateTypes;
+
   before(function() {
     mockery.enable({warnOnReplace: false, warnOnUnregistered: false, useCleanCache: true});
     mockery.registerMock('./logger', testLogger);
@@ -20,6 +22,7 @@ describe('The Action', function() {
     fixturesForExtensions = require('../extension-source-version-fixtures.js');
     SourceVersion = require('../../../backend/source-version');
     Loader = require('../../../backend/rules/loader');
+    CandidateTypes = require('../../../backend/rules/candidate-types');
   });
 
   describe('deny', function() {
@@ -40,6 +43,19 @@ describe('The Action', function() {
 
         compatible = deny.isCompatibleWithPredicates([]);
         expect(compatible).to.be.true;
+      });
+    });
+
+    describe('allowed candidates', function() {
+      it('should be an array', function() {
+        var deny = Loader.actions.deny;
+        expect(deny.allowedCandidates).to.be.an.array;
+      });
+      it('should only contain SourceVersion and ExtensionSourceVersion', function() {
+        var deny = Loader.actions.deny;
+        expect(deny.allowedCandidates).to.have.length(2);
+        expect(deny.allowedCandidates).to.contain(CandidateTypes.SourceVersion);
+        expect(deny.allowedCandidates).to.contain(CandidateTypes.ExtensionSourceVersion);
       });
     });
 
@@ -79,6 +95,21 @@ describe('The Action', function() {
         expect(compatible).to.be.true;
       });
     });
+
+    describe('allowed candidates', function() {
+      it('should be an array', function() {
+        var allow = Loader.actions.allow;
+        expect(allow.allowedCandidates).to.be.an.array;
+      });
+
+      it('should only contain SourceVersion and ExtensionSourceVersion', function() {
+        var allow = Loader.actions.allow;
+        expect(allow.allowedCandidates).to.have.length(2);
+        expect(allow.allowedCandidates).to.contain(CandidateTypes.SourceVersion);
+        expect(allow.allowedCandidates).to.contain(CandidateTypes.ExtensionSourceVersion);
+      });
+    });
+
 
     it('always return an unmodified update list with SourceVersion', function() {
       var allow = Loader.actions.allow.for({});
@@ -126,6 +157,19 @@ describe('The Action', function() {
       });
     });
 
+    describe('allowed candidates', function() {
+      it('should be an array', function() {
+        var latestForBranch = Loader.actions.latestForBranch;
+        expect(latestForBranch.allowedCandidates).to.be.an.array;
+      });
+
+      it('should only contain SourceVersion', function() {
+        var latestForBranch = Loader.actions.latestForBranch;
+        expect(latestForBranch.allowedCandidates).to.have.length(1);
+        expect(latestForBranch.allowedCandidates).to.contain(CandidateTypes.SourceVersion);
+      });
+    });
+
     it('should only return updates for the latest release of the given version branch', function() {
       var latestForBranch = Loader.actions.latestForBranch.for({branch: 12});
       var candidate = new SourceVersion(fixtures.thunderbird3);
@@ -161,6 +205,19 @@ describe('The Action', function() {
         ];
         var compatible = latestForCurrentBranch.isCompatibleWithPredicates(predicates);
         expect(compatible).to.be.false;
+      });
+    });
+
+    describe('allowed candidates', function() {
+      it('should be an array', function() {
+        var latestForCurrentBranch = Loader.actions.latestForCurrentBranch;
+        expect(latestForCurrentBranch.allowedCandidates).to.be.an.array;
+      });
+
+      it('should only contain SourceVersion', function() {
+        var latestForCurrentBranch = Loader.actions.latestForCurrentBranch;
+        expect(latestForCurrentBranch.allowedCandidates).to.have.length(1);
+        expect(latestForCurrentBranch.allowedCandidates).to.contain(CandidateTypes.SourceVersion);
       });
     });
 
@@ -216,6 +273,20 @@ describe('The Action', function() {
         expect(compatible).to.be.false;
       });
     });
+
+    describe('allowed candidates', function() {
+      it('should be an array', function() {
+        var upgradeToVersion = Loader.actions.upgradeToVersion;
+        expect(upgradeToVersion.allowedCandidates).to.be.an.array;
+      });
+
+      it('should only contain ExtensionSourceVersion', function() {
+        var upgradeToVersion = Loader.actions.upgradeToVersion;
+        expect(upgradeToVersion.allowedCandidates).to.have.length(1);
+        expect(upgradeToVersion.allowedCandidates).to.contain(CandidateTypes.ExtensionSourceVersion);
+      });
+    });
+
   });
 
   after(function() {
