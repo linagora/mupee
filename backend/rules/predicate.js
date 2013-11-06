@@ -8,6 +8,7 @@ var Predicate = function(object) {
   this.description = object.description;
   this.predicate = object.predicate;
   this.weight = object.weight;
+  this.allowedCandidate = object.allowedCandidate;
   this.parametersDefinitions = [];
   if (object.parametersDefinitions) {
     object.parametersDefinitions.forEach(function(paramDef) {

@@ -1,6 +1,7 @@
 'use strict';
 
-var productMapper = require('../../product-mapper');
+var productMapper = require('../../product-mapper'),
+    CandidateTypes = require('../candidate-types');
 
 var Predicate = require('../predicate.js');
 
@@ -9,6 +10,7 @@ var extProductEquals = new Predicate({
   summary: 'extension\'s product equals',
   description: 'true if the extension product compatibility matches the given parameter',
   weight: 4,
+  allowedCandidate: CandidateTypes.ExtensionSourceVersion,
   predicate: function(candidate, parameters) {
     return (candidate.appId === productMapper.idFromName(parameters.product));
   },

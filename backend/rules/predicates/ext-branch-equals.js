@@ -1,6 +1,7 @@
 'use strict';
 
 var Predicate = require('../predicate.js'),
+    CandidateTypes = require('../candidate-types'),
     versionSplitter = require('../../version-splitter');
 
 var extBranchEquals = new Predicate({
@@ -8,6 +9,7 @@ var extBranchEquals = new Predicate({
   summary: 'extension\'s product branch equals',
   description: 'true if the extension product branch matches the given parameter',
   weight: 4,
+  allowedCandidate: CandidateTypes.ExtensionSourceVersion,
   predicate: function(candidate, parameters) {
     return (versionSplitter.getBranch(candidate.appVersion) === parameters.branch);
   },
