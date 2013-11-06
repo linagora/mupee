@@ -6,6 +6,7 @@ var deny = new Action({
   id: 'deny',
   summary: 'deny all upgrades',
   description: 'this policy disable all updates',
+  isCompatibleWithPredicates: function() {return true;},
   action: function(parameters) {
     return function(version) {
       version.clearUpdates();

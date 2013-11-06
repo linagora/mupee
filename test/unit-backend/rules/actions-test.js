@@ -23,6 +23,26 @@ describe('The Action', function() {
   });
 
   describe('deny', function() {
+    describe('isCompatibleWithPredicates', function() {
+      it('should be a function', function() {
+        var deny = Loader.actions.deny;
+        expect(deny.isCompatibleWithPredicates).to.be.a.function;
+      });
+      it('should be compatible whatever predicates are given', function() {
+        var deny = Loader.actions.deny;
+        var predicates = [
+          {id: 'foo'},
+          {id: 'extIdEquals'},
+          {id: 'bar'}
+        ];
+        var compatible = deny.isCompatibleWithPredicates(predicates);
+        expect(compatible).to.be.true;
+
+        compatible = deny.isCompatibleWithPredicates([]);
+        expect(compatible).to.be.true;
+      });
+    });
+
     it('always return an empty update list with SourceVersion', function() {
       var deny = Loader.actions.deny.for({});
       var candidate = new SourceVersion(fixtures.thunderbird3);
@@ -39,6 +59,27 @@ describe('The Action', function() {
   });
 
   describe('allow', function() {
+
+    describe('isCompatibleWithPredicates', function() {
+      it('should be a function', function() {
+        var allow = Loader.actions.allow;
+        expect(allow.isCompatibleWithPredicates).to.be.a.function;
+      });
+      it('should be compatible whatever predicates are given', function() {
+        var allow = Loader.actions.allow;
+        var predicates = [
+          {id: 'foo'},
+          {id: 'extIdEquals'},
+          {id: 'bar'}
+        ];
+        var compatible = allow.isCompatibleWithPredicates(predicates);
+        expect(compatible).to.be.true;
+
+        compatible = allow.isCompatibleWithPredicates([]);
+        expect(compatible).to.be.true;
+      });
+    });
+
     it('always return an unmodified update list with SourceVersion', function() {
       var allow = Loader.actions.allow.for({});
       var candidate = new SourceVersion(fixtures.thunderbird3);
@@ -57,6 +98,34 @@ describe('The Action', function() {
   });
 
   describe('latestForBranch', function() {
+
+    describe('isCompatibleWithPredicates', function() {
+      it('should be a function', function() {
+        var latestForBranch = Loader.actions.latestForBranch;
+        expect(latestForBranch.isCompatibleWithPredicates).to.be.a.function;
+      });
+      it('should be compatible if the productEquals predicate is given', function() {
+        var latestForBranch = Loader.actions.latestForBranch;
+        var predicates = [
+          {id: 'foo'},
+          {id: 'productEquals'},
+          {id: 'bar'}
+        ];
+        var compatible = latestForBranch.isCompatibleWithPredicates(predicates);
+        expect(compatible).to.be.true;
+      });
+      it('should not be compatible if the productEquals predicate is not given', function() {
+        var latestForBranch = Loader.actions.latestForBranch;
+        var predicates = [
+          {id: 'foo'},
+          {id: 'colorEquals'},
+          {id: 'bar'}
+        ];
+        var compatible = latestForBranch.isCompatibleWithPredicates(predicates);
+        expect(compatible).to.be.false;
+      });
+    });
+
     it('should only return updates for the latest release of the given version branch', function() {
       var latestForBranch = Loader.actions.latestForBranch.for({branch: 12});
       var candidate = new SourceVersion(fixtures.thunderbird3);
@@ -67,6 +136,34 @@ describe('The Action', function() {
   });
 
   describe('latestForCurrentBranch', function() {
+
+    describe('isCompatibleWithPredicates', function() {
+      it('should be a function', function() {
+        var latestForCurrentBranch = Loader.actions.latestForCurrentBranch;
+        expect(latestForCurrentBranch.isCompatibleWithPredicates).to.be.a.function;
+      });
+      it('should be compatible if the productEquals predicate is given', function() {
+        var latestForCurrentBranch = Loader.actions.latestForCurrentBranch;
+        var predicates = [
+          {id: 'foo'},
+          {id: 'productEquals'},
+          {id: 'bar'}
+        ];
+        var compatible = latestForCurrentBranch.isCompatibleWithPredicates(predicates);
+        expect(compatible).to.be.true;
+      });
+      it('should not be compatible if the productEquals predicate is not given', function() {
+        var latestForCurrentBranch = Loader.actions.latestForCurrentBranch;
+        var predicates = [
+          {id: 'foo'},
+          {id: 'colorEquals'},
+          {id: 'bar'}
+        ];
+        var compatible = latestForCurrentBranch.isCompatibleWithPredicates(predicates);
+        expect(compatible).to.be.false;
+      });
+    });
+
     it('should only return updates for the latest release of the current version branch', function() {
       var latestForCurrentBranch = Loader.actions.latestForCurrentBranch.for();
       var candidate = new SourceVersion(fixtures.thunderbird3);
@@ -91,6 +188,33 @@ describe('The Action', function() {
       var candidate = fixturesForExtensions.ltn123TB17WithLotOfUpdates();
       var result = upgradeToVersion(candidate);
       expect(result.updates).to.be.empty;
+    });
+
+    describe('isCompatibleWithPredicates', function() {
+      it('should be a function', function() {
+        var upgradeToVersion = Loader.actions.upgradeToVersion;
+        expect(upgradeToVersion.isCompatibleWithPredicates).to.be.a.function;
+      });
+      it('should be compatible if one of the predicate is extIdEquals', function() {
+        var upgradeToVersion = Loader.actions.upgradeToVersion;
+        var predicates = [
+          {id: 'foo'},
+          {id: 'extIdEquals'},
+          {id: 'bar'}
+        ];
+        var compatible = upgradeToVersion.isCompatibleWithPredicates(predicates);
+        expect(compatible).to.be.true;
+      });
+      it('should not be compatible if no predicate is extIdEquals', function() {
+        var upgradeToVersion = Loader.actions.upgradeToVersion;
+        var predicates = [
+          {id: 'foo'},
+          {id: 'extColorEquals'},
+          {id: 'bar'}
+        ];
+        var compatible = upgradeToVersion.isCompatibleWithPredicates(predicates);
+        expect(compatible).to.be.false;
+      });
     });
   });
 
