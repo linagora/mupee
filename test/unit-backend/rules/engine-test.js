@@ -32,9 +32,10 @@ describe('The Rules Engine', function() {
         engine.on('cacheLoaded', function(err, result) {
           if (err) {throw (err);}
           expect(result).to.be.an.array;
-          expect(result).to.have.length(2);
-          expect(result[0]).to.be.instanceof(Rule);
-          expect(result[1]).to.be.instanceof(Rule);
+          expect(result).to.have.length(4);
+          result.forEach(function(rule) {
+            expect(rule).to.be.instanceof(Rule);
+          });
           done();
         });
       });
@@ -50,7 +51,7 @@ describe('The Rules Engine', function() {
       expect(result).to.be.an.object;
       expect(result).to.have.property('_id');
       expect(result.predicates).to.be.an.array;
-      expect(engine.cache).to.have.length(3);
+      expect(engine.cache).to.have.length(5);
       done();
     });
   });
@@ -61,9 +62,9 @@ describe('The Rules Engine', function() {
     rule._id = null;
 
     engine.create(rule, function(err, result) {
-      expect(engine.cache).to.have.length(4);
+      expect(engine.cache).to.have.length(6);
       engine.remove(result._id, function(err, result) {
-        expect(engine.cache).to.have.length(3);
+        expect(engine.cache).to.have.length(5);
         done();
       });
     });
@@ -75,11 +76,11 @@ describe('The Rules Engine', function() {
     rule._id = null;
 
     engine.create(rule, function(err, result) {
-      expect(engine.cache).to.have.length(4);
+      expect(engine.cache).to.have.length(6);
       result.action = {id: 'deny', parameters: {}};
       engine.update(result, function(err, result) {
         expect(result.action.id).to.equal('deny');
-        expect(engine.cache).to.have.length(4);
+        expect(engine.cache).to.have.length(6);
         done();
       });
     });

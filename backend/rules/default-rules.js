@@ -24,7 +24,31 @@ var denyAllThunderbird = module.exports.denyAllUpgradesForThunderbird = new Rule
   }
 });
 
+var denyAllFirefoxExtensions = module.exports.denyAllUpgradesForFirefoxExtensions = new Rule({
+  predicates: [{
+    id: 'extProductEquals',
+    parameters: { product: 'Firefox' }
+  }],
+  action: {
+    id: 'deny',
+    parameters: {}
+  }
+});
+
+var denyAllThunderbirdExtensions = module.exports.denyAllUpgradesForThunderbirdExtensions = new Rule({
+  predicates: [{
+    id: 'extProductEquals',
+    parameters: { product: 'Thunderbird' }
+  }],
+  action: {
+    id: 'deny',
+    parameters: {}
+  }
+});
+
 module.exports.list = [
   denyAllFirefox,
-  denyAllThunderbird
+  denyAllThunderbird,
+  denyAllFirefoxExtensions,
+  denyAllThunderbirdExtensions
 ];
