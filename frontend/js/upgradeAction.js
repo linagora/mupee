@@ -59,7 +59,7 @@
           }
           $scope.mode = $scope.modes.DISPLAY;
           $scope.upgradeActionList = angular.copy(upgradeActionList);
-          if ($scope.targetVersion) {
+          if ($scope.targetVersion || $scope.targetId) {
             $scope.upgradeActionList[inheritedAction.id] = inheritedAction;
           }
           setDefaultsFromRule(actualRule);

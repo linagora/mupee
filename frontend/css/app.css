@@ -182,6 +182,11 @@ input.button.radius {
     border: none;
 }
 
+.extension-title {
+    line-height: 2.5em;
+    text-align: left;
+}
+
 @media screen and (max-width: 980px) {
   .row .columns {
     font-size: 1.5em;

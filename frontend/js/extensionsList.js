@@ -13,7 +13,19 @@
         $scope.mode = $scope.modes.LOAD;
 
         API.extensions.list($scope.product, $scope.version).then(function(results) {
-          $scope.extensions = results;
+          $scope.extensionsById = {};
+          $scope.extensions = [];
+
+          results.forEach(function(result) {
+            if (!$scope.extensionsById[result.id]) {
+              $scope.extensionsById[result.id] = result.name;
+              $scope.extensions.push({
+                id: result.id,
+                name: result.name
+              });
+            }
+          });
+
           $scope.mode = $scope.modes.DISPLAY;
         });
       }

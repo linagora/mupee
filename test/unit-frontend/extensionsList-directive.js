@@ -5,57 +5,145 @@
 var expect = chai.expect;
 
 describe('The extensionsList directive', function() {
-  var $s, $c, $h;
+  var $scope, $c, $h;
 
   beforeEach(module('mupeeExtensionsList', 'directives/extensionsList'));
   beforeEach(inject(function($rootScope, $compile, $httpBackend) {
-    $s = $rootScope;
+    $scope = $rootScope;
     $c = $compile;
     $h = $httpBackend;
   }));
 
-  it('should display \'No extensions...\' if backend sends no extensions (no filter)', function(done) {
+  function digest() {
+    $scope.$digest();
+    $h.flush();
+  }
+
+  it('should display only an upgradeAction directive if backend sends no extensions (no filter)', function(done) {
     $h.expectGET('/admin/extensions?').respond([]);
 
-    var element = $c('<div data-extensions-list></div>')($s);
+    var element = $c('<div data-extensions-list></div>')($scope);
 
-    $s.$digest();
+    digest();
 
+    var rootElement = element.children('[data-ng-show*="DISPLAY"]');
+
+    expect(rootElement.hasClass('ng-hide')).to.be.false;
+    expect(rootElement.find('article.ng-hide').length).to.equal(1);
     expect(
-        element
-          .children('[data-ng-show*="DISPLAY"]')
+        rootElement
           .children()
-          .html()).to.equal('No   extensions are currently registered');
+          .html()).to.equal('<span data-upgrade-action="data-upgrade-action" data-product="product" data-target-mode="extension"></span>');
     done();
   });
 
-  it('should display \'No extensions...\' if backend sends no extensions (product=Thunderbird)', function(done) {
+  it('should display only an upgradeAction directive if backend sends no extensions (product=Thunderbird)', function(done) {
     $h.expectGET('/admin/extensions?product=Thunderbird').respond([]);
 
-    var element = $c('<div data-extensions-list data-product="Thunderbird"></div>')($s);
+    var element = $c('<div data-extensions-list data-product="Thunderbird"></div>')($scope);
 
-    $s.$digest();
+    digest();
 
+    var rootElement = element.children('[data-ng-show*="DISPLAY"]');
+
+    expect(rootElement.hasClass('ng-hide')).to.be.false;
+    expect(rootElement.find('article.ng-hide').length).to.equal(1);
     expect(
-        element
-          .children('[data-ng-show*="DISPLAY"]')
+        rootElement
           .children()
-          .html()).to.equal('No Thunderbird  extensions are currently registered');
+          .html()).to.equal('<span data-upgrade-action="data-upgrade-action" data-product="product" data-target-mode="extension"></span>');
     done();
   });
 
-  it('should display \'No extensions...\' if backend sends no extensions (product=Thunderbird, version=24)', function(done) {
+  it('should display only an upgradeAction directive if backend sends no extensions (product=Thunderbird, version=24)', function(done) {
     $h.expectGET('/admin/extensions?branch=24&product=Thunderbird').respond([]);
 
-    var element = $c('<div data-extensions-list data-product="Thunderbird" data-version="24"></div>')($s);
+    var element = $c('<div data-extensions-list data-product="Thunderbird" data-version="24"></div>')($scope);
 
-    $s.$digest();
+    digest();
 
+    var rootElement = element.children('[data-ng-show*="DISPLAY"]');
+
+    expect(rootElement.hasClass('ng-hide')).to.be.false;
+    expect(rootElement.find('article.ng-hide').length).to.equal(1);
     expect(
-        element
-          .children('[data-ng-show*="DISPLAY"]')
+        rootElement
           .children()
-          .html()).to.equal('No Thunderbird 24 extensions are currently registered');
+          .html()).to.equal('<span data-upgrade-action="data-upgrade-action" data-product="product" data-target-mode="extension"></span>');
+    done();
+  });
+
+  it('should display one extension if backend sends one extension', function(done) {
+    $h.expectGET('/admin/extensions?').respond([{
+      id: 'id',
+      name: 'name',
+      version: '1.0'
+    }]);
+
+    var element = $c('<div data-extensions-list></div>')($scope);
+
+    digest();
+
+    var rootElement = element.children('[data-ng-show*="DISPLAY"]').find('article');
+    var extNames = rootElement.find('.row.minor-versions > div > span');
+
+    expect(rootElement.hasClass('ng-hide')).to.be.false;
+    expect(extNames.length).to.equal(1);
+    expect(extNames[0].innerHTML).to.equal('name');
+    done();
+  });
+
+  it('should display two extensions if backend sends two extension', function(done) {
+    $h.expectGET('/admin/extensions?').respond([{
+      id: 'id1',
+      name: 'name1',
+      version: '1.0'
+    }, {
+      id: 'id2',
+      name: 'name2',
+      version: '1.0'
+    }]);
+
+    var element = $c('<div data-extensions-list></div>')($scope);
+
+    digest();
+
+    var rootElement = element.children('[data-ng-show*="DISPLAY"]').find('article');
+    var extNames = rootElement.find('.row.minor-versions > div > span');
+
+    expect(rootElement.hasClass('ng-hide')).to.be.false;
+    expect(extNames.length).to.equal(2);
+    expect(extNames[0].innerHTML).to.equal('name1');
+    expect(extNames[1].innerHTML).to.equal('name2');
+    done();
+  });
+
+  it('should group extensions by name', function(done) {
+    $h.expectGET('/admin/extensions?').respond([{
+      id: 'id1',
+      name: 'name1',
+      version: '1.0'
+    }, {
+      id: 'id2',
+      name: 'name2',
+      version: '1.0'
+    }, {
+      id: 'id2',
+      name: 'name2',
+      version: '2.0'
+    }]);
+
+    var element = $c('<div data-extensions-list></div>')($scope);
+
+    digest();
+
+    var rootElement = element.children('[data-ng-show*="DISPLAY"]').find('article');
+    var extNames = rootElement.find('.row.minor-versions > div > span');
+
+    expect(rootElement.hasClass('ng-hide')).to.be.false;
+    expect(extNames.length).to.equal(2);
+    expect(extNames[0].innerHTML).to.equal('name1');
+    expect(extNames[1].innerHTML).to.equal('name2');
     done();
   });
 

@@ -1,6 +1,9 @@
 h1.center 
   {{product}} updates policies
 
+div.center(data-ng-show="loadProgress") Loading...
+div.center.alert-box.alert(data-ng-show="networkError") Oh my god ! We encountered an error :-(
+
 div.row.productRule
   h4.center Default policy for {{product}} updates:
   div(data-upgrade-action data-product="product" data-target-mode="product")
@@ -11,19 +14,10 @@ div.row.productRule
 
 br
 
-div.center(data-ng-show="loadProgress") Loading...
-div.center.alert-box.alert(data-ng-show="networkError") Oh my god ! We encountered an error :-(
+h4.center Known versions of {{product}}:
 
 div(data-ng-show="!loadProgress && !networkError")
   div.row.collapse
-    div.row
-          div.large-1.columns
-            span(class="grey") Versions
-          div.large-10.columns.center
-            span(class="grey") Policies
-          div.large-1.columns
-      br
-
     div.columns.center.alert-box.radius(data-ng-show="versions.length == 0") No {{product}} clients has connected to your Mupee yet
 
     article.twelve.columns.version-row(data-ng-repeat="branchDetail in versions" data-ng-init="opened = false")
