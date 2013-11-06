@@ -555,6 +555,11 @@ describe('The ExtensionUpdates route', function() {
       });
       mockery.registerMock('../extension-update-storage', UpdStorage);
       mockery.registerMock('../extension-storage', Storage);
+      mockery.registerMock('../rules/engine', {
+        evaluate: function(candidate) {
+          return candidate;
+        }
+      });
       proxy = require('../../backend/routes/extension-updates');
 
       proxy.versionCheck({
@@ -595,6 +600,12 @@ describe('The ExtensionUpdates route', function() {
       });
       mockery.registerMock('../extension-update-storage', UpdStorage);
       mockery.registerMock('../extension-storage', Storage);
+      mockery.registerMock('../rules/engine', {
+        evaluate: function(candidate) {
+          candidate.updates.splice(1, 1);
+          return candidate;
+        }
+      });
       proxy = require('../../backend/routes/extension-updates');
 
       proxy.versionCheck({
@@ -604,6 +615,43 @@ describe('The ExtensionUpdates route', function() {
           data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.9.2-localFile.rdf'), {encoding: 'utf-8'}));
           done();
         }
+      });
+    });
+
+    it('should call engine.evaluate', function(done) {
+      var ltn191Linux = fixtures.ltn191Linux();
+      ltn191Linux.localFile = {
+        path: 'Extensions/{e2fda1a4-762b-4020-b5ad-a41df1933103}/1.9.1/test.xpi',
+        hash: 'sha1:1234'
+      };
+
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) { callback(); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, [ltn191Linux]); };
+
+      mockery.registerMock('../config', {
+        server: {
+          url: 'http://localhost',
+          port: 1234
+        }
+      });
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      mockery.registerMock('../rules/engine', {
+        evaluate: function(candidate) {
+          done();
+          return candidate;
+        }
+      });
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function() {}
       });
     });
 

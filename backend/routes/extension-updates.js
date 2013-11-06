@@ -9,7 +9,8 @@ var ExtensionSourceVersion = require('../extension-source-version').ExtensionSou
     ExtensionUpdateStorage = require('../extension-update-storage'),
     Extension = require('../extension').Extension,
     mvc = require('mozilla-version-comparator'),
-    backgroundTasks = require('../background-tasks');
+    backgroundTasks = require('../background-tasks'),
+    engine = require('../rules/engine');
 
 function badRequest(res, err, filename) {
   logger.error(filename ? filename + ': ' + err : err);
@@ -70,8 +71,6 @@ exports.versionCheck = function(req, res) {
                   updateHash: sortedKnownExtensions[i].localFile.hash
                 }
               }));
-
-              break; // This returns the latest version, for now
             }
           }
         }
@@ -81,7 +80,7 @@ exports.versionCheck = function(req, res) {
         backgroundTasks.addExtensionScraperTask(dbSourceVersion);
       }
 
-      res.send(clientSourceVersion.updatesAsRDF());
+      res.send(engine.evaluate(clientSourceVersion).updatesAsRDF());
       updateStorage.save(dbSourceVersion, function(err) {
         if (err) {
           logger.warn('While saving an ExtensionSourceVersion in storage: ', err);
