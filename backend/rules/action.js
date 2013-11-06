@@ -7,6 +7,7 @@ var Action = function(object) {
   this.summary = object.summary;
   this.description = object.description;
   this.action = object.action;
+  this.isCompatibleWithPredicates = object.isCompatibleWithPredicates;
   this.parametersDefinitions = [];
   if (object.parametersDefinitions) {
     object.parametersDefinitions.forEach(function(paramDef) {
