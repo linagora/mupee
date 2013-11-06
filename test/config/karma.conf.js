@@ -10,12 +10,13 @@ module.exports = function(config) {
       'frontend/lib/angular/angular-*.js',
       'test/lib/angular/angular-mocks-mocha.js',
       'test/lib/chai.js',
-      'frontend/js/*.js',
+      'frontend/js/**/*.js',
       'test/unit-frontend/**/*.js',
       'frontend/views/directives/*.jade'
     ],
     exclude: [
-      'frontend/js/product.src.js'
+      'frontend/js/product.src.js',
+      'frontend/js/directives/autoComplete.src.js'
     ],
 
     frameworks: ['mocha'],

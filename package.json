@@ -34,7 +34,9 @@
     "browserify": "2.35.0",
     "adm-zip": "~0.4.3",
     "fs-extra": "~0.8.1",
-    "checksum": "~0.1.1"
+    "checksum": "~0.1.1",
+    "flat": "~1.0.0",
+    "node-uuid": "~1.4.1"
   },
   "devDependencies": {
     "mocha": "1.13.0",

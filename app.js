@@ -9,6 +9,7 @@ var proxy = require('./backend/routes/updates'),
     versions = require('./backend/routes/admin/versions'),
     extensions = require('./backend/routes/admin/extensions'),
     rules = require('./backend/routes/admin/rules'),
+    autocomplete = require('./backend/routes/autocomplete'),
     routes = require('./backend/routes'),
     config = require('./backend/config'),
     logger = require('./backend/logger'),
@@ -66,6 +67,8 @@ app.post('/admin/upload/extension', express.bodyParser(), extensions.uploadXpi);
 app.get('/admin/extensions', extensions.findAll);
 
 app.get('/:name', routes.index);
+
+app.get('/autocomplete/datalist/?', autocomplete.getAutoCompleteValues);
 
 http.createServer(app).listen(app.get('port'), function() {
   logger.info('mozilla-updater server listening on port %d', app.get('port'));

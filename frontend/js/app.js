@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp', ['ngRoute', 'mupeeProduct', 'mupeeUploader', 'mupeeNavigation'])
+angular.module('myApp', ['ngRoute', 'mupeeProduct', 'mupeeUploader', 'mupeeNavigation', 'mupeeAutoComplete'])
   .config(['$routeProvider', function($routeProvider) {
       $routeProvider.when('/home', {templateUrl: 'partials/home'});
       $routeProvider.when('/Firefox', {templateUrl: 'partials/productHome', controller: 'productHome'});

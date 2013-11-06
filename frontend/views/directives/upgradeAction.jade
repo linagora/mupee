@@ -20,8 +20,10 @@ span
           div.large-3.columns
             span.grey {{parameter.summary}}: 
           div.large-9.columns
-            input(type="{{parameter.type}}" data-ng-model='parameter.value' 
-              data-ng-required='{{parameter.mandatory}}' placeholder='{{parameter.summary}}')
+            input(type="{{parameter.type}}" data-ng-model='parameter.value'
+              data-ng-required='{{parameter.mandatory}}' placeholder='{{parameter.summary}}'
+              data-auto-complete data-id='{{targetId}}' data-property='{{parameter.id}}'
+              data-target-mode='{{targetMode}}' data-version='{{targetVersion}}' data-product='{{targetProduct}}')
         
         div.row.collapse
           div.large-5.columns
