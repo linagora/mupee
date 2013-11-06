@@ -24,3 +24,6 @@ div.row.collapse
             div(data-upgrade-action data-product="product" data-version="version" data-target-id="{{extension.id}}" data-target-mode="extension")
 
   span(data-ng-show='mode == modes.LOAD') Loading...
+  span.error(data-ng-show='mode == modes.ERROR') Unable to retrieve the list of extensions
+    div.code Code: {{error.status}}
+    div.reason(data-ng-show="error.data") Reason: {{error.data}}

@@ -297,7 +297,26 @@ describe('The mupeeAPI angular module', function() {
         promise.then(function(response) {
           expect(response).to.deep.equal([{ greet: 'hi' }]);
           done();
-        },function() { done(); });
+        });
+
+        httpBackend.flush();
+      });
+
+      it('should return an error object when there\'s an error', function(done) {
+        var promise = APIService.extensions.list();
+
+        httpBackend.expectGET('/admin/extensions?').respond(400, 'This is a bad request!');
+        expect(promise).to.be.an.object;
+        expect(promise).to.have.property('then');
+        expect(promise.then).to.be.a.function;
+
+        promise.then(null, function(error) {
+          expect(error).to.deep.equal({
+            status: 400,
+            data: 'This is a bad request!'
+          });
+          done();
+        });
 
         httpBackend.flush();
       });

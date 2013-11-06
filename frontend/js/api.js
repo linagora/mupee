@@ -75,7 +75,7 @@ angular.module('mupeeAPI', [])
         }
       })
       .success(function(data) { deferred.resolve(data); })
-      .error(function(data, status) { deferred.reject(status, data); });
+      .error(function(data, status) { deferred.reject({ status: status, data: data }); });
 
     return deferred.promise;
   }

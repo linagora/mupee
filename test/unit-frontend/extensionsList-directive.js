@@ -138,4 +138,20 @@ describe('The extensionsList directive', function() {
     done();
   });
 
+  it('should display an error message if there\'s an error', function(done) {
+    $h.expectGET('/admin/extensions?').respond(726, 'It is a feature, not a bug');
+
+    var element = $c('<div data-extensions-list></div>')($scope);
+
+    digest();
+
+    var rootElement = element.children('[data-ng-show*="ERROR"]');
+
+    expect(rootElement.hasClass('ng-hide')).to.be.false;
+    expect(rootElement.html()).to.equal('Unable to retrieve the list of extensions' +
+        '<div class="code ng-binding">Code: 726</div>' +
+        '<div data-ng-show="error.data" class="reason ng-binding">Reason: It is a feature, not a bug</div>');
+    done();
+  });
+
 });
