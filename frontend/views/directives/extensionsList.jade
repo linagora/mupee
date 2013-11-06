@@ -1,29 +1,26 @@
 div.row.collapse
   span(data-ng-show='mode == modes.DISPLAY')
-    div.large-12.columns.center(data-ng-show="extensions.length == 0")
-      span(data-upgrade-action data-product="product" data-target-mode="extension")
-
-    article.extensionsList.twelve.columns.version-row(data-ng-init="opened = false" data-ng-show="extensions.length > 0")
+    article.extensionsList.twelve.columns.version-row(data-ng-init="opened = false")
       header.row.major-branch
         div.large-1.columns Extensions
         div.large-10.columns.center
-          span(data-upgrade-action data-product="product" data-target-mode="extension")
+          span(data-upgrade-action data-product="product" data-version="version" data-target-mode="extension")
 
-        div.center.large-1.columns.pointer(data-ng-click="opened = !opened")
+        div.center.large-1.columns.pointer(data-ng-click="opened = !opened" data-ng-show="extensions.length > 0")
           span(class="down" data-ng-show="opened == false") ▼
           span(class="up" data-ng-show="opened == true") ▲
 
       section.row.versionDetails(data-ng-class="{'open': opened == true}")
         div.row.labels.versionDetailsLabels
-          div.large-2.columns.extension-title
+          div.large-3.columns.extension-title
             span Name
-          div.large-10.columns
+          div.large-9.columns
             span Policy
 
         div.row.minor-versions(data-ng-repeat="extension in extensions")
-          div.large-2.columns.extension-title
+          div.large-3.columns.extension-title
             span.grey {{extension.name}}
-          div.large-10.columns
-            div(data-upgrade-action data-product="product" data-target-id="{{extension.id}}" data-target-mode="extension")
+          div.large-9.columns
+            div(data-upgrade-action data-product="product" data-version="version" data-target-id="{{extension.id}}" data-target-mode="extension")
 
   span(data-ng-show='mode == modes.LOAD') Loading...

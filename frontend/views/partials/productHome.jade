@@ -4,12 +4,15 @@ h1.center
 div.center(data-ng-show="loadProgress") Loading...
 div.center.alert-box.alert(data-ng-show="networkError") Oh my god ! We encountered an error :-(
 
-div.row.productRule
-  h4.center Default policy for {{product}} updates:
-  div(data-upgrade-action data-product="product" data-target-mode="product")
+h4.center Default policies:
+div.row
+  article.twelve.columns.version-row(data-ng-init="opened = false")
+    header.major-branch
+      div.large-1.columns {{product}}
+      div.large-10.columns.center
+        div(data-upgrade-action data-product="product" data-target-mode="product")
+      div.large-1.columns
 
-div.row.productRule
-  h4.center Default policies for {{product}} extensions updates:
   div(data-extensions-list data-product="{{product}}")
 
 br
@@ -55,4 +58,6 @@ div(data-ng-show="!loadProgress && !networkError")
               strong {{version.channel}}
           div.large-3.columns
               strong {{version.os}}
+
+        div.row.extension-by-branch(data-extensions-list data-product="{{product}}" data-version="{{branchDetail.branch}}")
 

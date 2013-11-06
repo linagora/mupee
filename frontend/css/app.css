@@ -84,6 +84,10 @@ div.large-1.columns.pointer {
   border-bottom: 0px solid #fafafa;
 }
 
+.extensionsList .minor-versions {
+  line-height: 2.3em;
+}
+
 .edit-rule-button {
   margin: 0;
   margin-bottom: 0.1em;
@@ -95,7 +99,7 @@ section.open {
 }
 
 section div {
-  padding: 0.3em;
+  padding: 0.1em;
 }
 
 .bigIcon {
@@ -183,7 +187,6 @@ input.button.radius {
 }
 
 .extension-title {
-    line-height: 2.5em;
     text-align: left;
 }
 
@@ -250,4 +253,27 @@ input.button.radius {
   height: 38px;
   margin-top: -3px;
   margin-right: 1em;
+}
+
+.extension-by-branch {
+  border-top: 1px solid #DDD;
+  padding: 0;
+}
+
+.extension-by-branch .extensionsList {
+  padding: 0;
+  margin: 0;
+}
+
+.extension-by-branch article {
+  border: none;
+}
+
+.extension-by-branch .versionDetails div.row.labels {
+  padding-top: 0;
+}
+
+.extensionsList .versionDetails {
+  line-height: 1em;
+  text-align: center;
 }

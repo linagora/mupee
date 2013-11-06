@@ -26,14 +26,11 @@ describe('The extensionsList directive', function() {
 
     digest();
 
-    var rootElement = element.children('[data-ng-show*="DISPLAY"]');
+    var rootElement = element.children('[data-ng-show*="DISPLAY"]').children();
 
     expect(rootElement.hasClass('ng-hide')).to.be.false;
-    expect(rootElement.find('article.ng-hide').length).to.equal(1);
-    expect(
-        rootElement
-          .children()
-          .html()).to.equal('<span data-upgrade-action="data-upgrade-action" data-product="product" data-target-mode="extension"></span>');
+    expect(rootElement.find('.pointer').hasClass('ng-hide')).to.be.true;
+    expect(rootElement.find('[data-upgrade-action]').length).to.equal(1);
     done();
   });
 
@@ -44,14 +41,11 @@ describe('The extensionsList directive', function() {
 
     digest();
 
-    var rootElement = element.children('[data-ng-show*="DISPLAY"]');
+    var rootElement = element.children('[data-ng-show*="DISPLAY"]').children();
 
     expect(rootElement.hasClass('ng-hide')).to.be.false;
-    expect(rootElement.find('article.ng-hide').length).to.equal(1);
-    expect(
-        rootElement
-          .children()
-          .html()).to.equal('<span data-upgrade-action="data-upgrade-action" data-product="product" data-target-mode="extension"></span>');
+    expect(rootElement.find('.pointer').hasClass('ng-hide')).to.be.true;
+    expect(rootElement.find('[data-upgrade-action]').length).to.equal(1);
     done();
   });
 
@@ -62,14 +56,11 @@ describe('The extensionsList directive', function() {
 
     digest();
 
-    var rootElement = element.children('[data-ng-show*="DISPLAY"]');
+    var rootElement = element.children('[data-ng-show*="DISPLAY"]').children();
 
     expect(rootElement.hasClass('ng-hide')).to.be.false;
-    expect(rootElement.find('article.ng-hide').length).to.equal(1);
-    expect(
-        rootElement
-          .children()
-          .html()).to.equal('<span data-upgrade-action="data-upgrade-action" data-product="product" data-target-mode="extension"></span>');
+    expect(rootElement.find('.pointer').hasClass('ng-hide')).to.be.true;
+    expect(rootElement.find('[data-upgrade-action]').length).to.equal(1);
     done();
   });
 
