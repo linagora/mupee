@@ -18,7 +18,7 @@ var upgradeToVersion = new Action({
     id: 'version',
     summary: 'version',
     description: 'a version in Mozilla Toolkit version format',
-    type: 'sring',
+    type: 'string',
     mandatory: true
   }]
 });
