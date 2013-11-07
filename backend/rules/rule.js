@@ -25,4 +25,30 @@ Rule.prototype.matches = function(candidate) {
   return match;
 };
 
+Rule.prototype.getInconsistencies = function() {
+  var action = Loader.actions[this.action.id],
+      inconsistencies = [];
+
+  this.predicates.forEach(function(p) {
+    var predicate = Loader.predicates[p.id];
+    if (action.allowedCandidates.indexOf(predicate.allowedCandidate) < 0) {
+      inconsistencies.push({
+        type: 'candidateTypeMismatch',
+        action: action.id,
+        predicate: predicate.id
+      });
+    }
+  });
+
+  if (!action.isCompatibleWithPredicates(this.predicates)) {
+    inconsistencies.push({
+      type: 'predicatesCompatibility',
+      action: action.id,
+      predicates: this.predicates.map(function(predicate) { return predicate.id; })
+    });
+  }
+
+  return inconsistencies.length ? inconsistencies : null;
+};
+
 module.exports = Rule;

@@ -4,7 +4,7 @@ var expect = require('chai').expect,
     mockery = require('mockery'),
     testLogger = require('../test-logger');
 
-var fixtures = require('./fixtures');
+var fixtures;
 
 describe('The Rule module', function() {
   var rule;
@@ -32,9 +32,9 @@ describe('The Rule module', function() {
     });
   });
 
-  it('action.apply should be function that performs the rule action', function() {
+  it('action.apply should be a function that performs the rule action', function() {
     var apply = rule.action.apply;
-    apply.should.be.a.function;
+    expect(apply).to.be.a.function;
     var result = apply({
       product: 'Thunderbird',
       branch: 10,
@@ -65,6 +65,38 @@ describe('The Rule module', function() {
 
   it('weight property should report the weight of this rule (higher weight means higher priority)', function() {
     expect(rule.weight).to.equal(12);
+  });
+
+  describe('getInconsistencies method', function() {
+
+    it('should return null if the rule is consistent', function() {
+      var rule = fixtures.thunderbird10ToLatest17;
+      expect(rule.getInconsistencies()).to.be.null;
+    });
+    it('should return an array if one rule predicate allowed candidate is incompatible with action allowed candidates', function() {
+      var rule = fixtures.invalidRuleAllowedCandidates;
+      var inconsistencies = rule.getInconsistencies();
+      expect(inconsistencies).to.be.an.array;
+      expect(inconsistencies).to.have.length(3);
+      expect(inconsistencies[0]).to.be.an.object;
+      expect(inconsistencies[0].type).to.equal('candidateTypeMismatch');
+      expect(inconsistencies[0].predicate).to.equal('branchEquals');
+      expect(inconsistencies[1]).to.be.an.object;
+      expect(inconsistencies[1].type).to.equal('candidateTypeMismatch');
+      expect(inconsistencies[1].predicate).to.equal('productEquals');
+      expect(inconsistencies[2]).to.be.an.object;
+      expect(inconsistencies[2].type).to.equal('predicatesCompatibility');
+    });
+
+    it('should return false if rule predicates are incompatible with the action', function() {
+      var rule = fixtures.invalidRuleNotCompatiblePredicates;
+      var inconsistencies = rule.getInconsistencies();
+      expect(inconsistencies).to.be.an.array;
+      expect(inconsistencies).to.have.length(1);
+      expect(inconsistencies[0]).to.be.an.object;
+      expect(inconsistencies[0].type).to.equal('predicatesCompatibility');
+    });
+
   });
 
   after(function() {
