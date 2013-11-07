@@ -1,9 +1,15 @@
 'use strict';
 
+require('chai').should();
+
 var mockery = require('mockery'),
     testLogger = require('./test-logger');
 
 describe('The Rules Server module', function() {
+
+  function compatibleWithEverything(predicates) {
+    return true;
+  }
 
   var rule = {
     _id: 'rule-id',
@@ -277,18 +283,20 @@ describe('The Rules Server module', function() {
   });
 
   it('should return the list of available actions', function(done) {
-    var threeActions = [
-      {
+    var threeActions = {
+      action1: {
         id: 'action1',
         summary: 'Block all',
-        description: 'Prevents all clients from upgrading'
+        description: 'Prevents all clients from upgrading',
+        isCompatibleWithPredicates: compatibleWithEverything
       },
-      {
+      action2: {
         id: 'action2',
         summary: 'Upgrade to latest version',
-        description: 'Allows clients to upgrade to the latest minor version of the latest branch'
+        description: 'Allows clients to upgrade to the latest minor version of the latest branch',
+        isCompatibleWithPredicates: compatibleWithEverything
       },
-      {
+      action3: {
         id: 'action3',
         summary: 'Upgrade to given version',
         description: 'Allows clients to upgrade to the latest minor version of a given branch',
@@ -300,15 +308,26 @@ describe('The Rules Server module', function() {
             type: 'number',
             mandatory: true
           }
-        ]
+        ],
+        isCompatibleWithPredicates: compatibleWithEverything
       }
-    ];
+    };
+
     mockery.registerMock('../../rules/engine', {
       listActions: function() { return threeActions; }
     });
     var rules = require('../../backend/routes/admin/rules');
 
-    rules.listActions({}, {
+    rules.listActions({
+      body: {
+        predicates: [{
+          id: 'productEquals',
+          parameters: {
+            product: 'Thunderbird'
+          }
+        }]
+      }
+    }, {
       json: function(result) {
         result.should.deep.equal(threeActions);
         done();
@@ -316,15 +335,116 @@ describe('The Rules Server module', function() {
     });
   });
 
-  it('should return an empty list to a listAction request when there is no actions', function(done) {
+  it('should send 400 when there\'s no predicates in a listActions request', function(done) {
     mockery.registerMock('../../rules/engine', {
       listActions: function() { return []; }
     });
     var rules = require('../../backend/routes/admin/rules');
 
     rules.listActions({}, {
+      send: function(data) {
+        data.should.equal(400);
+        done();
+      }
+    });
+  });
+
+  it('should send 400 when the predicates array is empty in a listActions request', function(done) {
+    mockery.registerMock('../../rules/engine', {
+      listActions: function() { return []; }
+    });
+    var rules = require('../../backend/routes/admin/rules');
+
+    rules.listActions({
+      body: {
+        predicates: []
+      }
+    }, {
+      send: function(data) {
+        data.should.equal(400);
+        done();
+      }
+    });
+  });
+
+  it('should send 400 when one of the predicates is invalid in a listActions request', function(done) {
+    mockery.registerMock('../../rules/engine', {
+      listActions: function() { return []; }
+    });
+    var rules = require('../../backend/routes/admin/rules');
+
+    rules.listActions({
+      body: {
+        predicates: [{
+          id: 'unknownPredicate'
+        }]
+      }
+    }, {
+      send: function(data) {
+        data.should.equal(400);
+        done();
+      }
+    });
+  });
+
+  it('should return an empty list to a listAction request when there is no actions', function(done) {
+    mockery.registerMock('../../rules/engine', {
+      listActions: function() { return {}; }
+    });
+    var rules = require('../../backend/routes/admin/rules');
+
+    rules.listActions({
+      body: {
+        predicates: [{
+          id: 'productEquals',
+          parameters: {product: 'Firefox'}
+        }]
+      }
+    }, {
       json: function(result) {
-        result.should.deep.equal([]);
+        result.should.deep.equal({});
+        done();
+      }
+    });
+  });
+
+  it('should return only compatible actions to a listAction request', function(done) {
+    mockery.registerMock('../../rules/engine', {
+      listActions: function() { return {
+                                  action1: {
+                                    id: 'action1',
+                                    summary: 'Block all',
+                                    description: 'Prevents all clients from upgrading',
+                                    isCompatibleWithPredicates: compatibleWithEverything
+                                  },
+                                  action2: {
+                                    id: 'action2',
+                                    summary: 'Upgrade to latest version',
+                                    description: 'Allows clients to upgrade to the latest minor version of the latest branch',
+                                    isCompatibleWithPredicates: function() { return false; }
+                                  }
+                                };
+                              }
+    });
+    var rules = require('../../backend/routes/admin/rules');
+
+    rules.listActions({
+      body: {
+        predicates: [{
+          id: 'productEquals',
+          parameters: {product: 'Firefox'}
+        }]
+      }
+    }, {
+      json: function(result) {
+        result.should.deep.equal({
+          action1: {
+            id: 'action1',
+            summary: 'Block all',
+            description: 'Prevents all clients from upgrading',
+            isCompatibleWithPredicates: compatibleWithEverything
+          }
+        });
         done();
       }
     });

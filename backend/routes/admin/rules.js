@@ -21,27 +21,57 @@ function getRuleFromRequest(request, response) {
   return new Rule(rule);
 }
 
-exports.listActions = function(request, response) {
-  response.json(engine.listActions());
-};
-
-exports.findByPredicate = function(request, response) {
+function getPredicatesFromRequest(request, response) {
   if (!request.body || !request.body.predicates || !('forEach' in request.body.predicates)) {
-    return response.send(400, 'body should contain a \'predicates\' array');
+    response.send(400, 'body should contain a \'predicates\' array');
+    return false;
   }
+
   var predicates = [];
+
   for (var i in request.body.predicates) {
     var predicate = request.body.predicates[i];
+
     try {
       rulesValidation.validatePredicateObject(predicate);
     } catch (e) {
-      return response.send(400, e.message);
+      response.send(400, e.message);
+      return false;
     }
     predicates.push(predicate);
   }
 
   if (!predicates || !predicates.length) {
-    return response.send(400);
+    response.send(400);
+    return false;
+  }
+
+  return predicates;
+}
+
+exports.listActions = function(request, response) {
+  var predicates = getPredicatesFromRequest(request, response);
+
+  if (!predicates) {
+    return;
+  }
+
+  var actions = engine.listActions(), filteredActions = {};
+
+  for (var id in actions) {
+    if (actions[id].isCompatibleWithPredicates(predicates)) {
+      filteredActions[id] = actions[id];
+    }
+  }
+
+  response.json(filteredActions);
+};
+
+exports.findByPredicate = function(request, response) {
+  var predicates = getPredicatesFromRequest(request, response);
+
+  if (!predicates) {
+    return;
   }
 
   engine.findByPredicate(predicates, function(err, result) {
