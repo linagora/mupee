@@ -88,6 +88,11 @@ exports.create = function(request, response) {
     return;
   }
 
+  var inconsistencies = rule.getInconsistencies();
+  if (inconsistencies && inconsistencies.length) {
+    return response.send(400, inconsistencies);
+  }
+
   engine.create(rule, function(err, result) {
     if (err) {
       return response.send(500, err);
@@ -101,6 +106,11 @@ exports.update = function(request, response) {
 
   if (!rule) {
     return;
+  }
+
+  var inconsistencies = rule.getInconsistencies();
+  if (inconsistencies && inconsistencies.length) {
+    return response.send(400, inconsistencies);
   }
 
   engine.update(rule, function(err, result) {

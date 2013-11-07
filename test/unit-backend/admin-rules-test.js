@@ -7,6 +7,8 @@ var mockery = require('mockery'),
 
 describe('The Rules Server module', function() {
 
+  var CandidateTypes;
+
   function compatibleWithEverything(predicates) {
     return true;
   }
@@ -43,16 +45,34 @@ describe('The Rules Server module', function() {
     }
   };
 
+  var inconsistentRule = {
+    _id: 'rule-id',
+    summary: '',
+    description: '',
+    predicates: [{
+      id: 'extIdEquals',
+      parameters: {
+        id: 'obm-connector@dreamteam.fr'
+      }
+    }],
+    action: {
+      id: 'action3',
+      parameters: {}
+    }
+  };
+
   beforeEach(function() {
     mockery.enable({warnOnUnregistered: false, useCleanCache: true});
     mockery.registerMock('./logger', testLogger);
     mockery.registerMock('../logger', testLogger);
+    CandidateTypes = require('../../backend/rules/candidate-types');
     var Loader = {
       predicates: {
         productEquals: {
           id: 'productEquals',
           summary: 'product equals',
           description: 'true if product matches with candidate',
+          allowedCandidate: CandidateTypes.SourceVersion,
           predicate: function(candidate, parameters) {
             if (candidate.product === parameters.product) {
               return true;
@@ -68,6 +88,27 @@ describe('The Rules Server module', function() {
             mandatory: true
           }],
           for: function(object) { return function() { return true; };}
+        },
+        extIdEquals: {
+          id: 'extIdEquals',
+          summary: 'extension id equals',
+          description: 'true if extension id matches with candidate',
+          allowedCandidate: CandidateTypes.ExtensionSourceVersion,
+          predicate: function(candidate, parameters) {
+            if (candidate.id === parameters.id) {
+              return true;
+            } else {
+              return false;
+            }
+          },
+          parametersDefinitions: [{
+            id: 'id',
+            summary: 'extension id',
+            description: 'the id of a mozilla extension',
+            type: 'string',
+            mandatory: true
+          }],
+          for: function(object) { return function() { return true; };}
         }
       },
       actions: {
@@ -75,6 +116,8 @@ describe('The Rules Server module', function() {
           id: 'action3',
           summary: 'deny upgrades',
           description: 'This policy disable all upgrades',
+          isCompatibleWithPredicates: compatibleWithEverything,
+          allowedCandidates: [CandidateTypes.SourceVersion],
           action: function(parameters) {
             return function(version) {
               version.clearUpdates();
@@ -134,6 +177,28 @@ describe('The Rules Server module', function() {
     }, {
       send: function(result) {
         result.should.equal(500);
+        done();
+      }
+    });
+  });
+
+  it('should send 400, and some details, when an inconsistent rule is provided in a create request', function(done) {
+    mockery.registerMock('../../rules/engine', {
+      create: function(rule, callback) { callback('Something is broken !'); }
+    });
+    var rules = require('../../backend/routes/admin/rules');
+
+    rules.create({
+      body: {
+        rule: inconsistentRule
+      }
+    }, {
+      send: function(result, details) {
+        result.should.equal(400);
+        details.should.be.an.array;
+        details.should.have.length(1);
+        details[0].should.be.an.object;
+        details[0].type.should.equal('candidateTypeMismatch');
         done();
       }
     });
@@ -214,6 +279,31 @@ describe('The Rules Server module', function() {
     }, {
       send: function(result) {
         result.should.equal(404);
+        done();
+      }
+    });
+  });
+
+  it('should send 400, and some details, when an inconsistent rule is provided in an update request', function(done) {
+    mockery.registerMock('../../rules/engine', {
+      update: function(rule, callback) { callback('something is broken'); }
+    });
+    var rules = require('../../backend/routes/admin/rules');
+
+    rules.update({
+      params: {
+        id: 'rule-id'
+      },
+      body: {
+        rule: inconsistentRule
+      }
+    }, {
+      send: function(result, details) {
+        result.should.equal(400);
+        details.should.be.an.array;
+        details.should.have.length(1);
+        details[0].should.be.an.object;
+        details[0].type.should.equal('candidateTypeMismatch');
         done();
       }
     });
