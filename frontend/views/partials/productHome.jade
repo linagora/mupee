@@ -1,23 +1,18 @@
-h1.center 
-  {{product}} updates policies
-
 div.center(data-ng-show="loadProgress") Loading...
 div.center.alert-box.alert(data-ng-show="networkError") Oh my god ! We encountered an error :-(
 
-h4.center Default policies:
+h2.center.lightblack Default policies:
 div.row
   article.twelve.columns.version-row(data-ng-init="opened = false")
     header.major-branch
       div.large-1.columns {{product}}
-      div.large-10.columns.center
+      div.large-10.columns.center.default-rule
         div(data-upgrade-action data-product="product" data-target-mode="product")
       div.large-1.columns
 
   div(data-extensions-list data-product="{{product}}")
 
-br
-
-h4.center Known versions of {{product}}:
+h2.center.lightblack Known versions of {{product}}:
 
 div(data-ng-show="!loadProgress && !networkError")
   div.row.collapse

@@ -42,7 +42,7 @@ html(ng-app="myApp")
       li.name
         h1 
           a(href="#/home") Mupee
-            span.little  : The Mozilla Updater Proxy
+            span.little  : The Mozilla Updates Proxy
       li.toggle-topbar(data-ng-show="!homepage")
         a
           img.more-menu(src="/images/more-menu.png")
@@ -58,5 +58,8 @@ html(ng-app="myApp")
           a(href='#/Thunderbird')
             img.top-bar-icon-product(src='/images/thunderbird_logo_big.png')
             | Thunderbird
-
+        li
+          a(href='#/uploadExtension')
+            img.top-bar-icon-product(src='/images/archiveIcon.png')
+            | Upload extension
   block body

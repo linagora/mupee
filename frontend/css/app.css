@@ -18,11 +18,22 @@ nav h1 {
 }
 
 body > footer {
-  margin-top: 5em;
   padding-top: 1.25em;
   padding-bottom: 1px;
   background-color: #333;
   color: #999;
+}
+
+body.Firefox {
+  background: url(../images/faded_firefox.png) 50% top no-repeat;
+}
+
+body.Thunderbird {
+  background: url(../images/faded_thunderbird.png) 50% top no-repeat;
+}
+
+div.content{
+  padding-bottom: 5em;
 }
 
 article.version-row {
@@ -113,12 +124,8 @@ section div {
   -webkit-transform: rotate(10deg);
 }
 
-footer {
-  font-size: 0.9em;
-}
-
 .row article header div:first-child {
-  font-size: 2.2em;
+  font-size: 1.8em;
   text-align: left;
   padding-left: 0;
 }
@@ -256,6 +263,11 @@ input.button.radius {
     margin-top: -5px;
   }
 }
+@media screen and (max-width: 981px) {
+  .default-rule {
+    margin-top: 1.5em;
+  }
+}
 
 @media screen and (min-width: 981px) {
   .row .columns {
@@ -290,6 +302,10 @@ input.button.radius {
 .extensionsList .versionDetails {
   line-height: 1em;
   text-align: center;
+}
+
+.lightblack {
+  color: #333;
 }
 
 .error {
