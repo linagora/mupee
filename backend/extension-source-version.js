@@ -143,6 +143,10 @@ ExtensionSourceVersion.prototype.updatesAsRDF = function() {
   });
 };
 
+ExtensionSourceVersion.prototype.shortDescription = function() {
+  return this.id + ' ' + this.version;
+};
+
 module.exports = {
   ExtensionSourceVersion: ExtensionSourceVersion,
   ExtensionUpdate: ExtensionUpdate,

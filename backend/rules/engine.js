@@ -113,16 +113,17 @@ Engine.prototype.remove = function(id, callback) {
 };
 
 Engine.prototype.evaluate = function(candidate) {
+  var candidateDescription = candidate.shortDescription();
   for (var i in this.cache) {
     var rule = this.cache[i];
 
     if (rule.matches(candidate)) {
-      logger.debug('Applying rule %s to candidate %s/%s', rule.action.id, candidate.product, candidate.version);
+      logger.debug('Applying rule %s to candidate %s', rule.action.id, candidateDescription);
       return rule.action.apply(candidate);
     }
   }
 
-  logger.debug('Applying default rule %s to candidate %s/%s', config.rules.defaultRule, candidate.product, candidate.version);
+  logger.debug('Applying default rule %s to candidate %s', config.rules.defaultRule, candidateDescription);
   return Loader.actions[config.rules.defaultRule].action()(candidate);
 };
 
