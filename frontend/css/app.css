@@ -135,6 +135,14 @@ section div {
   cursor: pointer;
 }
 
+.ruleWidget {
+  padding-top: 0.8em;
+}
+
+.ruleWidget fieldset {
+  border-radius: 0.4em;
+}
+
 .ruleWidget fieldset .row .columns{
   font-size: 1em;
 }
