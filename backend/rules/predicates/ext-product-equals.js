@@ -12,7 +12,7 @@ var extProductEquals = new Predicate({
   weight: 4,
   allowedCandidate: CandidateTypes.ExtensionSourceVersion,
   predicate: function(candidate, parameters) {
-    return (candidate.appId === productMapper.idFromName(parameters.product));
+    return (candidate.appID === productMapper.idFromName(parameters.product));
   },
   parametersDefinitions: [{
     id: 'product',

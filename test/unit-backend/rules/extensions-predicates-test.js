@@ -21,21 +21,21 @@ describe('The Predicate', function() {
 
     it('does not match if candidate product is different from parameter', function() {
       var matchesThunderbird = Loader.predicates.extProductEquals.for({ product: 'Thunderbird' });
-      var result = matchesThunderbird({ appId: productMapper.idFromName('Firefox') });
+      var result = matchesThunderbird({ appID: productMapper.idFromName('Firefox') });
       expect(result).to.be.a('boolean');
       expect(result).to.be.false;
     });
 
     it('matches if the candidate product is the same as the parameter ', function() {
       var matchesFirefox = Loader.predicates.extProductEquals.for({ product: 'Firefox' });
-      var result = matchesFirefox({ appId: productMapper.idFromName('Firefox') });
+      var result = matchesFirefox({ appID: productMapper.idFromName('Firefox') });
       expect(result).to.be.a('boolean');
       expect(result).to.be.true;
     });
 
     it('does not match if the parameter product is unknown', function() {
       var matchesFirefox = Loader.predicates.extProductEquals.for({ product: 'Unknown' });
-      var result = matchesFirefox({ appId: productMapper.idFromName('Firefox') });
+      var result = matchesFirefox({ appID: productMapper.idFromName('Firefox') });
       expect(result).to.be.a('boolean');
       expect(result).to.be.false;
     });
