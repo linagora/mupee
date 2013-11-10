@@ -54,7 +54,7 @@ exports = module.exports = function(data, callback) {
 
     var extension = {};
 
-    ['id', 'name', 'version', 'description', 'creator', 'homepageURL', 'iconURL'].forEach(function(key) {
+    ['id', 'name', 'version', 'description', 'creator', 'homepageURL', 'iconURL', 'strictCompatibility'].forEach(function(key) {
       extension[key] = getElementValueIgnoringNS(root, key);
     });
     extension.targetPlatforms = getElementValuesIgnoringNS(root, 'targetPlatform', function(node) { return node['#'] || node; });

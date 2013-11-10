@@ -37,6 +37,7 @@ var Extension = function(object) {
   this.creator = object.creator || null;
   this.homepageURL = object.homepageURL || null;
   this.iconURL = object.iconURL || null;
+  this.strictCompatibility = object.strictCompatibility === 'true';
   this.targetPlatforms = object.targetPlatforms || [];
   this.targetApplications = object.targetApplications.map(function(targetApplication) {
     return new ExtensionTargetApplication(targetApplication);

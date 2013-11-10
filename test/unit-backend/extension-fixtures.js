@@ -130,6 +130,25 @@ exports.obmConnector32011 = function() {
   });
 };
 
+exports.obmConnector32011Strict = function() {
+  return new Extension({
+    id: 'obm-connector@aliasource.fr',
+    version: '3.2.0.11',
+    name: 'OBM Connector',
+    description: 'OBM Calendar provider',
+    creator: 'Linagora Group',
+    homepageURL: 'http://obm.org/doku.php?id=obmmozillacalendar',
+    iconURL: 'chrome://obm-extension/skin/icons/ico_connecteur_32.png',
+    strictCompatibility: 'true',
+    targetPlatforms: [],
+    targetApplications: [{
+      id: '{3550f703-e582-4d05-9a08-453d09bdfdc6}',
+      minVersion: '2.0',
+      maxVersion: '17.*'
+    }]
+  });
+};
+
 exports.obmConnector32011Darwin = function() {
   return new Extension({
     id: 'obm-connector@aliasource.fr',

@@ -68,7 +68,7 @@ describe('The ExtensionInstallRDFParser module', function() {
     });
   });
 
-  it('should parse a valid install.rdf stream (obm-connector-3.2.0.11', function() {
+  it('should parse a valid install.rdf stream (obm-connector-3.2.0.11)', function() {
     var rdf = fs.readFileSync(Path.join(__dirname, '/resources/obm-connector-3.2.0.11-install.rdf'));
     var obmCon32011 = fixtures.obmConnector32011();
 
@@ -99,6 +99,39 @@ describe('The ExtensionInstallRDFParser module', function() {
 
     parseRdf(rdf, function(err) {
       expect(err).to.exist;
+    });
+  });
+
+  it('should correctly parse strictCompatibility tag when true', function() {
+    var rdf = fs.readFileSync(Path.join(__dirname, '/resources/obm-connector-3.2.0.11-strict-install.rdf'));
+    var obmCon32011Strict = fixtures.obmConnector32011Strict();
+
+    parseRdf(rdf, function(err, parsed) {
+      expect(err).to.be.null;
+      expect(parsed.strictCompatibility).to.be.true;
+      expect(parsed).to.deep.equal(obmCon32011Strict);
+    });
+  });
+
+  it('should correctly parse strictCompatibility tag when false', function() {
+    var rdf = fs.readFileSync(Path.join(__dirname, '/resources/obm-connector-3.2.0.11-nostrict-install.rdf'));
+    var obmCon32011 = fixtures.obmConnector32011();
+
+    parseRdf(rdf, function(err, parsed) {
+      expect(err).to.be.null;
+      expect(parsed.strictCompatibility).to.be.false;
+      expect(parsed).to.deep.equal(obmCon32011);
+    });
+  });
+
+  it('should set strictCompatibility to false if not present in install.rdf', function() {
+    var rdf = fs.readFileSync(Path.join(__dirname, '/resources/obm-connector-3.2.0.11-install.rdf'));
+    var obmCon32011 = fixtures.obmConnector32011();
+
+    parseRdf(rdf, function(err, parsed) {
+      expect(err).to.be.null;
+      expect(parsed.strictCompatibility).to.be.false;
+      expect(parsed).to.deep.equal(obmCon32011);
     });
   });
 
