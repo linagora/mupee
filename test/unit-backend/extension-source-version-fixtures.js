@@ -20,6 +20,24 @@ exports.ltn123TB17 = function() {
   });
 };
 
+exports.ltn123TB24 = function() {
+  return new ExtensionSourceVersion({
+    reqVersion: 2,
+    id: '{e2fda1a4-762b-4020-b5ad-a41df1933103}',
+    version: '1.2.3',
+    status: 'userEnabled',
+    appID: '{3550f703-e582-4d05-9a08-453d09bdfdc6}',
+    appVersion: '24.0',
+    appOS: 'Linux',
+    appABI: 'x86_64-gcc3',
+    currentAppVersion: '24.0',
+    maxAppVersion: '10.*',
+    locale: 'fr',
+    updateType: 97,
+    compatMode: 'normal'
+  });
+};
+
 exports.ltn123TB17WithUpdate = function() {
   return new ExtensionSourceVersion({
     reqVersion: 2,
@@ -123,5 +141,41 @@ exports.ltn123TB17WithLotOfUpdates = function() {
         }
       }
     ]
+  });
+};
+
+exports.connector3209TB24 = function() {
+  return new ExtensionSourceVersion({
+    reqVersion: 2,
+    id: 'obm-connector@aliasource.fr',
+    version: '3.2.0.9',
+    status: 'userEnabled',
+    appID: '{3550f703-e582-4d05-9a08-453d09bdfdc6}',
+    appVersion: '24.0',
+    appOS: 'Linux',
+    appABI: 'x86_64-gcc3',
+    currentAppVersion: '24.0',
+    maxAppVersion: '17.*',
+    locale: 'fr',
+    updateType: 97,
+    compatMode: 'normal'
+  });
+};
+
+exports.ltn10b1TB5 = function() {
+  return new ExtensionSourceVersion({
+    reqVersion: 2,
+    id: '{e2fda1a4-762b-4020-b5ad-a41df1933103}',
+    version: '1.0b1',
+    status: 'userEnabled',
+    appID: '{3550f703-e582-4d05-9a08-453d09bdfdc6}',
+    appVersion: '5.0.2',
+    appOS: 'Linux',
+    appABI: 'x86_64-gcc3',
+    currentAppVersion: '5.0.2',
+    maxAppVersion: '5.*',
+    locale: 'fr',
+    updateType: 97,
+    compatMode: 'normal'
   });
 };

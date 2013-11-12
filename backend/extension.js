@@ -27,6 +27,14 @@ function validateExtensionObject(object) {
   }
 }
 
+function maxVersionFits(ext, productVersion, maxVersion) {
+  if (ext.strictCompatibility || ext.hasBinaryComponent || mvc(productVersion, '10') < 0) {
+    return mvc(productVersion, maxVersion) <= 0;
+  }
+
+  return true;
+}
+
 var Extension = function(object) {
   validateExtensionObject(object);
 
@@ -37,7 +45,7 @@ var Extension = function(object) {
   this.creator = object.creator || null;
   this.homepageURL = object.homepageURL || null;
   this.iconURL = object.iconURL || null;
-  this.strictCompatibility = object.strictCompatibility === 'true';
+  this.strictCompatibility = object.strictCompatibility === 'true' || object.strictCompatibility === true;
   this.hasBinaryComponent = object.hasBinaryComponent || false;
   this.targetPlatforms = object.targetPlatforms || [];
   this.targetApplications = object.targetApplications.map(function(targetApplication) {
@@ -79,7 +87,7 @@ Extension.prototype.getCompatibleTargetApplication = function(id, version) {
   for (var i in this.targetApplications) {
     var app = this.targetApplications[i];
 
-    if (app.id === id && (!version || mvc(version, app.minVersion) >= 0 && mvc(version, app.maxVersion) <= 0)) {
+    if (app.id === id && (!version || mvc(version, app.minVersion) >= 0 && maxVersionFits(this, version, app.maxVersion))) {
       return app;
     }
   }

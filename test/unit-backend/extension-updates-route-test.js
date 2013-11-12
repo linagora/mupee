@@ -6,7 +6,7 @@ var mockery = require('mockery'),
     Path = require('path'),
     fixtures,
     updatesFixture;
-
+require('chai').should();
 describe('The ExtensionUpdates route', function() {
   var proxy;
 
@@ -819,6 +819,150 @@ describe('The ExtensionUpdates route', function() {
         query: updatesFixture.ltn123TB17()
       }, {
         send: function() {
+          done();
+        }
+      });
+    });
+
+    it('should only send updates newer than client version', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) { callback(); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, [fixtures.ltn122Linux()]); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      mockery.registerMock('../rules/engine', { evaluate: function(candidate) { return candidate; } });
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB17()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/lightning-noupdates.rdf'), {encoding: 'utf-8'}));
+          done();
+        }
+      });
+    });
+
+    it('should honor strictCompatibility flag', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) { callback(); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, [fixtures.obmConnector32011Strict()]); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      mockery.registerMock('../rules/engine', { evaluate: function(candidate) { return candidate; } });
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.connector3209TB24()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/obm-connector-noupdates.rdf'), {encoding: 'utf-8'}));
+          done();
+        }
+      });
+    });
+
+    it('should honor hasBinaryComponent flag', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) { callback(); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, [fixtures.ltn191LinuxBinaryComp()]); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      mockery.registerMock('../rules/engine', { evaluate: function(candidate) { return candidate; } });
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn123TB24()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/lightning-noupdates.rdf'), {encoding: 'utf-8'}));
+          done();
+        }
+      });
+    });
+
+    it('should do strict version checking if extension has a binary component and doesn\'t set strict mode', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) { callback(); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, [fixtures.ltn122LinuxBinaryCompNoStrict()]); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      mockery.registerMock('../rules/engine', { evaluate: function(candidate) { return candidate; } });
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn10b1TB5()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/lightning-noupdates.rdf'), {encoding: 'utf-8'}));
+          done();
+        }
+      });
+    });
+
+    it('should do strict version checking for products with version < 10', function(done) {
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) { callback(); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, [fixtures.ltn10b2Linux()]); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      mockery.registerMock('../rules/engine', { evaluate: function(candidate) { return candidate; } });
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.ltn10b1TB5()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/lightning-noupdates.rdf'), {encoding: 'utf-8'}));
+          done();
+        }
+      });
+    });
+
+    it('should do relaxed version checking for products with version >= 10', function(done) {
+      var obmConnector32011 = fixtures.obmConnector32011();
+      obmConnector32011.localFile = {
+        path: 'Extensions/obm-connector@aliasource.fr/3.2.0.11/test.xpi',
+        hash: 'sha1:1234'
+      };
+
+      var UpdStorage = function(db) {};
+      UpdStorage.prototype.findByVersion = function(extension, callback) { callback(null, []); };
+      UpdStorage.prototype.save = function(extension, callback) { callback(); };
+
+      var Storage = function() {};
+      Storage.prototype.findByExtension = function(extension, callback) { callback(null, [obmConnector32011]); };
+
+      mockery.registerMock('../extension-update-storage', UpdStorage);
+      mockery.registerMock('../extension-storage', Storage);
+      mockery.registerMock('../rules/engine', { evaluate: function(candidate) { return candidate; } });
+      proxy = require('../../backend/routes/extension-updates');
+
+      proxy.versionCheck({
+        query: updatesFixture.connector3209TB24()
+      }, {
+        send: function(data) {
+          data.should.equal(fs.readFileSync(Path.join(__dirname, '/resources/obm-connector-3.2.0.11.rdf'), {encoding: 'utf-8'}));
           done();
         }
       });

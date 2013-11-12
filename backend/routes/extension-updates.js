@@ -57,7 +57,8 @@ exports.versionCheck = function(req, res) {
         for (var i in sortedKnownExtensions) {
           var knownExt = new Extension(sortedKnownExtensions[i]);
 
-          if (knownExt.canBeInstalledOnOSAndArch(clientSourceVersion.appOS, clientSourceVersion.appABI)) {
+          if (mvc(knownExt.version, clientSourceVersion.version) >= 0 &&
+              knownExt.canBeInstalledOnOSAndArch(clientSourceVersion.appOS, clientSourceVersion.appABI)) {
             var compatibleApp = knownExt.getCompatibleTargetApplication(clientSourceVersion.appID, clientSourceVersion.appVersion);
 
             if (compatibleApp) {

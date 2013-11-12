@@ -2,6 +2,24 @@
 
 var Extension = require('../../backend/extension').Extension;
 
+exports.ltn10b2Linux = function() {
+  return new Extension({
+    id: '{e2fda1a4-762b-4020-b5ad-a41df1933103}',
+    version: '1.2.2',
+    name: 'Lightning',
+    description: 'An integrated calendar for Thunderbird',
+    creator: 'Mozilla Calendar Project',
+    homepageURL: 'http://www.mozilla.org/projects/calendar/releases/lightning1.2.2.html',
+    iconURL: 'chrome://calendar/skin/cal-icon32.png',
+    targetPlatforms: ['Linux_x86-gcc3', 'Linux_x86_64-gcc3'],
+    targetApplications: [{
+      id: '{3550f703-e582-4d05-9a08-453d09bdfdc6}',
+      minVersion: '3.0',
+      maxVersion: '3.*'
+    }]
+  });
+};
+
 exports.ltn122Linux = function() {
   return new Extension({
     id: '{e2fda1a4-762b-4020-b5ad-a41df1933103}',
@@ -12,6 +30,53 @@ exports.ltn122Linux = function() {
     homepageURL: 'http://www.mozilla.org/projects/calendar/releases/lightning1.2.2.html',
     iconURL: 'chrome://calendar/skin/cal-icon32.png',
     targetPlatforms: ['Linux_x86-gcc3', 'Linux_x86_64-gcc3'],
+    targetApplications: [{
+      id: '{3550f703-e582-4d05-9a08-453d09bdfdc6}',
+      minVersion: '10.0',
+      maxVersion: '10.*'
+    }, {
+      id: '{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}',
+      minVersion: '2.7',
+      maxVersion: '2.7.*'
+    }]
+  });
+};
+
+exports.ltn122LinuxBinaryComp = function() {
+  return new Extension({
+    id: '{e2fda1a4-762b-4020-b5ad-a41df1933103}',
+    version: '1.2.2',
+    name: 'Lightning',
+    description: 'An integrated calendar for Thunderbird',
+    creator: 'Mozilla Calendar Project',
+    homepageURL: 'http://www.mozilla.org/projects/calendar/releases/lightning1.2.2.html',
+    iconURL: 'chrome://calendar/skin/cal-icon32.png',
+    targetPlatforms: ['Linux_x86-gcc3', 'Linux_x86_64-gcc3'],
+    hasBinaryComponent: true,
+    targetApplications: [{
+      id: '{3550f703-e582-4d05-9a08-453d09bdfdc6}',
+      minVersion: '10.0',
+      maxVersion: '10.*'
+    }, {
+      id: '{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}',
+      minVersion: '2.7',
+      maxVersion: '2.7.*'
+    }]
+  });
+};
+
+exports.ltn122LinuxBinaryCompNoStrict = function() {
+  return new Extension({
+    id: '{e2fda1a4-762b-4020-b5ad-a41df1933103}',
+    version: '1.2.2',
+    name: 'Lightning',
+    description: 'An integrated calendar for Thunderbird',
+    creator: 'Mozilla Calendar Project',
+    homepageURL: 'http://www.mozilla.org/projects/calendar/releases/lightning1.2.2.html',
+    iconURL: 'chrome://calendar/skin/cal-icon32.png',
+    targetPlatforms: ['Linux_x86-gcc3', 'Linux_x86_64-gcc3'],
+    strictCompatibility: false,
+    hasBinaryComponent: true,
     targetApplications: [{
       id: '{3550f703-e582-4d05-9a08-453d09bdfdc6}',
       minVersion: '10.0',
@@ -56,6 +121,29 @@ exports.ltn191Linux = function() {
     homepageURL: 'http://www.mozilla.org/projects/calendar/releases/lightning1.2.2.html',
     iconURL: 'chrome://calendar/skin/cal-icon32.png',
     targetPlatforms: ['Linux_x86-gcc3', 'Linux_x86_64-gcc3'],
+    targetApplications: [{
+      id: '{3550f703-e582-4d05-9a08-453d09bdfdc6}',
+      minVersion: '17.0',
+      maxVersion: '17.*'
+    }, {
+      id: '{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}',
+      minVersion: '2.7',
+      maxVersion: '2.7.*'
+    }]
+  });
+};
+
+exports.ltn191LinuxBinaryComp = function() {
+  return new Extension({
+    id: '{e2fda1a4-762b-4020-b5ad-a41df1933103}',
+    version: '1.9.1',
+    name: 'Lightning',
+    description: 'An integrated calendar for Thunderbird',
+    creator: 'Mozilla Calendar Project',
+    homepageURL: 'http://www.mozilla.org/projects/calendar/releases/lightning1.2.2.html',
+    iconURL: 'chrome://calendar/skin/cal-icon32.png',
+    targetPlatforms: ['Linux_x86-gcc3', 'Linux_x86_64-gcc3'],
+    hasBinaryComponent: true,
     targetApplications: [{
       id: '{3550f703-e582-4d05-9a08-453d09bdfdc6}',
       minVersion: '17.0',

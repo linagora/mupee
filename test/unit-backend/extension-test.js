@@ -134,8 +134,23 @@ describe('An Extension', function() {
     expect(fixtures.obmConnector32011().getCompatibleTargetApplication('{3550f703-e582-4d05-9a08-453d09bdfdc6}', '1.0')).to.not.exist;
   });
 
-  it('should not find any target application of OBM Connector 3.2.0.11 if given Thunderbird/24.1', function() {
-    expect(fixtures.obmConnector32011().getCompatibleTargetApplication('{3550f703-e582-4d05-9a08-453d09bdfdc6}', '24.1')).to.not.exist;
+  it('should find a target application of OBM Connector 3.2.0.11 if given Thunderbird/24.1', function() {
+    var app = fixtures.obmConnector32011().getCompatibleTargetApplication('{3550f703-e582-4d05-9a08-453d09bdfdc6}', '24.1');
+
+    expect(app).to.exist;
+    expect(app.id).to.equal('{3550f703-e582-4d05-9a08-453d09bdfdc6}');
+  });
+
+  it('should not find any target application of OBM Connector 3.2.0.11 in strict mode if given Thunderbird/24', function() {
+    expect(fixtures.obmConnector32011Strict().getCompatibleTargetApplication('{3550f703-e582-4d05-9a08-453d09bdfdc6}', '24')).to.not.exist;
+  });
+
+  it('should not find any target application of Lightning 1.2.2 with binary component if given Thunderbird/17', function() {
+    expect(fixtures.ltn122LinuxBinaryComp().getCompatibleTargetApplication('{3550f703-e582-4d05-9a08-453d09bdfdc6}', '17')).to.not.exist;
+  });
+
+  it('should not find any target application of Lightning 1.0b2 if given Thunderbird/4', function() {
+    expect(fixtures.ltn10b2Linux().getCompatibleTargetApplication('{3550f703-e582-4d05-9a08-453d09bdfdc6}', '4')).to.not.exist;
   });
 
   it('should not find any target application of OBM Connector 3.2.0.11 if given Firefox/24', function() {
