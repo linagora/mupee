@@ -1,0 +1,78 @@
+content obm-extension chrome/content/
+resource obm-extension .
+skin obm-extension classic/1.0 chrome/skin/
+locale obm-extension en-US chrome/locales/en-US/
+locale obm-extension fr chrome/locales/fr/
+
+overlay chrome://messenger/content/preferences/preferences.xul    chrome://obm-extension/content/preferences/prefOverlay_Lightning.xul
+overlay chrome://messenger/content/messenger.xul                  chrome://obm-extension/content/mainOverlay.xul
+overlay chrome://messenger/content/addressbook/addressbook.xul    chrome://obm-extension/content/addressbookOverlay.xul
+overlay chrome://lightning/content/messenger-overlay-sidebar.xul  chrome://obm-extension/content/lightningOverlay.xul
+overlay chrome://lightning/content/messenger-overlay-sidebar.xul  chrome://obm-extension/content/inhibitHomeCalendar.xul
+overlay chrome://calendar/content/today-pane.xul                  chrome://obm-extension/content/inhibitHomeCalendar.xul
+overlay chrome://lightning/content/imip-bar-overlay.xul           chrome://obm-extension/content/imipbarOverlay.xul
+overlay chrome://calendar/content/calendar-event-dialog.xul       chrome://obm-extension/content/calendar-event-dialog.overlay.xul
+overlay chrome://calendar/content/sun-calendar-event-dialog.xul   chrome://obm-extension/content/calendar-event-dialog.overlay.xul
+overlay chrome://messenger/content/msgHdrViewOverlay.xul          chrome://obm-extension/content/msgHdrViewOverlay.xul
+overlay chrome://calendar/content/calendar-properties-dialog.xul  chrome://obm-extension/content/calendar-properties-dialog.overlay.xul
+style chrome://calendar/content/calendar-summary-dialog.xul       chrome://obm-extension/skin/style.css
+style chrome://global/content/customizeToolbar.xul                chrome://obm-extension/skin/style.css
+style chrome://calendar/content/calendar-event-dialog.xul chrome://obm-extension/skin/calendar-event-dialog.css
+style chrome://calendar/content/sun-calendar-event-dialog.xul chrome://obm-extension/skin/calendar-event-dialog.css
+
+interfaces components/obm.xpt
+
+component {86cb9e4f-44c6-4734-9aed-a22795e92b1e} components/calOBMCalendar.js
+contract @mozilla.org/calendar/calendar;1?type=obm {86cb9e4f-44c6-4734-9aed-a22795e92b1e}
+
+component {8778a141-6b96-43ae-914b-3027b69ef4d3} components/logger/logger.js
+contract @obm.org/calendar/logger;1 {8778a141-6b96-43ae-914b-3027b69ef4d3}
+
+component {d2e49656-9ccd-4e4e-82a7-24c987af14a8} components/logger/unixFileWriter.js
+contract @obm.org/calendar/writer;1?type=unixfile {d2e49656-9ccd-4e4e-82a7-24c987af14a8}
+
+component {3a4a0dcc-ede2-4932-bb76-9a3c164c7e84} components/logger/alertWriter.js
+contract @obm.org/calendar/writer;1?type=alert {3a4a0dcc-ede2-4932-bb76-9a3c164c7e84}
+
+component {eb2cc8c9-30f5-46b9-95fc-914f6b3927b3} components/logger/consoleWriter.js
+contract @obm.org/calendar/writer;1?type=console {eb2cc8c9-30f5-46b9-95fc-914f6b3927b3}
+
+component {153070b7-cd53-4503-a770-73334b812d73} components/logger/dumpWriter.js
+contract @obm.org/calendar/writer;1?type=dump {153070b7-cd53-4503-a770-73334b812d73}
+
+component {4b4d13f2-53c0-439a-85c9-f9ac654f72c7} components/obm-sync-rest/obmRAddressBookProxy.js
+contract @obm.org/obm-sync-rest/addressbookproxy;1 {4b4d13f2-53c0-439a-85c9-f9ac654f72c7}
+
+component {68214b68-8421-480c-8cd3-bd0cf70a50c4} components/obm-sync-rest/obmRAddressBookSync.js
+contract @obm.org/obm-sync-rest/addressbooksync;1 {68214b68-8421-480c-8cd3-bd0cf70a50c4}
+
+component {e2b34be1-b2b2-47de-bfe2-4f8126183ca5} components/obm-sync-rest/obmRCalendarProxy.js
+contract @obm.org/obm-sync-rest/calendarproxy;1 {e2b34be1-b2b2-47de-bfe2-4f8126183ca5}
+
+component {b70b2123-cdd5-45d6-a439-7842c1b02b6d} components/obm-sync-rest/obmRCalendarSync.js
+contract @obm.org/obm-sync-rest/calendarsync;1 {b70b2123-cdd5-45d6-a439-7842c1b02b6d}
+
+component {f4a5a493-4c2c-4919-97bf-95059e4415ab} components/obm-sync-rest/obmRRemoteAPIService.js
+contract @obm.org/obm-sync-rest/service;1 {f4a5a493-4c2c-4919-97bf-95059e4415ab}
+
+component {f6cdfa9e-6961-4d9e-a7cc-612783c1bb0b} components/obmAddressBooksManager.js
+contract @obm.org/addressbooksmanager;1 {f6cdfa9e-6961-4d9e-a7cc-612783c1bb0b}
+
+component {a55551b2-2bea-406c-9b6b-f9be098ed178} components/obmCalendarsManager.js
+contract @obm.org/calendarsmanager;1 {a55551b2-2bea-406c-9b6b-f9be098ed178}
+category profile-after-change ObmCalendarManager @obm.org/calendarsmanager;1
+
+component {00c18d10-bae3-11dd-ad8b-0800200c9a66} components/obmRESTClient.js
+contract @obm.org/restclient;1 {00c18d10-bae3-11dd-ad8b-0800200c9a66}
+category profile-after-change obmRESTClient @obm.org/restclient;1
+
+component {e37931ed-104f-4cf1-9b5c-73fab2d65424} components/obmSyncManager.js
+contract @obm.org/syncmanager;1 {e37931ed-104f-4cf1-9b5c-73fab2d65424}
+category profile-after-change ObmSyncManager @obm.org/syncmanager;1
+
+component {431dd1bc-6d57-42f1-b08f-18c928dd5169} components/obmVCardHandler.js
+contract @obm.org/vcard-handler;1 {431dd1bc-6d57-42f1-b08f-18c928dd5169}
+
+component {16896900-4776-11dd-ae16-0800200c9a66} components/startShutdownObserver.js
+contract @aliasource.fr/start-observer;1 {16896900-4776-11dd-ae16-0800200c9a66}
+category profile-after-change StartShutdownObserver @aliasource.fr/start-observer;1

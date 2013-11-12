@@ -1,0 +1,23 @@
+locale obm-extension fr-FR chrome/obm/locales/fr-FR/
+style chrome://calendar/content/calendar-summary-dialog.xul       chrome://obm-extension/skin/calendar/style.css
+style chrome://global/content/customizeToolbar.xul                chrome://obm-extension/skin/calendar/style.css
+overlay chrome://calendar/content/calendar-event-dialog.xul       chrome://obm-extension/content/calendar/calendar-event-dialog.overlay.xul
+overlay chrome://calendar/content/sun-calendar-event-dialog.xul   chrome://obm-extension/content/calendar/calendar-event-dialog.overlay.xul
+overlay chrome://lightning/content/messenger-overlay-sidebar.xul  chrome://obm-extension/content/calendar/inhibitHomeCalendar.xul
+resource obm-extension .
+skin obm-extension classic/1.0 chrome/obm/skin/classic/
+overlay chrome://messenger/content/messengercompose/messengercompose.xul    chrome://obm-extension/content/calendar/obmCommunitySupport.xul
+manifest
+overlay chrome://messenger/content/msgHdrViewOverlay.xul          chrome://obm-extension/content/calendar/msgHdrViewOverlay.xul
+overlay chrome://messenger/content/preferences/preferences.xul    chrome://obm-extension/content/calendar/preferences/prefOverlay_Lightning.xul
+manifest components/interfaces.manifest
+overlay chrome://messenger/content/messenger.xul                  chrome://obm-extension/content/calendar/mainOverlay.xul
+overlay chrome://messenger/content/addressbook/addressbook.xul    chrome://obm-extension/content/calendar/addressbookOverlay.xul
+style chrome://calendar/content/sun-calendar-event-dialog.xul chrome://obm-extension/skin/calendar/calendar-event-dialog.css
+overlay chrome://lightning/content/imip-bar-overlay.xul           chrome://obm-extension/content/calendar/imipbarOverlay.xul
+overlay chrome://calendar/content/calendar-properties-dialog.xul  chrome://obm-extension/content/calendar/calendar-properties-dialog.overlay.xul
+style chrome://calendar/content/calendar-event-dialog.xul chrome://obm-extension/skin/calendar/calendar-event-dialog.css
+locale obm-extension en-US chrome/obm/locales/en-US/
+overlay chrome://lightning/content/messenger-overlay-sidebar.xul  chrome://obm-extension/content/calendar/lightningOverlay.xul
+overlay chrome://calendar/content/today-pane.xul                  chrome://obm-extension/content/calendar/inhibitHomeCalendar.xul
+content obm-extension chrome/obm/content/

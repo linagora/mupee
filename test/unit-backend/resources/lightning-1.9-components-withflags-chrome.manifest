@@ -1,0 +1,1 @@
+binary-component calbasecomps.dll appversion>=17.0 os=Darwin osversion<=10.5
