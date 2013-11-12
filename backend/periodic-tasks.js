@@ -21,6 +21,7 @@ exports = module.exports = {
 
     intervalId = setInterval(function() {
       backgroundTasks.refreshProductUpdates();
+      backgroundTasks.refreshExtensionUpdates();
     }, interval);
   }
 };

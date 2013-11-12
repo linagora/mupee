@@ -5,9 +5,13 @@ var scraper = require('./mozilla-updates-server-scraper'),
     scheduler = require('./job-scheduler'),
     db = require('./mongo-provider'),
     UpdateStorage = require('./update-storage'),
-    storage = new UpdateStorage(db),
+    ExtensionUpdateStorage = require('./extension-update-storage'),
     SourceVersion = require('./source-version'),
+    ExtensionSourceVersion = require('./extension-source-version').ExtensionSourceVersion,
     logger = require('./logger');
+
+var updateStorage = new UpdateStorage(db),
+    extensionUpdateStorage = new ExtensionUpdateStorage(db);
 
 var buildHash = function(clientVersion) {
   return clientVersion.buildUrl('');
@@ -50,5 +54,29 @@ exports.refreshProductUpdates = function() {
     logger.debug('SourceVersion added for scraping: ', sourceVersion.shortDescription());
   }
 
-  storage.findAll({}).batchSize(10).each(queueScrapTask);
+  updateStorage.findAll({}).batchSize(10).each(queueScrapTask);
+};
+
+exports.refreshExtensionUpdates = function() {
+  function queueScrapTask(err, esv) {
+    if (err) {
+      return logger.error('Unable to fetch extension source versions from datastore', err);
+    }
+    if (esv === null) {
+      return;
+    }
+
+    var extensionSourceVersion;
+    try {
+      extensionSourceVersion = new ExtensionSourceVersion(esv);
+    } catch (e) {
+      logger.error(e);
+      return logger.error('ExtensionSourceVersion validation failed');
+    }
+
+    exports.addExtensionScraperTask(extensionSourceVersion);
+    logger.debug('ExtensionSourceVersion added for scraping: ', extensionSourceVersion.shortDescription());
+  }
+
+  extensionUpdateStorage.findAll({}).batchSize(10).each(queueScrapTask);
 };
