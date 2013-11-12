@@ -15,7 +15,6 @@ describe('The ExtensionUpdates route', function() {
     mockery.registerMock('./logger', testLogger);
     mockery.registerMock('../logger', testLogger);
     mockery.registerMock('../../logger', testLogger);
-    mockery.registerMock('adm-zip', null);
     fixtures = require('./extension-fixtures');
     updatesFixture = require('./extension-source-version-fixtures');
   });
@@ -111,7 +110,7 @@ describe('The ExtensionUpdates route', function() {
 
   it('should send the parsed Extension metadata if the uploaded extension is valid', function(done) {
     var Zip = function() {};
-    Zip.prototype.getEntry = function() { return this; };
+    Zip.prototype.getEntry = function(entry) { return entry === 'install.rdf' ? this : null; };
     Zip.prototype.readAsText = function() { return fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.2.2-install.rdf')); };
 
     var fsExtra = {
@@ -144,7 +143,7 @@ describe('The ExtensionUpdates route', function() {
 
   it('should copy the uploaded extension to file storage if extension is unknown', function(done) {
     var Zip = function() {};
-    Zip.prototype.getEntry = function() { return this; };
+    Zip.prototype.getEntry = function(entry) { return entry === 'install.rdf' ? this : null; };
     Zip.prototype.readAsText = function() { return fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.2.2-install.rdf')); };
 
     var fsExtra = {
@@ -177,7 +176,7 @@ describe('The ExtensionUpdates route', function() {
 
   it('should copy the uploaded extension to file storage if extension is know, but outdated', function(done) {
     var Zip = function() {};
-    Zip.prototype.getEntry = function() { return this; };
+    Zip.prototype.getEntry = function(entry) { return entry === 'install.rdf' ? this : null; };
     Zip.prototype.readAsText = function() { return fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.2.2-install.rdf')); };
 
     var fsExtra = {
@@ -211,7 +210,7 @@ describe('The ExtensionUpdates route', function() {
 
   it('should remove outdated metadata if extension is know, but outdated', function(done) {
     var Zip = function() {};
-    Zip.prototype.getEntry = function() { return this; };
+    Zip.prototype.getEntry = function(entry) { return entry === 'install.rdf' ? this : null; };
     Zip.prototype.readAsText = function() { return fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.2.2-install.rdf')); };
 
     var fsExtra = {
@@ -242,7 +241,7 @@ describe('The ExtensionUpdates route', function() {
 
   it('should store metadata if extension is know, but outdated', function(done) {
     var Zip = function() {};
-    Zip.prototype.getEntry = function() { return this; };
+    Zip.prototype.getEntry = function(entry) { return entry === 'install.rdf' ? this : null; };
     Zip.prototype.readAsText = function() { return fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.2.2-install.rdf')); };
 
     var fsExtra = {
@@ -273,7 +272,7 @@ describe('The ExtensionUpdates route', function() {
 
   it('should store metadata if extension is unknown', function(done) {
     var Zip = function() {};
-    Zip.prototype.getEntry = function() { return this; };
+    Zip.prototype.getEntry = function(entry) { return entry === 'install.rdf' ? this : null; };
     Zip.prototype.readAsText = function() { return fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.2.2-install.rdf')); };
 
     var fsExtra = {
@@ -303,7 +302,7 @@ describe('The ExtensionUpdates route', function() {
 
   it('should compute the sha1 of the uploaded file before saving metadata', function(done) {
     var Zip = function() {};
-    Zip.prototype.getEntry = function() { return this; };
+    Zip.prototype.getEntry = function(entry) { return entry === 'install.rdf' ? this : null; };
     Zip.prototype.readAsText = function() { return fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.2.2-install.rdf')); };
 
     var fsExtra = {
@@ -338,7 +337,7 @@ describe('The ExtensionUpdates route', function() {
 
   it('should do nothing if the extension is known and valid', function(done) {
     var Zip = function() {};
-    Zip.prototype.getEntry = function() { return this; };
+    Zip.prototype.getEntry = function(entry) { return entry === 'install.rdf' ? this : null; };
     Zip.prototype.readAsText = function() { return fs.readFileSync(Path.join(__dirname, '/resources/lightning-1.2.2-install.rdf')); };
 
     var fsExtra = {
@@ -373,6 +372,122 @@ describe('The ExtensionUpdates route', function() {
       }
     }, {
       send: function() {}
+    });
+  });
+
+  it('should correctly parse chrome.manifest if present (obm-connector-3.2.0.11, no binary-component)', function(done) {
+    var fsExtra = {
+      copy: function() {}
+    };
+
+    var Storage = function() {};
+    Storage.prototype.findByExtension = function(extension, callback) { callback(null, null); };
+    Storage.prototype.save = function(extension, callback) { callback(null, null); };
+    Storage.prototype.remove = function(id, callback) { callback(null, null); };
+
+    mockery.registerMock('fs-extra', fsExtra);
+    mockery.registerMock('../../extension-storage', Storage);
+    proxy = require('../../backend/routes/admin/extensions');
+
+    proxy.uploadXpi({
+      files: {
+        file: {
+          name: 'obm-connector-3.2.0.11.xpi',
+          path: Path.join(__dirname, 'resources/extensions/obm-connector-3.2.0.11.xpi')
+        }
+      }
+    }, {
+      send: function(data) {
+        data.hasBinaryComponent.should.be.false;
+        done();
+      }
+    });
+  });
+
+  it('should correctly parse chrome.manifest if present (obm-connector-3.2.0.11, binary-component in root manifest)', function(done) {
+    var fsExtra = {
+      copy: function() {}
+    };
+
+    var Storage = function() {};
+    Storage.prototype.findByExtension = function(extension, callback) { callback(null, null); };
+    Storage.prototype.save = function(extension, callback) { callback(null, null); };
+    Storage.prototype.remove = function(id, callback) { callback(null, null); };
+
+    mockery.registerMock('fs-extra', fsExtra);
+    mockery.registerMock('../../extension-storage', Storage);
+    proxy = require('../../backend/routes/admin/extensions');
+
+    proxy.uploadXpi({
+      files: {
+        file: {
+          name: 'obm-connector-fakebinary-3.2.0.11.xpi',
+          path: Path.join(__dirname, 'resources/extensions/obm-connector-fakebinary-3.2.0.11.xpi')
+        }
+      }
+    }, {
+      send: function(data) {
+        data.hasBinaryComponent.should.be.true;
+        done();
+      }
+    });
+  });
+
+  it('should correctly parse chrome.manifest if present (lightning-1.2.3.24obm, binary-component in sub-manifest)', function(done) {
+    var fsExtra = {
+      copy: function() {}
+    };
+
+    var Storage = function() {};
+    Storage.prototype.findByExtension = function(extension, callback) { callback(null, null); };
+    Storage.prototype.save = function(extension, callback) { callback(null, null); };
+    Storage.prototype.remove = function(id, callback) { callback(null, null); };
+
+    mockery.registerMock('fs-extra', fsExtra);
+    mockery.registerMock('../../extension-storage', Storage);
+    proxy = require('../../backend/routes/admin/extensions');
+
+    proxy.uploadXpi({
+      files: {
+        file: {
+          name: 'lightning-1.2.3.24obm-tb-mac.xpi',
+          path: Path.join(__dirname, 'resources/extensions/lightning-1.2.3.24obm-tb-mac.xpi')
+        }
+      }
+    }, {
+      send: function(data) {
+        data.hasBinaryComponent.should.be.true;
+        done();
+      }
+    });
+  });
+
+  it('should correctly parse chrome.manifest if present (lightning-1.9.1, binary-component in sub-manifest)', function(done) {
+    var fsExtra = {
+      copy: function() {}
+    };
+
+    var Storage = function() {};
+    Storage.prototype.findByExtension = function(extension, callback) { callback(null, null); };
+    Storage.prototype.save = function(extension, callback) { callback(null, null); };
+    Storage.prototype.remove = function(id, callback) { callback(null, null); };
+
+    mockery.registerMock('fs-extra', fsExtra);
+    mockery.registerMock('../../extension-storage', Storage);
+    proxy = require('../../backend/routes/admin/extensions');
+
+    proxy.uploadXpi({
+      files: {
+        file: {
+          name: 'lightning-1.9.1-sm+tb-linux.xpi',
+          path: Path.join(__dirname, 'resources/extensions/lightning-1.9.1-sm+tb-linux.xpi')
+        }
+      }
+    }, {
+      send: function(data) {
+        data.hasBinaryComponent.should.be.true;
+        done();
+      }
     });
   });
 
