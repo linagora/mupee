@@ -14,9 +14,12 @@ function sendValues(response, result, property) {
   return response.send(values);
 }
 
-function sendAutoCompleteValuesForProduct(response, product, property) {
+function sendAutoCompleteValuesForProduct(response, product, property, value) {
   var storage = new UpdateStorage(db);
-  storage.findAll({product: product}, function(err, result) {
+  var query = {};
+  query.product = product;
+  query[property] = new RegExp('^' + value);
+  storage.findAll(query, function(err, result) {
     if (!result) {
       return response.send([]);
     }
@@ -24,9 +27,12 @@ function sendAutoCompleteValuesForProduct(response, product, property) {
   });
 }
 
-function sendAutoCompleteValuesForExtension(response, id, product, version, property) {
+function sendAutoCompleteValuesForExtension(response, id, product, version, property, value) {
   var extensionStorage = new ExtensionStorage(db);
-  extensionStorage.findByExtension({id: id}, function(err, result) {
+  var query = {};
+  query.id = id;
+  query[property] = new RegExp('^' + value);
+  extensionStorage.findByExtension(query, function(err, result) {
     if (!result) {
       return response.send([]);
     }
@@ -43,12 +49,13 @@ exports.getAutoCompleteValues = function(request, response) {
       product = request.query.product,
       property = request.query.property,
       version = request.query.version,
+      value = request.query.value,
       targetMode = request.query.targetMode;
 
   if (targetMode === 'product') {
-    sendAutoCompleteValuesForProduct(response, product, property);
+    sendAutoCompleteValuesForProduct(response, product, property, value);
   } else if (targetMode === 'extension') {
-    sendAutoCompleteValuesForExtension(response, id, product, version, property);
+    sendAutoCompleteValuesForExtension(response, id, product, version, property, value);
   } else {
     return response.send([]);
   }
