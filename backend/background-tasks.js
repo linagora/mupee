@@ -46,8 +46,7 @@ exports.refreshProductUpdates = function() {
     try {
       sourceVersion = new SourceVersion(sv);
     } catch (e) {
-      logger.error(e);
-      return logger.error('SourceVersion validation failed');
+      return logger.error('SourceVersion validation failed', e);
     }
 
     exports.addProductScraperTask(sourceVersion);
@@ -70,8 +69,7 @@ exports.refreshExtensionUpdates = function() {
     try {
       extensionSourceVersion = new ExtensionSourceVersion(esv);
     } catch (e) {
-      logger.error(e);
-      return logger.error('ExtensionSourceVersion validation failed');
+      return logger.error('ExtensionSourceVersion validation failed', e);
     }
 
     exports.addExtensionScraperTask(extensionSourceVersion);
