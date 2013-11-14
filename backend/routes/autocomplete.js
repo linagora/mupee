@@ -8,7 +8,7 @@ var db = require('../mongo-provider'),
     productMapper = require('../product-mapper');
 
 function sendValues(response, result, property) {
-  var values = result.map(function (value) {
+  var values = result.map(function(value) {
     return flatten(value)[property];
   });
   return response.send(values);
