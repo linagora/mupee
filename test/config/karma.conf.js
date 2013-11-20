@@ -8,7 +8,7 @@ module.exports = function(config) {
       'frontend/lib/jquery/jquery.js',
       'frontend/lib/angular/angular.js',
       'frontend/lib/angular/angular-*.js',
-      'test/lib/angular/angular-mocks-mocha.js',
+      'test/lib/angular/angular-mocks.js',
       'test/lib/chai.js',
       'frontend/js/**/*.js',
       'test/unit-frontend/**/*.js',
