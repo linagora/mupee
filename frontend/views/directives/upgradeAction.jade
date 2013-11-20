@@ -23,6 +23,7 @@ span
             input(type="{{parameter.type}}" data-ng-model='parameter.value'
               data-ng-required='{{parameter.mandatory}}' placeholder='{{parameter.summary}}'
               data-auto-complete data-id='{{targetId}}' data-property='{{parameter.id}}'
+              data-parameter="parameter"
               data-target-mode='{{targetMode}}' data-version='{{targetVersion}}' data-product='{{targetProduct}}')
         
         div.row.collapse

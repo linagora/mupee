@@ -35,7 +35,8 @@ angular.module('mupeeAutoComplete', [])
           property: '@',
           targetMode: '@',
           version: '@',
-          product: '@'
+          product: '@',
+          parameter: '=parameter'
         },
         controller: controller,
         link: link,

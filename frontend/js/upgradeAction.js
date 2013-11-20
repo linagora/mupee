@@ -63,7 +63,6 @@
             $scope.upgradeActionList[inheritedAction.id] = inheritedAction;
           }
           setDefaultsFromRule(actualRule);
-
           $scope.$emit('onRESTComplete');
         }
       );
@@ -89,7 +88,6 @@
       };
 
       $scope.submitForm = function() {
-        console.log('submit: ', $scope.edition);
         $scope.mode = $scope.modes.RECORD;
         if ($scope.edition.activeActionId === $scope.activeAction.id &&
           $scope.edition.activeActionId === inheritedAction.id) {
@@ -141,6 +139,15 @@
 
   .factory('buildRuleJSON', ['inheritedAction',
            function(inheritedAction) {
+
+    function strongTypeParameter(p, value) {
+      var typedValue = value;
+      if (p.type === 'number') {
+        typedValue = parseInt(value, 10);
+      }
+      return typedValue;
+    }
+
     function buildRuleJSON(product, ruleId, action, version, predicates) {
       var ruleData = {
         predicates: predicates,
@@ -156,7 +163,7 @@
 
       for (var i = 0; i < action.parameters.length; i++) {
         var p = action.parameters[i];
-        ruleData.action.parameters[p.id] = p.value;
+        ruleData.action.parameters[p.id] = strongTypeParameter(p, p.value);
       }
       if (ruleId) { ruleData._id = ruleId; }
 
