@@ -16,4 +16,3 @@ data/
 *.txte
 dist/
 frontend/js/product.js
-frontend/js/directives/autoComplete.js

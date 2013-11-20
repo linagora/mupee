@@ -2,9 +2,11 @@
 
 angular.module('mupeeAutoComplete', [])
   .directive('autoComplete', function($http) {
+
+      var uniqueIdCounter = 1;
+
       function controller($scope) {
-        var uuid = require('node-uuid');
-        $scope.datalistUuid = uuid.v1();
+        $scope.datalistUuid = 'autoCompleteID' + uniqueIdCounter++;
       }
 
       function link(scope, element, attrs) {

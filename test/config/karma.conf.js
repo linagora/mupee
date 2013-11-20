@@ -15,8 +15,7 @@ module.exports = function(config) {
       'frontend/views/directives/*.jade'
     ],
     exclude: [
-      'frontend/js/product.src.js',
-      'frontend/js/directives/autoComplete.src.js'
+      'frontend/js/product.src.js'
     ],
 
     frameworks: ['mocha'],
